@@ -1,5 +1,5 @@
 const initialState = {
-    password: 'Password'
+    passwordTitle: 'Password'
 };
 
 export default function password(state = initialState) {

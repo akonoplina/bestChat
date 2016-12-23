@@ -84,3 +84,6 @@ h3 {
 .btn:hover {
     background-color: #6d8cb0
 }
+.none{
+    display: none;
+}

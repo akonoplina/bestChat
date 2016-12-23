@@ -5,13 +5,13 @@ export default class Password extends Component {
 
     }
     render() {
-        const { password } = this.props;
-        return <div className="pass">
-            <p><label>{password}:</label><input type="text" placeholder={password} /></p>
+        const { passwordTitle, showPass } = this.props;
+        return <div className={'pass ' + (!showPass ? 'none' : '')}>
+            <p><label>{passwordTitle}:</label><input type="text" placeholder={passwordTitle} /></p>
         </div>
     }
 }
 
 Password.propTypes = {
-    password: PropTypes.string.isRequired
+    passwordTitle: PropTypes.string.isRequired
 };

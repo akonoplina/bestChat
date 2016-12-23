@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
-//import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';
 import Password from '../components/Password';
 import OkButton from '../components/OkButton';
-
-//import * as pageActions from '../actions/PageActions';
+import * as chatActions  from '../actions/chatActions';
 
 class App extends Component {
     render() {
         const { signIn, signUp, password, okButton } = this.props;
-
+        const { signInAction, signUpAction, OkButtonAction } = this.props.chatActions;
 
         return <div className='loginForm'>
-            <SignIn login={ signIn.login }/>
-            <Password password={ password.password }/>
-            <SignUp login={ signUp.login}/>
-            <OkButton title={okButton.title}/>
+            <SignIn signInAction={signInAction()} signInButtonTitle={ signIn.signInButtonTitle}/>
+            <Password passwordTitle={ password.passwordTitle }/>
+            <SignUp signUpAction={signUpAction()} signUpButtonTitle={ signUp.signUpButtonTitle}/>
+            <OkButton OkButtonAction={OkButtonAction()} okButtonTitle={okButton.okButtonTitle}/>
         </div>
     }
 }
@@ -30,11 +30,11 @@ function mapStateToProps(state) {
         okButton: state.okButton
     }
 }
-//
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         pageActions: bindActionCreators(pageActions, dispatch)
-//     }
-// }
 
-export default connect(mapStateToProps)(App)
+function mapDispatchToProps(dispatch) {
+    return {
+        chatActions: bindActionCreators(chatActions, dispatch),
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App)

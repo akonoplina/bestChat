@@ -1,17 +1,19 @@
 import React, { PropTypes, Component } from 'react';
 
 export default class SignUp extends Component {
-    onKeyPress(e){
-
+    onSignUpButtonPress(){
+        this.props.signUpAction();
     }
     render() {
-        const { login } = this.props;
-        return <div className="pass">
-            <p><label>{login}:</label><input type="text" placeholder={login} /></p>
+        const { signUpButtonTitle, buttonSignUpVisible, showSignUpInput } = this.props;
+        return <div className={'signUp ' + (buttonSignUpVisible ? 'none':'')}>
+            <button onClick={::this.onSignUpButtonPress}>{signUpButtonTitle}</button>
+            <p className={(!showSignUpInput ? 'none':'')}><label>{signUpButtonTitle}:</label><input type="text" placeholder={signUpButtonTitle} /></p>
         </div>
     }
 }
 
 SignUp.propTypes = {
-    login: PropTypes.string.isRequired
+    signUpButtonTitle: PropTypes.string.isRequired,
+    signUpAction: PropTypes.func.isRequired
 };

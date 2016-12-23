@@ -1,0 +1,1 @@
+export const OK_BUTTON_PRESSED = 'OK_BUTTON_PRESSED';
