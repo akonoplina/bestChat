@@ -1,17 +1,17 @@
 import React, { PropTypes, Component } from 'react';
 
 export default class Password extends Component {
-    onKeyPress(e){
-
-    }
     render() {
+
         const { passwordTitle, showPass } = this.props;
-        return <div className={'pass ' + (!showPass ? 'none' : '')}>
+
+        return <div ref="pass" className={'pass ' + (!showPass ? 'none' : '')}>
             <p><label>{passwordTitle}:</label><input type="text" placeholder={passwordTitle} /></p>
         </div>
     }
 }
 
 Password.propTypes = {
-    passwordTitle: PropTypes.string.isRequired
+    passwordTitle: PropTypes.string.isRequired,
+    showPass: PropTypes.bool.isRequired
 };

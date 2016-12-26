@@ -6,10 +6,11 @@ export default class OkButton extends Component {
     }
     render() {
         const { okButtonTitle, okButtonVisible } = this.props;
-        return <button onClick={::this.onOkButtonPress} className={'okButton ' + (!okButtonVisible ? 'none' : '')}>{okButtonTitle}</button>
+        return <button ref="okButton" onClick={::this.onOkButtonPress} className={'okButton ' + (!okButtonVisible ? 'none' : '')}>{okButtonTitle}</button>
     }
 }
 OkButton.propTypes = {
     okButtonTitle: PropTypes.string.isRequired,
-    OkButtonAction: PropTypes.func.isRequired
+    OkButtonAction: PropTypes.func.isRequired,
+    okButtonVisible: PropTypes.bool.isRequired
 };

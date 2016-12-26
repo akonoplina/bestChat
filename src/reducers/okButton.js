@@ -1,5 +1,6 @@
 const initialState = {
-    okButtonTitle: 'Ok'
+    okButtonTitle: 'Ok',
+    okButtonVisible: false
 };
 
 import {

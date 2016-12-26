@@ -1,11 +1,7 @@
 const initialState = {
     signUpButtonTitle: 'Sign up',
-    buttonSignInVisible: true,
     buttonSignUpVisible: true,
-    showSignInInput: false,
-    showSignUpInput: false,
-    showPass: false,
-    okButtonVisible: false
+    showSignUpInput: false
 };
 
 import {
@@ -16,8 +12,7 @@ export default function signUp(state = initialState, action) {
 
     switch (action.type) {
         case SIGN_UP_BUTTON_PRESSED:
-            return { ...state, buttonSignInVisible:false, buttonSignUpVisible:false, showSignInInput:true,
-                showSignUpInput:false, showPass:true, okButtonVisible:true};
+            return { ...state, buttonSignUpVisible:false, showSignUpInput:true};
         default:
             return state;
     }
