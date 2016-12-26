@@ -2,7 +2,8 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    SEND_MESSAGE
+    SEND_MESSAGE,
+    VALIDATE_DATA
 } from '../constants/AuthComponent';
 
 export function signInAction() {
@@ -29,3 +30,12 @@ export function OkButtonAction() {
         });
     }
 }
+export function validateAction() {
+
+    return (dispatch) => {
+        dispatch({
+            type: VALIDATE_DATA
+        });
+    }
+}
+

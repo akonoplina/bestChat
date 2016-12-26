@@ -9,10 +9,10 @@ import * as chatActions from '../actions/chatActions';
 class App extends Component {
     render() {
         const { authReducer } = this.props;
-        const { signUpAction, signInAction, OkButtonAction } = this.props.chatActions;
+        const { signUpAction, signInAction, OkButtonAction, validateAction } = this.props.chatActions;
 
         return <div className='loginForm'>
-            <AuthComponent signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
+            <AuthComponent validateAction={validateAction} signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
                            showSignInInput={authReducer.showSignInInput} signInButtonTitle={ authReducer.signInButtonTitle}
                            showPass={authReducer.showPass} passwordTitle={ authReducer.passwordTitle }
                            showSignUpInput={authReducer.showSignUpInput}  buttonSignUpVisible={authReducer.buttonSignUpVisible}

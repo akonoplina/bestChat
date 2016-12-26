@@ -10,8 +10,8 @@ const initialState = {
     okButtonTitle: 'Ok',
     okButtonVisible: false,
     messageListTitle: 'Welcome to the chat!!!',
-    messageFormTitle: 'Please enter your message!!!'
-
+    messageFormTitle: 'Please enter your message!!!',
+    showChatPage: false
 };
 
 import {
@@ -32,7 +32,7 @@ export default function authReducer(state = initialState, action) {
             return { ...state, buttonSignUpVisible: false, showSignUpInput: true, buttonSignInVisible: false,
                 showSignInInput: false, showPass: true, okButtonVisible: true};
         case OK_BUTTON_PRESSED:
-            return { ...state, showMessageList: true, showMessageForm: true};
+            return { ...state, showChatPage: true, showWelcomeMessage: true};
         case SEND_MESSAGE:
             return { ...state, messageSend: true};
         default:
