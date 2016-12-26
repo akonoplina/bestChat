@@ -1,14 +1,9 @@
 import {
-    SIGN_IN_BUTTON_PRESSED
-} from '../constants/SignIn';
-
-import {
-    SIGN_UP_BUTTON_PRESSED
-} from '../constants/SignUp';
-
-import {
-    OK_BUTTON_PRESSED
-} from '../constants/OkButton';
+    SIGN_IN_BUTTON_PRESSED,
+    SIGN_UP_BUTTON_PRESSED,
+    OK_BUTTON_PRESSED,
+    SEND_MESSAGE
+} from '../constants/AuthComponent';
 
 export function signInAction() {
 

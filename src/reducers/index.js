@@ -1,17 +1,8 @@
 import { combineReducers } from 'redux';
 
-import signIn from './signIn';
-import signUp from './signUp';
-import password from './password';
-import okButton from './okButton';
-import messageList from './messageList';
-import messageForm from './messageForm';
+import authReducer from './authReducer';
+
 
 export default combineReducers({
-    signIn,
-    password,
-    signUp,
-    okButton,
-    messageList,
-    messageForm
+    authReducer
 });
