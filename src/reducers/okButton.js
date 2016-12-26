@@ -15,5 +15,4 @@ export default function okButton(state = initialState, action) {
         default:
             return state;
     }
-
 }
