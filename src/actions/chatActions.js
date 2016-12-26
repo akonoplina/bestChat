@@ -1,14 +1,14 @@
 import {
     SIGN_IN_BUTTON_PRESSED
-} from '../constants/SignIn'
+} from '../constants/SignIn';
 
 import {
     SIGN_UP_BUTTON_PRESSED
-} from '../constants/SignUp'
+} from '../constants/SignUp';
 
 import {
     OK_BUTTON_PRESSED
-} from '../constants/OkButton'
+} from '../constants/OkButton';
 
 export function signInAction() {
 
