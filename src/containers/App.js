@@ -4,28 +4,43 @@ import { bindActionCreators } from 'redux'
 
 import AuthComponent from '../components/AuthComponent';
 
+import ChatComponent from '../components/ChatComponent';
+
 import * as chatActions from '../actions/chatActions';
 
 class App extends Component {
     render() {
-        const { authReducer } = this.props;
-        const { signUpAction, signInAction, OkButtonAction, validateAction } = this.props.chatActions;
 
-        return <div className='loginForm'>
-            <AuthComponent validateAction={validateAction} signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
-                           showSignInInput={authReducer.showSignInInput} signInButtonTitle={ authReducer.signInButtonTitle}
+
+        const { authReducer, chatReducer } = this.props;
+
+        const { signUpAction, signInAction, OkButtonAction, validateAction, changeDataAction } = this.props.chatActions;
+
+
+
+        return <div>
+            <AuthComponent validateAction={validateAction} signInAction={signInAction}
+                           buttonSignInVisible={authReducer.buttonSignInVisible}
+                           showSignInInput={authReducer.showSignInInput}
+                           signInButtonTitle={ authReducer.signInButtonTitle}
                            showPass={authReducer.showPass} passwordTitle={ authReducer.passwordTitle }
-                           showSignUpInput={authReducer.showSignUpInput}  buttonSignUpVisible={authReducer.buttonSignUpVisible}
+                           showSignUpInput={authReducer.showSignUpInput}
+                           buttonSignUpVisible={authReducer.buttonSignUpVisible}
                            signUpAction={signUpAction} signUpButtonTitle={ authReducer.signUpButtonTitle}
                            okButtonVisible={authReducer.okButtonVisible} OkButtonAction={OkButtonAction}
-                           okButtonTitle={authReducer.okButtonTitle}/>
+                           okButtonTitle={authReducer.okButtonTitle}
+                           changeDataAction={changeDataAction} signInEmpty={authReducer.signInEmpty}
+                           signUpEmpty={authReducer.signUpEmpty} passEmpty={authReducer.passEmpty}/>
+
+            <ChatComponent messageListTitle={chatReducer.messageListTitle} showChatPage={authReducer.showChatPage} />
             </div>
     }
 }
 
 function mapStateToProps(state) {
     return {
-        authReducer: state.authReducer
+        authReducer: state.authReducer,
+        chatReducer: state.chatReducer
     }
 }
 

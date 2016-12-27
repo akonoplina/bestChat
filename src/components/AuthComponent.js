@@ -16,39 +16,49 @@ export default class AuthComponent extends Component {
         this.props.OkButtonAction();
 
     }
-    onFieldChange(e, fieldName){
+    onFieldChange(fieldName, e){
 
-        this.props.validateAction();
+        if (e.target.value.trim().length > 0) {
+
+            this.props.changeDataAction(fieldName, true);
+
+        }
+        else{
+
+            this.props.changeDataAction(fieldName, false);
+        }
+
+        //this.props.validateAction();
 
     }
     render() {
 
         const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
-            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass } = this.props;
+            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass,signInEmpty, signUpEmpty,
+            passEmpty} = this.props;
 
-        return <div className="wrapper">
+        return <div className="authWrapper">
             <div>
-                <button ref="signInButton" className={'signIn ' + (!buttonSignInVisible ? 'none':'')}
+                <button className={'signIn ' + (!buttonSignInVisible ? 'none':'')}
                         onClick={::this.onSignInButtonPress} >{signInButtonTitle}</button>
-                <p ref="signInInput" className={(!showSignInInput ? 'none':'')}><label>{signInButtonTitle}:</label>
-                    <input type="text" onChange={this.onFieldChange.bind(this, 'signInEmpty')}/></p>
+                <p className={(!showSignInInput ? 'none':'')}><label>{signInButtonTitle}:</label>
+                    <input className="signInData" type="text" onChange={this.onFieldChange.bind(this, 'signInEmpty')}/></p>
             </div>
             <div>
-                <button ref="signUpButton" className={'signUp ' + (!buttonSignUpVisible ? 'none':'')}
+                <button className={'signUp ' + (!buttonSignUpVisible ? 'none':'')}
                         onClick={::this.onSignUpButtonPress}>{signUpButtonTitle}</button>
-                <p ref="signUpInput" className={(!showSignUpInput ? 'none':'')}><label>{signUpButtonTitle}:</label>
-                    <input type="text" onChange={this.onFieldChange.bind(this, 'signUpEmpty')}/></p>
+                <p className={(!showSignUpInput ? 'none':'')}><label>{signUpButtonTitle}:</label>
+                    <input className="signUpData" type="text" onChange={this.onFieldChange.bind(this, 'signUpEmpty')}/></p>
             </div>
-            <div ref="pass" className={'pass ' + (!showPass ? 'none' : '')}>
-                <p><label>{passwordTitle}:</label><input type="text"
+            <div className={'pass ' + (!showPass ? 'none' : '')}>
+                <p><label>{passwordTitle}:</label><input type="text" className="passData"
                                                          onChange={this.onFieldChange.bind(this, 'passEmpty')}/></p>
             </div>
-            <button ref="okButton" onClick={::this.onOkButtonPress}
+            <button disabled={signInEmpty || signUpEmpty || passEmpty} onClick={::this.onOkButtonPress}
                     className={'okButton ' + (!okButtonVisible ? 'none' : '')}>{okButtonTitle}</button>
 
         </div>
     }
-    //showChatPage: true, showWelcomeMessage: true
 }
 
 AuthComponent.propTypes = {
@@ -64,5 +74,9 @@ AuthComponent.propTypes = {
     OkButtonAction: PropTypes.func.isRequired,
     okButtonVisible: PropTypes.bool.isRequired,
     passwordTitle: PropTypes.string.isRequired,
-    showPass: PropTypes.bool.isRequired
+    showPass: PropTypes.bool.isRequired,
+    changeDataAction: PropTypes.func.isRequired,
+    signInEmpty: PropTypes.bool.isRequired,
+    signUpEmpty: PropTypes.bool.isRequired,
+    passEmpty: PropTypes.bool.isRequired
 };

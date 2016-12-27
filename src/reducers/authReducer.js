@@ -1,24 +1,37 @@
 const initialState = {
     signInButtonTitle: 'Sign in',
+    signUpButtonTitle: 'Sign up',
+    passwordTitle: 'Password',
+    okButtonTitle: 'Ok',
+
     buttonSignInVisible: true,
     showSignInInput: false,
-    signUpButtonTitle: 'Sign up',
     buttonSignUpVisible: true,
     showSignUpInput: false,
-    passwordTitle: 'Password',
+
     showPass: false,
-    okButtonTitle: 'Ok',
     okButtonVisible: false,
-    messageListTitle: 'Welcome to the chat!!!',
-    messageFormTitle: 'Please enter your message!!!',
-    showChatPage: false
+
+    showChatPage: false,
+
+    signInEmpty: true,
+    signUpEmpty: true,
+    passEmpty: true
+
 };
 
 import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    SEND_MESSAGE
+    SEND_MESSAGE,
+    PASS_ENTERED,
+    SIGN_IN_ENTERED,
+    SIGN_UP_ENTERED,
+    PASS_DELETED,
+    SIGN_IN_DELETED,
+    SIGN_UP_DELETED
+
 
 } from '../constants/AuthComponent';
 
@@ -32,9 +45,22 @@ export default function authReducer(state = initialState, action) {
             return { ...state, buttonSignUpVisible: false, showSignUpInput: true, buttonSignInVisible: false,
                 showSignInInput: false, showPass: true, okButtonVisible: true};
         case OK_BUTTON_PRESSED:
-            return { ...state, showChatPage: true, showWelcomeMessage: true};
+            return { ...state, showChatPage: true, showSignInInput : false,
+                showSignUpInput: false, showPass: false, okButtonVisible: false};
         case SEND_MESSAGE:
             return { ...state, messageSend: true};
+        case SIGN_IN_ENTERED:
+            return {...state, signInEmpty: false, signUpEmpty: false};
+        case SIGN_UP_ENTERED:
+            return {...state, signUpEmpty: false, signInEmpty: false};
+        case PASS_ENTERED:
+            return {...state, passEmpty: false};
+        case SIGN_IN_DELETED:
+            return {...state, signInEmpty: true, signUpEmpty: true};
+        case SIGN_UP_DELETED:
+            return {...state, signUpEmpty: true, signInEmpty: true};
+        case PASS_DELETED:
+            return {...state, passEmpty: true};
         default:
             return state;
     }
