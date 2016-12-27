@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
+
+//import * as Bootstrap from 'react-bootstrap';
 
 import AuthComponent from '../components/AuthComponent';
 
