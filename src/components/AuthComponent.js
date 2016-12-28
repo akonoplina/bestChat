@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 
 export default class AuthComponent extends Component {
+
     onSignInButtonPress(){
 
         this.props.signInAction();
@@ -34,7 +35,7 @@ export default class AuthComponent extends Component {
     render() {
 
         const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
-            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass,signInEmpty, signUpEmpty,
+            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, signInEmpty, signUpEmpty,
             passEmpty} = this.props;
 
         return <div className="authWrapper">
@@ -51,7 +52,7 @@ export default class AuthComponent extends Component {
                     <input className="signUpData" type="text" onChange={this.onFieldChange.bind(this, 'signUpEmpty')}/></p>
             </div>
             <div className={'pass ' + (!showPass ? 'none' : '')}>
-                <p><label>{passwordTitle}:</label><input type="text" className="passData"
+                <p><label>{passwordTitle}:</label><input type="password" className="passData"
                                                          onChange={this.onFieldChange.bind(this, 'passEmpty')}/></p>
             </div>
             <button disabled={signInEmpty || signUpEmpty || passEmpty} onClick={::this.onOkButtonPress}

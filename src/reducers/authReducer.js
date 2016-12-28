@@ -16,8 +16,10 @@ const initialState = {
 
     signInEmpty: true,
     signUpEmpty: true,
-    passEmpty: true
+    passEmpty: true,
 
+    showMessageLog: false,
+    showConnectionLog: false
 };
 
 import {
@@ -32,7 +34,6 @@ import {
     SIGN_IN_DELETED,
     SIGN_UP_DELETED
 
-
 } from '../constants/AuthComponent';
 
 export default function authReducer(state = initialState, action) {
@@ -46,7 +47,8 @@ export default function authReducer(state = initialState, action) {
                 showSignInInput: false, showPass: true, okButtonVisible: true};
         case OK_BUTTON_PRESSED:
             return { ...state, showChatPage: true, showSignInInput : false,
-                showSignUpInput: false, showPass: false, okButtonVisible: false};
+                showSignUpInput: false, showPass: false, okButtonVisible: false, showMessageLog: true,
+                showConnectionLog: true};
         case SEND_MESSAGE:
             return { ...state, messageSend: true};
         case SIGN_IN_ENTERED:

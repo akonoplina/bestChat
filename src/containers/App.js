@@ -2,23 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//import * as Bootstrap from 'react-bootstrap';
-
 import AuthComponent from '../components/AuthComponent';
 
 import ChatComponent from '../components/ChatComponent';
+
+import SocketConnectionLog from '../components/SocketConnectionLog';
+
+import SocketMessageLog from '../components/SocketMessageLog';
 
 import * as chatActions from '../actions/chatActions';
 
 class App extends Component {
     render() {
 
+        const { authReducer, chatReducer, socketReducer } = this.props;
 
-        const { authReducer, chatReducer } = this.props;
-
-        const { signUpAction, signInAction, OkButtonAction, validateAction, changeDataAction } = this.props.chatActions;
-
-
+        const { signUpAction, signInAction, OkButtonAction, validateAction, changeDataAction, socketsConnecting,
+            socketsDisconnecting, socketsMessageSend, socketsConnect, socketsDisconnect} = this.props.chatActions;
 
         return <div>
             <AuthComponent validateAction={validateAction} signInAction={signInAction}
@@ -35,6 +35,18 @@ class App extends Component {
                            signUpEmpty={authReducer.signUpEmpty} passEmpty={authReducer.passEmpty}/>
 
             <ChatComponent messageListTitle={chatReducer.messageListTitle} showChatPage={authReducer.showChatPage} />
+
+
+            <SocketConnectionLog connectAction={socketsConnecting} history={socketReducer.history}
+                                 disconnectAction={socketsDisconnecting}
+                                 message={socketReducer.message} loaded={socketReducer.loaded}
+                                 connected={socketReducer.connected} showConnectionLog={authReducer.showConnectionLog}/>
+
+            <SocketMessageLog showMessageLog={authReducer.showMessageLog} connected={socketReducer.connected}
+                              loaded={socketReducer.loaded} message_history={socketReducer.message_history}
+                              socketsMessageSend={socketsMessageSend}/>
+
+
             </div>
     }
 }
@@ -42,7 +54,8 @@ class App extends Component {
 function mapStateToProps(state) {
     return {
         authReducer: state.authReducer,
-        chatReducer: state.chatReducer
+        chatReducer: state.chatReducer,
+        socketReducer: state.socketReducer
     }
 }
 

@@ -4,6 +4,8 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import socketExampleMiddleware from '../middleware/socketExampleMiddleware';
+
 
 export default function configureStore(initialState) {
     const logger = createLogger();
@@ -20,7 +22,7 @@ export default function configureStore(initialState) {
             const nextRootReducer = require('../reducers');
             store.replaceReducer(nextRootReducer)
         });
-    };
+    }
 
     return store;
 }

@@ -3,14 +3,15 @@ import {
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
     SEND_MESSAGE,
-    VALIDATE_DATA,
-    SIGN_IN_ENTERED,
-    SIGN_UP_ENTERED,
-    PASS_ENTERED,
-    SIGN_IN_DELETED,
-    SIGN_UP_DELETED,
-    PASS_DELETED
+    VALIDATE_DATA
 } from '../constants/AuthComponent';
+
+import {
+    SOCKETS_CONNECTING,
+    SOCKETS_DISCONNECTING,
+    SOCKETS_MESSAGE_SENDING,
+    SOCKETS_MESSAGE_RECEIVING
+} from '../constants/SocketsComponent';
 
 export function signInAction() {
 
@@ -71,6 +72,59 @@ export function changeDataAction(fieldName, dataEntered = false) {
     return (dispatch) => {
         dispatch({
             type: type
+        });
+    }
+}
+
+export function socketsConnecting() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_CONNECTING
+        });
+    }
+}
+export function socketsConnect() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_CONNECT
+        });
+    }
+}
+export function socketsDisconnecting() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_DISCONNECTING
+        });
+    }
+}
+export function socketsDisconnect() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_DISCONNECT
+        });
+    }
+}
+export function socketsMessageSending(sendMessage) {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_MESSAGE_SENDING,
+            message_send: sendMessage
+        });
+    }
+}
+export function socketsMessageSend(sendMessage) {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_MESSAGE_SEND,
+            message_send: sendMessage
+        });
+    }
+}
+export function socketsMessageReceiving(receiveMessage) {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_MESSAGE_RECEIVING,
+            message_receive: receiveMessage
         });
     }
 }
