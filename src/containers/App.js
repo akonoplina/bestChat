@@ -4,8 +4,6 @@ import { bindActionCreators } from 'redux';
 
 import AuthComponent from '../components/AuthComponent';
 
-import ChatComponent from '../components/ChatComponent';
-
 import SocketConnectionLog from '../components/SocketConnectionLog';
 
 import SocketMessageLog from '../components/SocketMessageLog';
@@ -15,7 +13,7 @@ import * as chatActions from '../actions/chatActions';
 class App extends Component {
     render() {
 
-        const { authReducer, chatReducer, socketReducer } = this.props;
+        const { authReducer, socketReducer } = this.props;
 
         const { signUpAction, signInAction, OkButtonAction, validateAction, changeDataAction, socketsConnecting,
             socketsDisconnecting, socketsMessageSend, socketsConnect, socketsDisconnect} = this.props.chatActions;
@@ -33,9 +31,6 @@ class App extends Component {
                            okButtonTitle={authReducer.okButtonTitle}
                            changeDataAction={changeDataAction} signInEmpty={authReducer.signInEmpty}
                            signUpEmpty={authReducer.signUpEmpty} passEmpty={authReducer.passEmpty}/>
-
-            <ChatComponent messageListTitle={chatReducer.messageListTitle} showChatPage={authReducer.showChatPage} />
-
 
             <SocketConnectionLog connectAction={socketsConnect} disconnectAction={socketsDisconnect}
                                  connectingAction={socketsConnecting} history={socketReducer.history}
@@ -55,7 +50,6 @@ class App extends Component {
 function mapStateToProps(state) {
     return {
         authReducer: state.authReducer,
-        chatReducer: state.chatReducer,
         socketReducer: state.socketReducer
     }
 }

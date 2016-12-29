@@ -1,8 +1,8 @@
-var path = require('path');
-var webpack = require('webpack');
-var NpmInstallPlugin = require('npm-install-webpack-plugin');
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
+let path = require('path');
+let webpack = require('webpack');
+let NpmInstallPlugin = require('npm-install-webpack-plugin');
+let autoprefixer = require('autoprefixer');
+let precss = require('precss');
 
 module.exports = {
     devtool: 'cheap-module-eval-source-map',

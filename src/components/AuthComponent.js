@@ -15,6 +15,7 @@ export default class AuthComponent extends Component {
     onOkButtonPress(){
 
         this.props.OkButtonAction();
+        //this.props.validateAction();
 
     }
     onFieldChange(fieldName, e){
@@ -28,8 +29,6 @@ export default class AuthComponent extends Component {
 
             this.props.changeDataAction(fieldName, false);
         }
-
-        //this.props.validateAction();
 
     }
     render() {

@@ -26,7 +26,6 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    SEND_MESSAGE,
     PASS_ENTERED,
     SIGN_IN_ENTERED,
     SIGN_UP_ENTERED,
@@ -49,8 +48,6 @@ export default function authReducer(state = initialState, action) {
             return { ...state, showChatPage: true, showSignInInput : false,
                 showSignUpInput: false, showPass: false, okButtonVisible: false, showMessageLog: true,
                 showConnectionLog: true};
-        case SEND_MESSAGE:
-            return { ...state, messageSend: true};
         case SIGN_IN_ENTERED:
             return {...state, signInEmpty: false, signUpEmpty: false};
         case SIGN_UP_ENTERED:

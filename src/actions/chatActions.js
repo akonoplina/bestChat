@@ -2,7 +2,6 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    SEND_MESSAGE,
     VALIDATE_DATA
 } from '../constants/AuthComponent';
 
