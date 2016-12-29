@@ -1,5 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 
+import { Button, Form, FormGroup, Col, FormControl } from 'react-bootstrap';
+
 export default class AuthComponent extends Component {
 
     onSignInButtonPress(){
@@ -38,24 +40,42 @@ export default class AuthComponent extends Component {
             passEmpty} = this.props;
 
         return <div className="authWrapper">
-            <div>
-                <button className={'signIn ' + (!buttonSignInVisible ? 'none':'')}
-                        onClick={::this.onSignInButtonPress} >{signInButtonTitle}</button>
-                <p className={(!showSignInInput ? 'none':'')}><label>{signInButtonTitle}:</label>
-                    <input className="signInData" type="text" onChange={this.onFieldChange.bind(this, 'signInEmpty')}/></p>
-            </div>
-            <div>
-                <button className={'signUp ' + (!buttonSignUpVisible ? 'none':'')}
-                        onClick={::this.onSignUpButtonPress}>{signUpButtonTitle}</button>
-                <p className={(!showSignUpInput ? 'none':'')}><label>{signUpButtonTitle}:</label>
-                    <input className="signUpData" type="text" onChange={this.onFieldChange.bind(this, 'signUpEmpty')}/></p>
-            </div>
-            <div className={'pass ' + (!showPass ? 'none' : '')}>
-                <p><label>{passwordTitle}:</label><input type="password" className="passData"
-                                                         onChange={this.onFieldChange.bind(this, 'passEmpty')}/></p>
-            </div>
-            <button disabled={signInEmpty || signUpEmpty || passEmpty} onClick={::this.onOkButtonPress}
-                    className={'okButton ' + (!okButtonVisible ? 'none' : '')}>{okButtonTitle}</button>
+            <Form horizontal>
+                <FormGroup>
+                        <Col smOffset={2} sm={10}>
+                            <Button className={'signIn ' + (!buttonSignInVisible ? 'none':'')}
+                                    onClick={::this.onSignInButtonPress} >{signInButtonTitle}</Button>
+                        </Col>
+                    <FormGroup className={(!showSignInInput ? 'none':'')} >
+                        <Col sm={2}>
+                            {signInButtonTitle}
+                        </Col>
+                        <Col sm={10}>
+                            <FormControl className="signInData" type="text" placeholder="signIn"
+                                         onChange={this.onFieldChange.bind(this, 'signInEmpty')} />
+                        </Col>
+                    </FormGroup>
+
+                </FormGroup>
+                <FormGroup>
+                    <div>
+                        <Button className={'signUp ' + (!buttonSignUpVisible ? 'none':'')}
+                                onClick={::this.onSignUpButtonPress}>{signUpButtonTitle} </Button>
+                        <p className={(!showSignUpInput ? 'none':'')}><label>{signUpButtonTitle}:</label>
+                            <input className="signUpData" type="text" onChange={this.onFieldChange.bind(this, 'signUpEmpty')}/></p>
+                    </div>
+                </FormGroup>
+                <FormGroup>
+                    <div className={'pass ' + (!showPass ? 'none' : '')}>
+                        <p><label>{passwordTitle}:</label><input type="password" className="passData"
+                                                                 onChange={this.onFieldChange.bind(this, 'passEmpty')}/></p>
+                    </div>
+                </FormGroup>
+                <FormGroup>
+                    <Button disabled={signInEmpty || signUpEmpty || passEmpty} onClick={::this.onOkButtonPress}
+                            className={'okButton ' + (!okButtonVisible ? 'none' : '')}>{okButtonTitle}</Button>
+                </FormGroup>
+            </Form>
 
         </div>
     }

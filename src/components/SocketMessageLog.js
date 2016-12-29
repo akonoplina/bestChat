@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
+import { Button } from 'react-bootstrap';
 
 export default class SocketMessageLog extends Component {
 
@@ -36,12 +37,12 @@ export default class SocketMessageLog extends Component {
                             ref="message_text" readOnly = {(loaded && connected === true) ? false : true}>
                         </input>
                     </div>
-                    <button
+                    <Button
                         className="btn btn-primary btn-sm"
                         onClick={::this.handleSendButton}
                         disabled = {(connected === true) ? false : true}>
                         <i className="fa fa-sign-in"/> Send
-                    </button>
+                    </Button>
                 </form>
             </div>
         </div>

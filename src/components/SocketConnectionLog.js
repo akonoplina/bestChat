@@ -1,5 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 
+import { Button } from 'react-bootstrap';
+
 export default class SocketConnectionLog extends Component {
 
     handleConnectButton (e){
@@ -29,16 +31,16 @@ export default class SocketConnectionLog extends Component {
                         ' message = ' + historyElement.message.toString() +
                         ' connected = ' + historyElement.connected.toString() + ' \n').reverse().join('')
                     }/>
-                <button
+                <Button
                     className="btn btn-primary btn-sm"
                     onClick={::this.handleConnectButton}>
                     <i className="fa fa-sign-in"/> Connect
-                </button>
-                <button
+                </Button>
+                <Button
                     className="btn btn-danger btn-sm"
                     onClick={::this.handleDisconnectButton}>
                     <i className="fa fa-sign-out"/> Disconnect
-                </button>
+                </Button>
             </div>
         </div>
     }
