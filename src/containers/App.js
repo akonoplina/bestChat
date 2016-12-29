@@ -37,8 +37,9 @@ class App extends Component {
             <ChatComponent messageListTitle={chatReducer.messageListTitle} showChatPage={authReducer.showChatPage} />
 
 
-            <SocketConnectionLog connectAction={socketsConnecting} history={socketReducer.history}
-                                 disconnectAction={socketsDisconnecting}
+            <SocketConnectionLog connectAction={socketsConnect} disconnectAction={socketsDisconnect}
+                                 connectingAction={socketsConnecting} history={socketReducer.history}
+                                 disconnectingAction={socketsDisconnecting}
                                  message={socketReducer.message} loaded={socketReducer.loaded}
                                  connected={socketReducer.connected} showConnectionLog={authReducer.showConnectionLog}/>
 

@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
+
 export default class SocketMessageLog extends Component {
 
     handleSendButton(e) {
@@ -26,7 +27,7 @@ export default class SocketMessageLog extends Component {
                 </ul>
                 <form
                     className="form-inline"
-                    onSubmit={this.handleSendButton}>
+                    onSubmit={::this.handleSendButton}>
                     <p></p>
                     <div className="form-group">
                         <input
@@ -37,7 +38,7 @@ export default class SocketMessageLog extends Component {
                     </div>
                     <button
                         className="btn btn-primary btn-sm"
-                        onClick={this.handleSendButton}
+                        onClick={::this.handleSendButton}
                         disabled = {(connected === true) ? false : true}>
                         <i className="fa fa-sign-in"/> Send
                     </button>
@@ -52,8 +53,6 @@ SocketMessageLog.propTypes = {
     loaded: PropTypes.bool.isRequired,
     connected: PropTypes.bool.isRequired,
     message_history: PropTypes.array.isRequired,
-    //socketsMessageSendingAction: PropTypes.func.isRequired,
-    //socketsMessageReceivingAction: PropTypes.func.isRequired,
     socketsMessageSend: PropTypes.func.isRequired
 
 };

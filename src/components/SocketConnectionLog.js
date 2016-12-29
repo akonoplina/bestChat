@@ -51,6 +51,8 @@ SocketConnectionLog.propTypes = {
     connected: PropTypes.bool.isRequired,
     history: PropTypes.array.isRequired,
     connectAction: PropTypes.func.isRequired,
-    disconnectAction: PropTypes.func.isRequired
+    disconnectAction: PropTypes.func.isRequired,
+    connectingAction: PropTypes.func.isRequired,
+    disconnectingAction: PropTypes.func.isRequired
 
 };
