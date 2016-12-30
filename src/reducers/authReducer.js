@@ -19,7 +19,11 @@ const initialState = {
     passEmpty: true,
 
     showMessageLog: false,
-    showConnectionLog: false
+    showConnectionLog: false,
+
+    validationStateSignIn: null,
+    validationStateSignUp: null,
+    validationStatePass: null
 };
 
 import {
@@ -49,17 +53,17 @@ export default function authReducer(state = initialState, action) {
                 showSignUpInput: false, showPass: false, okButtonVisible: false, showMessageLog: true,
                 showConnectionLog: true};
         case SIGN_IN_ENTERED:
-            return {...state, signInEmpty: false, signUpEmpty: false};
+            return {...state, validationStateSignIn: action.validationStateSignIn, signInEmpty: false, signUpEmpty: false};
         case SIGN_UP_ENTERED:
-            return {...state, signUpEmpty: false, signInEmpty: false};
+            return {...state, validationStateSignUp: action.validationStateSignUp, signUpEmpty: false, signInEmpty: false};
         case PASS_ENTERED:
-            return {...state, passEmpty: false};
+            return {...state, validationStatePass: action.validationStatePass, passEmpty: false};
         case SIGN_IN_DELETED:
-            return {...state, signInEmpty: true, signUpEmpty: true};
+            return {...state, validationStateSignIn: action.validationStateSignIn, signInEmpty: true, signUpEmpty: true};
         case SIGN_UP_DELETED:
-            return {...state, signUpEmpty: true, signInEmpty: true};
+            return {...state, validationStateSignUp: action.validationStateSignUp, signUpEmpty: true, signInEmpty: true};
         case PASS_DELETED:
-            return {...state, passEmpty: true};
+            return {...state, validationStatePass: action.validationStatePass, passEmpty: true};
         default:
             return state;
     }

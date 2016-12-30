@@ -30,7 +30,11 @@ class App extends Component {
                            okButtonVisible={authReducer.okButtonVisible} OkButtonAction={OkButtonAction}
                            okButtonTitle={authReducer.okButtonTitle}
                            changeDataAction={changeDataAction} signInEmpty={authReducer.signInEmpty}
-                           signUpEmpty={authReducer.signUpEmpty} passEmpty={authReducer.passEmpty}/>
+                           signUpEmpty={authReducer.signUpEmpty} passEmpty={authReducer.passEmpty}
+                           validationStateSignIn={authReducer.validationStateSignIn}
+                           validationStateSignUp={authReducer.validationStateSignUp}
+                           validationStatePass={authReducer.validationStatePass}
+            />
 
             <SocketConnectionLog connectAction={socketsConnect} disconnectAction={socketsDisconnect}
                                  connectingAction={socketsConnecting} history={socketReducer.history}

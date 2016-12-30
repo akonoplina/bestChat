@@ -47,9 +47,10 @@ export function validateAction() {
         });
     }
 }
-export function changeDataAction(fieldName, dataEntered = false) {
+export function changeDataAction(fieldName, dataEntered = false, validateData = null) {
 
     let type, status = '';
+    let validationStateSignIn, validationStateSignUp, validationStatePass = null;
 
     if(dataEntered === true){
         status = 'ENTERED';
@@ -59,12 +60,15 @@ export function changeDataAction(fieldName, dataEntered = false) {
     switch(fieldName){
         case 'signInEmpty':
             type = 'SIGN_IN_' + status;
+            validationStateSignIn = validateData;
             break;
         case 'signUpEmpty':
             type = 'SIGN_UP_' + status;
+            validationStateSignUp = validateData;
             break;
         case 'passEmpty':
             type = 'PASS_' + status;
+            validationStatePass = validateData;
             break;
         default:
             break;
@@ -73,7 +77,10 @@ export function changeDataAction(fieldName, dataEntered = false) {
 
     return (dispatch) => {
         dispatch({
-            type: type
+            type: type,
+            validationStateSignIn: validationStateSignIn,
+            validationStateSignUp: validationStateSignUp,
+            validationStatePass: validationStatePass
         });
     }
 }

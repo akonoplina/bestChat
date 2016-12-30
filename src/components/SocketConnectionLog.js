@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Button } from 'react-bootstrap';
+import { Button, Form, FormGroup, FormControl } from 'react-bootstrap';
 
 export default class SocketConnectionLog extends Component {
 
@@ -16,33 +16,36 @@ export default class SocketConnectionLog extends Component {
 
         const { history, showConnectionLog } = this.props;
 
-        return <div className = {'showConnectionLog ' + (!showConnectionLog? 'none': '')}>
-            <div>
+        return <Form horizontal className = {'showConnectionLog ' + (!showConnectionLog? 'none': '')}>
+            <FormGroup>
                 <h3>Socket connection log</h3>
-                <textarea
-                    className="form-control"
-                    rows="1"
-                    readOnly
-                    placeholder="Waiting ..."
-                    value={
-                        history.map((historyElement, index) =>
-                        'index = ' + index +
-                        ' loaded = ' + historyElement.loaded.toString() +
-                        ' message = ' + historyElement.message.toString() +
-                        ' connected = ' + historyElement.connected.toString() + ' \n').reverse().join('')
-                    }/>
+                <FormControl className="form-control"
+                             rows="1"
+                             readOnly
+                             placeholder="Waiting ..."
+                             value={
+                                 history.map((historyElement, index) =>
+                                 'index = ' + index +
+                                 ' loaded = ' + historyElement.loaded.toString() +
+                                 ' message = ' + historyElement.message.toString() +
+                                 ' connected = ' + historyElement.connected.toString() + ' \n').reverse().join('')
+                             } componentClass="textarea" />
+            </FormGroup>
+            <FormGroup>
                 <Button
                     className="btn btn-primary btn-sm"
                     onClick={::this.handleConnectButton}>
-                    <i className="fa fa-sign-in"/> Connect
+                    Connect
                 </Button>
+            </FormGroup>
+            <FormGroup>
                 <Button
                     className="btn btn-danger btn-sm"
                     onClick={::this.handleDisconnectButton}>
-                    <i className="fa fa-sign-out"/> Disconnect
+                    Disconnect
                 </Button>
-            </div>
-        </div>
+            </FormGroup>
+        </Form>
     }
 }
 
