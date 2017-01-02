@@ -6,12 +6,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { routerMiddleware } from 'react-router-redux';
 
-import createMiddleware from '../middleware/clientMiddleware';
-
 import socketExampleMiddleware from '../middleware/socketExampleMiddleware';
 
 
-export default function configureStore(initialState, history, client) {
+export default function configureStore(initialState, history) {
 
     const logger = createLogger();
 
@@ -21,7 +19,7 @@ export default function configureStore(initialState, history, client) {
         rootReducer,
         initialState,
         composeWithDevTools(
-            applyMiddleware(createMiddleware(client), reduxRouterMiddleware,thunk, logger,socketExampleMiddleware())
+            applyMiddleware(reduxRouterMiddleware,thunk, logger,socketExampleMiddleware())
         )
     );
 

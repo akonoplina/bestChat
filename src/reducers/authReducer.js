@@ -12,12 +12,9 @@ const initialState = {
     showPass: false,
     okButtonVisible: false,
 
-    showChatPage: false,
-
     buttonDisabled: true,
 
     showMessageLog: false,
-    showConnectionLog: false,
     showUser: false,
 
     validationStateSignIn: null,
@@ -48,9 +45,9 @@ export default function authReducer(state = initialState, action) {
             return { ...state, buttonSignUpVisible: false, showSignUpInput: true, buttonSignInVisible: false,
                 showSignInInput: false, showPass: true, okButtonVisible: true};
         case OK_BUTTON_PRESSED:
-            return { ...state, showChatPage: true, showSignInInput : false,
-                showSignUpInput: false, showPass: false, okButtonVisible: false, showMessageLog: true,
-                showConnectionLog: true};
+            return { ...state, showSignInInput : false, showSignUpInput: false, showPass: false, okButtonVisible: false,
+                showMessageLog: true, showUser: true, userName: action.userName,
+                userAge: action.userAge, userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
         case SIGN_IN_VALIDATION_PASSED:
             return {...state, validationStateSignIn: action.validationStateSignIn, buttonDisabled: action.buttonDisabled};
         case SIGN_UP_VALIDATION_PASSED:

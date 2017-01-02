@@ -2,16 +2,16 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
+    USER_LOGGED_IN,
+    USER_LOGGED_OUT,
+    USER_LOGIN,
+    USER_LOGOUT
 } from '../constants/AuthComponent';
 
 import {
-    SOCKETS_CONNECTING,
-    SOCKETS_DISCONNECTING,
     SOCKETS_MESSAGE_SENDING,
     SOCKETS_MESSAGE_RECEIVING,
     SOCKETS_MESSAGE_SEND,
-    SOCKETS_CONNECT,
-    SOCKETS_DISCONNECT
 } from '../constants/SocketsComponent';
 
 export function signInAction() {
@@ -35,6 +35,42 @@ export function OkButtonAction() {
     return (dispatch) => {
         dispatch({
             type: OK_BUTTON_PRESSED
+        });
+    }
+}
+export function userLoggedIn(userLogin, userPass){
+    return (dispatch) => {
+        dispatch({
+            type: USER_LOGGED_IN,
+            userLogin,
+            userPass
+        });
+    }
+}
+export function userLogin(userLogin, userPass){
+    return (dispatch) => {
+        dispatch({
+            type: USER_LOGIN,
+            userLogin,
+            userPass
+        });
+    }
+}
+export function userLogout(userLogin, userPass){
+    return (dispatch) => {
+        dispatch({
+            type: USER_LOGOUT,
+            userLogin,
+            userPass
+        });
+    }
+}
+
+
+export function userLoggedOut(){
+    return (dispatch) => {
+        dispatch({
+            type: USER_LOGGED_OUT
         });
     }
 }
@@ -75,35 +111,6 @@ export function changeDataAction(fieldName, validationPassed = false, validateDa
             validationStateSignUp: validationStateSignUp,
             validationStatePass: validationStatePass,
             buttonDisabled: buttonDisabled
-        });
-    }
-}
-
-export function socketsConnecting() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_CONNECTING
-        });
-    }
-}
-export function socketsConnect() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_CONNECT
-        });
-    }
-}
-export function socketsDisconnecting() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_DISCONNECTING
-        });
-    }
-}
-export function socketsDisconnect() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_DISCONNECT
         });
     }
 }

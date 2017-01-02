@@ -29,5 +29,5 @@ app.listen(port, function(error) {
     }
 });
 
-let io = require('socket.io').listen(server);
-io.sockets.on('connection', socket);
+// let io = require('socket.io').listen(server);
+// io.sockets.on('connection', socket);

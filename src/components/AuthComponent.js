@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 
 import { Button, Form, FormGroup, Col, FormControl, ControlLabel } from 'react-bootstrap';
 
+import ReactDOM from 'react-dom';
+
 export default class AuthComponent extends Component {
 
     onSignInButtonPress(){
@@ -16,21 +18,37 @@ export default class AuthComponent extends Component {
     }
     onOkButtonPress(){
 
+        let userSignIn = ReactDOM.findDOMNode(this.refs.signIn).value;
+
+        let userSignUp = ReactDOM.findDOMNode(this.refs.signUp).value;
+
+        let userLogin = '';
+        let userPass = ReactDOM.findDOMNode(this.refs.pass).value;
+
+        if(userSignIn !== 'undefined'){
+            userLogin = userSignIn;
+        }
+        else{
+            userLogin = userSignUp;
+        }
+
+        this.socketConnect();
+        this.props.userLogin(userLogin, userPass);  // send info to the server
         this.props.OkButtonAction();
-        // send info to the server
+
 
     }
     validateAction(fieldName,value){
         switch (fieldName){
             case 'pass':
-                let ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,}$/;
-                if(!ck_password.test(value)){
+                let ckPassword = /^[A-Za-z0-9!@#$%^&*()_]{6,}$/;
+                if(!ckPassword.test(value)){
                     return 'error';
                 }
                 return 'success';
             default:
-                let ck_username = /^[A-Za-z0-9_]{6,}$/;
-                if(!ck_username.test(value)){
+                let ckUsername = /^[A-Za-z0-9_]{6,}$/;
+                if(!ckUsername.test(value)){
                     return 'error';
                 }
                 return 'success';
@@ -68,7 +86,7 @@ export default class AuthComponent extends Component {
                         {signInButtonTitle}:
                     </Col>
                     <Col sm={2}>
-                    <FormControl className="signInData" type="text"
+                    <FormControl className="signInData" type="text" ref="signIn"
                                  onChange={this.onFieldChange.bind(this, 'signIn')} />
                     <FormControl.Feedback />
                     </Col>
@@ -83,7 +101,7 @@ export default class AuthComponent extends Component {
                         {signUpButtonTitle}:
                     </Col>
                     <Col sm={2}>
-                       <FormControl className="signUpData" type="text"
+                       <FormControl className="signUpData" type="text" ref="signUp"
                                     onChange={this.onFieldChange.bind(this, 'signUp')} />
                         <FormControl.Feedback />
                     </Col>
@@ -93,7 +111,7 @@ export default class AuthComponent extends Component {
                         {passwordTitle}:
                     </Col>
                     <Col sm={2}>
-                        <FormControl type="password" className="passData"
+                        <FormControl type="password" className="passData" ref="pass"
                                      onChange={this.onFieldChange.bind(this, 'pass')}/>
                     <FormControl.Feedback />
                     </Col>
@@ -123,5 +141,9 @@ AuthComponent.propTypes = {
     passwordTitle: PropTypes.string.isRequired,
     showPass: PropTypes.bool.isRequired,
     changeDataAction: PropTypes.func.isRequired,
-    buttonDisabled: PropTypes.bool.isRequired
+    buttonDisabled: PropTypes.bool.isRequired,
+    userLoggedIn: PropTypes.func.isRequired,
+    userLoggedOut: PropTypes.func.isRequired,
+    userLogin: PropTypes.func.isRequired,
+    useLogout: PropTypes.func.isRequired
 };
