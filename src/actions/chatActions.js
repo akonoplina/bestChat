@@ -2,7 +2,6 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    VALIDATE_DATA
 } from '../constants/AuthComponent';
 
 import {
@@ -39,35 +38,29 @@ export function OkButtonAction() {
         });
     }
 }
-export function validateAction() {
-
-    return (dispatch) => {
-        dispatch({
-            type: VALIDATE_DATA
-        });
-    }
-}
-export function changeDataAction(fieldName, dataEntered = false, validateData = null) {
+export function changeDataAction(fieldName, validationPassed = false, validateData = null) {
 
     let type, status = '';
     let validationStateSignIn, validationStateSignUp, validationStatePass = null;
+    let buttonDisabled = true;
 
-    if(dataEntered === true){
-        status = 'ENTERED';
+    if(validationPassed === true){
+        status = 'PASSED';
+        buttonDisabled = false;
     } else {
-        status = 'DELETED';
+        status = 'FAILED';
     }
     switch(fieldName){
-        case 'signInEmpty':
-            type = 'SIGN_IN_' + status;
+        case 'signIn':
+            type = 'SIGN_IN_VALIDATION_' + status;
             validationStateSignIn = validateData;
             break;
-        case 'signUpEmpty':
-            type = 'SIGN_UP_' + status;
+        case 'signUp':
+            type = 'SIGN_UP_VALIDATION_' + status;
             validationStateSignUp = validateData;
             break;
-        case 'passEmpty':
-            type = 'PASS_' + status;
+        case 'pass':
+            type = 'PASS_VALIDATION_' + status;
             validationStatePass = validateData;
             break;
         default:
@@ -80,7 +73,8 @@ export function changeDataAction(fieldName, dataEntered = false, validateData = 
             type: type,
             validationStateSignIn: validationStateSignIn,
             validationStateSignUp: validationStateSignUp,
-            validationStatePass: validationStatePass
+            validationStatePass: validationStatePass,
+            buttonDisabled: buttonDisabled
         });
     }
 }

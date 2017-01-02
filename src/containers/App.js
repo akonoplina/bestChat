@@ -8,12 +8,14 @@ import SocketConnectionLog from '../components/SocketConnectionLog';
 
 import SocketMessageLog from '../components/SocketMessageLog';
 
+import UserComponent from '../components/UserComponent';
+
 import * as chatActions from '../actions/chatActions';
 
 class App extends Component {
     render() {
 
-        const { authReducer, socketReducer } = this.props;
+        const { authReducer, socketReducer, userReducer } = this.props;
 
         const { signUpAction, signInAction, OkButtonAction, validateAction, changeDataAction, socketsConnecting,
             socketsDisconnecting, socketsMessageSend, socketsConnect, socketsDisconnect} = this.props.chatActions;
@@ -29,8 +31,7 @@ class App extends Component {
                            signUpAction={signUpAction} signUpButtonTitle={ authReducer.signUpButtonTitle}
                            okButtonVisible={authReducer.okButtonVisible} OkButtonAction={OkButtonAction}
                            okButtonTitle={authReducer.okButtonTitle}
-                           changeDataAction={changeDataAction} signInEmpty={authReducer.signInEmpty}
-                           signUpEmpty={authReducer.signUpEmpty} passEmpty={authReducer.passEmpty}
+                           changeDataAction={changeDataAction} buttonDisabled={authReducer.buttonDisabled}
                            validationStateSignIn={authReducer.validationStateSignIn}
                            validationStateSignUp={authReducer.validationStateSignUp}
                            validationStatePass={authReducer.validationStatePass}
@@ -44,8 +45,10 @@ class App extends Component {
 
             <SocketMessageLog showMessageLog={authReducer.showMessageLog} connected={socketReducer.connected}
                               loaded={socketReducer.loaded} message_history={socketReducer.message_history}
-                              socketsMessageSend={socketsMessageSend}/>
+                              socketsMessageSend={socketsMessageSend} userName={userReducer.userName}/>
 
+            <UserComponent showUser={authReducer.showUser} userName={userReducer.userName} userAboutMe={userReducer.userAboutMe}
+                           userAvatar={userReducer.userAvatar} userAge={userReducer.userAge} />
 
             </div>
     }
@@ -54,7 +57,8 @@ class App extends Component {
 function mapStateToProps(state) {
     return {
         authReducer: state.authReducer,
-        socketReducer: state.socketReducer
+        socketReducer: state.socketReducer,
+        userReducer: state.userReducer
     }
 }
 

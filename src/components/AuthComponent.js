@@ -17,35 +17,46 @@ export default class AuthComponent extends Component {
     onOkButtonPress(){
 
         this.props.OkButtonAction();
-        //this.props.validateAction();
+        // send info to the server
 
+    }
+    validateAction(fieldName,value){
+        switch (fieldName){
+            case 'pass':
+                let ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,}$/;
+                if(!ck_password.test(value)){
+                    return 'error';
+                }
+                return 'success';
+            default:
+                let ck_username = /^[A-Za-z0-9_]{6,}$/;
+                if(!ck_username.test(value)){
+                    return 'error';
+                }
+                return 'success';
+
+        }
     }
     onFieldChange(fieldName, e){
 
-        let length = e.target.value.trim().length;
-        if (length > 0) {
-            if (length > 10)
-                this.props.changeDataAction(fieldName, true, 'success');
-            else if (length > 5)
-                this.props.changeDataAction(fieldName, true, 'warning');
-            else if (length > 0)
-                this.props.changeDataAction(fieldName, true, 'error');
-
+        let validationResult = this.validateAction(fieldName, e.target.value);
+        if (validationResult === 'success') {
+            this.props.changeDataAction(fieldName, true, validationResult);
         }
         else{
-            this.props.changeDataAction(fieldName, false);
+            this.props.changeDataAction(fieldName, false, validationResult);
         }
 
     }
     render() {
 
         const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
-            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, signInEmpty, signUpEmpty,
-            passEmpty, validationStateSignIn, validationStateSignUp, validationStatePass } = this.props;
+            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, validationStateSignIn,
+            validationStateSignUp, validationStatePass, buttonDisabled} = this.props;
 
         return <Form horizontal className="authWrapper">
                 <FormGroup>
-                    <h3>Welcome to the chat!!!</h3>
+                    <h3>Please enter your login & pass)))</h3>
                 </FormGroup>
                 <FormGroup className={'signIn ' + (!buttonSignInVisible ? 'none':'')}>
                     <Col sm={1}>
@@ -58,7 +69,7 @@ export default class AuthComponent extends Component {
                     </Col>
                     <Col sm={2}>
                     <FormControl className="signInData" type="text"
-                                 onChange={this.onFieldChange.bind(this, 'signInEmpty')} />
+                                 onChange={this.onFieldChange.bind(this, 'signIn')} />
                     <FormControl.Feedback />
                     </Col>
                 </FormGroup>
@@ -73,7 +84,7 @@ export default class AuthComponent extends Component {
                     </Col>
                     <Col sm={2}>
                        <FormControl className="signUpData" type="text"
-                                    onChange={this.onFieldChange.bind(this, 'signUpEmpty')} />
+                                    onChange={this.onFieldChange.bind(this, 'signUp')} />
                         <FormControl.Feedback />
                     </Col>
                 </FormGroup>
@@ -83,13 +94,13 @@ export default class AuthComponent extends Component {
                     </Col>
                     <Col sm={2}>
                         <FormControl type="password" className="passData"
-                                     onChange={this.onFieldChange.bind(this, 'passEmpty')}/>
+                                     onChange={this.onFieldChange.bind(this, 'pass')}/>
                     <FormControl.Feedback />
                     </Col>
                 </FormGroup>
                 <FormGroup className={'okButton ' + (!okButtonVisible ? 'none' : '')}>
                     <Col sm={1}>
-                        <Button bsStyle="primary" disabled={signInEmpty || signUpEmpty || passEmpty}
+                        <Button bsStyle="primary" disabled={buttonDisabled}
                             onClick={::this.onOkButtonPress}>{okButtonTitle}</Button>
                     </Col>
                 </FormGroup>
@@ -112,7 +123,5 @@ AuthComponent.propTypes = {
     passwordTitle: PropTypes.string.isRequired,
     showPass: PropTypes.bool.isRequired,
     changeDataAction: PropTypes.func.isRequired,
-    signInEmpty: PropTypes.bool.isRequired,
-    signUpEmpty: PropTypes.bool.isRequired,
-    passEmpty: PropTypes.bool.isRequired
+    buttonDisabled: PropTypes.bool.isRequired
 };

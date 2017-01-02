@@ -14,12 +14,11 @@ const initialState = {
 
     showChatPage: false,
 
-    signInEmpty: true,
-    signUpEmpty: true,
-    passEmpty: true,
+    buttonDisabled: true,
 
     showMessageLog: false,
     showConnectionLog: false,
+    showUser: false,
 
     validationStateSignIn: null,
     validationStateSignUp: null,
@@ -30,12 +29,12 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    PASS_ENTERED,
-    SIGN_IN_ENTERED,
-    SIGN_UP_ENTERED,
-    PASS_DELETED,
-    SIGN_IN_DELETED,
-    SIGN_UP_DELETED
+    PASS_VALIDATION_PASSED,
+    SIGN_IN_VALIDATION_PASSED,
+    SIGN_UP_VALIDATION_PASSED,
+    PASS_VALIDATION_FAILED,
+    SIGN_IN_VALIDATION_FAILED,
+    SIGN_UP_VALIDATION_FAILED
 
 } from '../constants/AuthComponent';
 
@@ -52,18 +51,18 @@ export default function authReducer(state = initialState, action) {
             return { ...state, showChatPage: true, showSignInInput : false,
                 showSignUpInput: false, showPass: false, okButtonVisible: false, showMessageLog: true,
                 showConnectionLog: true};
-        case SIGN_IN_ENTERED:
-            return {...state, validationStateSignIn: action.validationStateSignIn, signInEmpty: false, signUpEmpty: false};
-        case SIGN_UP_ENTERED:
-            return {...state, validationStateSignUp: action.validationStateSignUp, signUpEmpty: false, signInEmpty: false};
-        case PASS_ENTERED:
-            return {...state, validationStatePass: action.validationStatePass, passEmpty: false};
-        case SIGN_IN_DELETED:
-            return {...state, validationStateSignIn: action.validationStateSignIn, signInEmpty: true, signUpEmpty: true};
-        case SIGN_UP_DELETED:
-            return {...state, validationStateSignUp: action.validationStateSignUp, signUpEmpty: true, signInEmpty: true};
-        case PASS_DELETED:
-            return {...state, validationStatePass: action.validationStatePass, passEmpty: true};
+        case SIGN_IN_VALIDATION_PASSED:
+            return {...state, validationStateSignIn: action.validationStateSignIn, buttonDisabled: action.buttonDisabled};
+        case SIGN_UP_VALIDATION_PASSED:
+            return {...state, validationStateSignUp: action.validationStateSignUp, buttonDisabled: action.buttonDisabled};
+        case PASS_VALIDATION_PASSED:
+            return {...state, validationStatePass: action.validationStatePass, buttonDisabled: action.buttonDisabled};
+        case SIGN_IN_VALIDATION_FAILED:
+            return {...state, validationStateSignIn: action.validationStateSignIn, buttonDisabled: action.buttonDisabled};
+        case SIGN_UP_VALIDATION_FAILED:
+            return {...state, validationStateSignUp: action.validationStateSignUp, buttonDisabled: action.buttonDisabled};
+        case PASS_VALIDATION_FAILED:
+            return {...state, validationStatePass: action.validationStatePass, buttonDisabled: action.buttonDisabled};
         default:
             return state;
     }

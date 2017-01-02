@@ -11,9 +11,12 @@ export default class SocketMessageLog extends Component {
     }
     render() {
 
-        const { showMessageLog, loaded, connected, message_history } = this.props;
+        const { showMessageLog, loaded, connected, message_history, userName } = this.props;
 
         return <div className = {'showMessageLog ' + (!showMessageLog? 'none': '')}>
+            <div>
+                <h3>Welcome to the chat{', ' + userName}!!!</h3>
+            </div>
             <div>
                 <h3>Message log</h3>
                 <ul>
@@ -54,6 +57,7 @@ SocketMessageLog.propTypes = {
     loaded: PropTypes.bool.isRequired,
     connected: PropTypes.bool.isRequired,
     message_history: PropTypes.array.isRequired,
-    socketsMessageSend: PropTypes.func.isRequired
+    socketsMessageSend: PropTypes.func.isRequired,
+    userName: PropTypes.string.isRequired
 
 };
