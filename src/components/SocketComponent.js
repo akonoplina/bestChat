@@ -2,18 +2,18 @@ import React, { PropTypes, Component } from 'react';
 
 import { Button } from 'react-bootstrap';
 
-export default class SocketMessageLog extends Component {
+export default class SocketComponent extends Component {
 
     handleSendButton(e) {
         e.preventDefault();
-        this.props.socketsMessageSend(this.refs.message_text.value);
-        this.refs.message_text.value = '';
+        this.props.socketsMessageSend(this.refs.messageText.value);
+        this.refs.messageText.value = '';
     }
     render() {
 
-        const { showMessageLog, loaded, connected, message_history, userName } = this.props;
+        const { connected, messageHistory, userName } = this.props;
 
-        return <div className = {'showMessageLog ' + (!showMessageLog? 'none': '')}>
+        return <div className = {(!connected? 'none': '')}>
             <div>
                 <h3>Welcome to the chat{', ' + userName}!!!</h3>
             </div>
@@ -21,7 +21,7 @@ export default class SocketMessageLog extends Component {
                 <h3>Message log</h3>
                 <ul>
                     {
-                        message_history.map((messageHistoryElement, index) =>
+                        messageHistory.map((messageHistoryElement, index) =>
                             <li key={index} className={'unstyled'}>
                                 <span className={(messageHistoryElement.direction === '->') ?
                                     'glyphicon glyphicon-arrow-right' : 'glyphicon glyphicon-arrow-left'}></span>
@@ -37,7 +37,7 @@ export default class SocketMessageLog extends Component {
                         <input
                             className="form-control input-sm"
                             type="text"
-                            ref="message_text" readOnly = {(loaded && connected === true) ? false : true}>
+                            ref="messageText" readOnly = {(connected === true) ? false : true}>
                         </input>
                     </div>
                     <Button
@@ -52,11 +52,9 @@ export default class SocketMessageLog extends Component {
     }
 }
 
-SocketMessageLog.propTypes = {
-    showMessageLog : PropTypes.bool.isRequired,
-    loaded: PropTypes.bool.isRequired,
+SocketComponent.propTypes = {
     connected: PropTypes.bool.isRequired,
-    message_history: PropTypes.array.isRequired,
+    messageHistory: PropTypes.array.isRequired,
     socketsMessageSend: PropTypes.func.isRequired,
     userName: PropTypes.string.isRequired
 

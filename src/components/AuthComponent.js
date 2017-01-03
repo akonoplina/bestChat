@@ -22,19 +22,22 @@ export default class AuthComponent extends Component {
 
         let userSignUp = ReactDOM.findDOMNode(this.refs.signUp).value;
 
-        let userLogin = '';
+        let userLogin, authType = '';
         let userPass = ReactDOM.findDOMNode(this.refs.pass).value;
 
         if(userSignIn !== 'undefined'){
             userLogin = userSignIn;
+            authType = 'signIn';
         }
         else{
             userLogin = userSignUp;
+            authType = 'signUp';
         }
 
-        this.socketConnect();
-        this.props.userLogin(userLogin, userPass);  // send info to the server
-        this.props.OkButtonAction();
+        this.props.socketsConnect(); // websockets action
+        console.log(this.props);
+        this.props.authSendData(userLogin, userPass, authType); // websockets action
+        //this.props.OkButtonAction();
 
 
     }
@@ -70,7 +73,7 @@ export default class AuthComponent extends Component {
 
         const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
             showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, validationStateSignIn,
-            validationStateSignUp, validationStatePass, buttonDisabled} = this.props;
+            validationStateSignUp, validationStatePass, buttonDisabled, errorMessage} = this.props;
 
         return <Form horizontal className="authWrapper">
                 <FormGroup>
@@ -122,6 +125,11 @@ export default class AuthComponent extends Component {
                             onClick={::this.onOkButtonPress}>{okButtonTitle}</Button>
                     </Col>
                 </FormGroup>
+                <FormGroup className={'errorMessageBlock ' + (!errorMessage? 'none' : '')}>
+                    <Col sm={1}>
+                        {errorMessage}
+                    </Col>
+                </FormGroup>
             </Form>
     }
 }
@@ -142,8 +150,12 @@ AuthComponent.propTypes = {
     showPass: PropTypes.bool.isRequired,
     changeDataAction: PropTypes.func.isRequired,
     buttonDisabled: PropTypes.bool.isRequired,
-    userLoggedIn: PropTypes.func.isRequired,
-    userLoggedOut: PropTypes.func.isRequired,
     userLogin: PropTypes.func.isRequired,
-    useLogout: PropTypes.func.isRequired
+    userLogout: PropTypes.func.isRequired,
+    socketsConnect: PropTypes.func.isRequired,
+    socketsDisconnect: PropTypes.func.isRequired,
+    socketsConnecting: PropTypes.func.isRequired,
+    socketsDisconnecting: PropTypes.func.isRequired,
+    authSendData: PropTypes.func.isRequired,
+    errorMessage: PropTypes.string.isRequired
 };

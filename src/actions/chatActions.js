@@ -2,16 +2,19 @@ import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
     OK_BUTTON_PRESSED,
-    USER_LOGGED_IN,
-    USER_LOGGED_OUT,
     USER_LOGIN,
-    USER_LOGOUT
+    USER_LOGOUT,
+    AUTH_SEND_DATA
 } from '../constants/AuthComponent';
 
 import {
+    SOCKETS_CONNECTING,
+    SOCKETS_DISCONNECTING,
     SOCKETS_MESSAGE_SENDING,
     SOCKETS_MESSAGE_RECEIVING,
     SOCKETS_MESSAGE_SEND,
+    SOCKETS_CONNECT,
+    SOCKETS_DISCONNECT
 } from '../constants/SocketsComponent';
 
 export function signInAction() {
@@ -38,39 +41,27 @@ export function OkButtonAction() {
         });
     }
 }
-export function userLoggedIn(userLogin, userPass){
-    return (dispatch) => {
-        dispatch({
-            type: USER_LOGGED_IN,
-            userLogin,
-            userPass
-        });
-    }
-}
-export function userLogin(userLogin, userPass){
+export function userLogin(user){
     return (dispatch) => {
         dispatch({
             type: USER_LOGIN,
-            userLogin,
-            userPass
+            user
         });
     }
 }
-export function userLogout(userLogin, userPass){
+export function userLogout(user){
     return (dispatch) => {
         dispatch({
             type: USER_LOGOUT,
-            userLogin,
-            userPass
+            user
         });
     }
 }
-
-
-export function userLoggedOut(){
+export function displayErrorMessage(errorMessage){
     return (dispatch) => {
         dispatch({
-            type: USER_LOGGED_OUT
+            type: DISPLAY_ERROR_MESSAGE,
+            errorMessage
         });
     }
 }
@@ -114,11 +105,40 @@ export function changeDataAction(fieldName, validationPassed = false, validateDa
         });
     }
 }
+
+export function socketsConnecting() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_CONNECTING
+        });
+    }
+}
+export function socketsConnect() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_CONNECT
+        });
+    }
+}
+export function socketsDisconnecting() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_DISCONNECTING
+        });
+    }
+}
+export function socketsDisconnect() {
+    return (dispatch) => {
+        dispatch({
+            type: SOCKETS_DISCONNECT
+        });
+    }
+}
 export function socketsMessageSending(sendMessage) {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_MESSAGE_SENDING,
-            message_send: sendMessage
+            messageSend: sendMessage
         });
     }
 }
@@ -126,7 +146,7 @@ export function socketsMessageSend(sendMessage) {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_MESSAGE_SEND,
-            message_send: sendMessage
+            messageSend: sendMessage
         });
     }
 }
@@ -134,7 +154,18 @@ export function socketsMessageReceiving(receiveMessage) {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_MESSAGE_RECEIVING,
-            message_receive: receiveMessage
+            messageReceive: receiveMessage
+        });
+    }
+}
+export function authSendData(userLogin, userPass, authType) {
+
+    return (dispatch) => {
+        dispatch({
+            type: AUTH_SEND_DATA,
+            userLogin,
+            userPass,
+            authType
         });
     }
 }

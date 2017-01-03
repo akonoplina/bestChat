@@ -14,12 +14,13 @@ const initialState = {
 
     buttonDisabled: true,
 
-    showMessageLog: false,
     showUser: false,
 
     validationStateSignIn: null,
     validationStateSignUp: null,
-    validationStatePass: null
+    validationStatePass: null,
+
+    errorMessage: ''
 };
 
 import {
@@ -31,7 +32,8 @@ import {
     SIGN_UP_VALIDATION_PASSED,
     PASS_VALIDATION_FAILED,
     SIGN_IN_VALIDATION_FAILED,
-    SIGN_UP_VALIDATION_FAILED
+    SIGN_UP_VALIDATION_FAILED,
+    DISPLAY_ERROR_MESSAGE
 
 } from '../constants/AuthComponent';
 
@@ -46,8 +48,7 @@ export default function authReducer(state = initialState, action) {
                 showSignInInput: false, showPass: true, okButtonVisible: true};
         case OK_BUTTON_PRESSED:
             return { ...state, showSignInInput : false, showSignUpInput: false, showPass: false, okButtonVisible: false,
-                showMessageLog: true, showUser: true, userName: action.userName,
-                userAge: action.userAge, userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
+                showUser: true, userName: action.userName, userAge: action.userAge, userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
         case SIGN_IN_VALIDATION_PASSED:
             return {...state, validationStateSignIn: action.validationStateSignIn, buttonDisabled: action.buttonDisabled};
         case SIGN_UP_VALIDATION_PASSED:
@@ -60,6 +61,8 @@ export default function authReducer(state = initialState, action) {
             return {...state, validationStateSignUp: action.validationStateSignUp, buttonDisabled: action.buttonDisabled};
         case PASS_VALIDATION_FAILED:
             return {...state, validationStatePass: action.validationStatePass, buttonDisabled: action.buttonDisabled};
+        case DISPLAY_ERROR_MESSAGE:
+            return {...state, errorMessage: action.errorMessage};
         default:
             return state;
     }

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import AuthComponent from '../components/AuthComponent';
 
-import SocketMessageLog from '../components/SocketMessageLog';
+import SocketComponent from '../components/SocketComponent';
 
 import UserComponent from '../components/UserComponent';
 
@@ -15,8 +15,9 @@ class App extends Component {
 
         const { authReducer, socketReducer, userReducer } = this.props;
 
-        const { signUpAction, signInAction, OkButtonAction, changeDataAction, socketsMessageSend, userLoggedIn,
-            userLoggedOut, userLogin, userLogout} = this.props.chatActions;
+        const { signUpAction, signInAction, OkButtonAction, changeDataAction, socketsConnect, socketsDisconnect,
+            socketsConnecting, socketsDisconnecting, socketsMessageSend, userLogin, userLogout, authSendData}
+            = this.props.chatActions;
 
         return <div>
             <AuthComponent signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
@@ -31,12 +32,13 @@ class App extends Component {
                            changeDataAction={changeDataAction} buttonDisabled={authReducer.buttonDisabled}
                            validationStateSignIn={authReducer.validationStateSignIn}
                            validationStateSignUp={authReducer.validationStateSignUp}
-                           validationStatePass={authReducer.validationStatePass} userLoggedIn={userLoggedIn}
-                           userLoggedOut={userLoggedOut} userLogin={userLogin} useLogout={userLogout} />
+                           validationStatePass={authReducer.validationStatePass} userLogin={userLogin}
+                           userLogout={userLogout} socketsConnect={socketsConnect} socketsDisconnect={socketsDisconnect}
+                           socketsConnecting={socketsConnecting} socketsDisconnecting={socketsDisconnecting}
+                           authSendData={authSendData} errorMessage={authReducer.errorMessage}/>
 
-            <SocketMessageLog showMessageLog={authReducer.showMessageLog} connected={socketReducer.connected}
-                              loaded={socketReducer.loaded} message_history={socketReducer.message_history}
-                              socketsMessageSend={socketsMessageSend} userName={userReducer.userName} />
+            <SocketComponent connected={socketReducer.connected} messageHistory={socketReducer.messageHistory}
+                             socketsMessageSend={socketsMessageSend} userName={userReducer.userName} />
 
             <UserComponent showUser={authReducer.showUser} userName={userReducer.userName}
                            userAboutMe={userReducer.userAboutMe} userAvatar={userReducer.userAvatar}

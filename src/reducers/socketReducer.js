@@ -1,44 +1,40 @@
 const initialState = {
-    loaded: false,
-    message: 'Just created',
     connected: false,
-    history: [],
-    message_history: []
+    messageHistory: []
 };
 
 import {
+    SOCKETS_CONNECTING,
+    SOCKETS_DISCONNECTING,
     SOCKETS_MESSAGE_RECEIVING,
     SOCKETS_MESSAGE_SENDING
 } from '../constants/SocketsComponent';
 
-export default function socketMessageLog(state = initialState, action = {}) {
+export default function socketReducer(state = initialState, action = {}) {
     switch (action.type) {
+        case SOCKETS_CONNECTING:
+            return { ...state, connected: true};
+        case SOCKETS_DISCONNECTING:
+            return { ...state, connected: false};
         case SOCKETS_MESSAGE_SENDING:
-            return Object.assign({}, state, {
-                loaded: true,
-                message: 'Send message',
-                connected: true,
-                message_history: [
-                    ...state.message_history,
-                    {
-                        direction: '->',
-                        message: action.message_send
-                    }
-                ]
-            });
+            return { ...state, connected: true,
+                messageHistory: [
+                ...state.messageHistory,
+                {
+                    direction: '->',
+                    message: action.messageSend
+                }
+            ]};
         case SOCKETS_MESSAGE_RECEIVING:
-            return Object.assign({}, state, {
-                loaded: true,
-                message: 'Message receive',
-                connected: true,
-                message_history: [
-                    ...state.message_history,
+            return { ...state, connected: true,
+                messageHistory: [
+                    ...state.messageHistory,
                     {
                         direction: '<-',
-                        message: action.message_receive
+                        message: action.messageReceive
                     }
                 ]
-            });
+            };
         default:
             return state;
     }
