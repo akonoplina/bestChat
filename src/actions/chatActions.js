@@ -1,7 +1,6 @@
 import {
     SIGN_IN_BUTTON_PRESSED,
     SIGN_UP_BUTTON_PRESSED,
-    OK_BUTTON_PRESSED,
     USER_LOGIN,
     USER_LOGOUT,
     AUTH_SEND_DATA
@@ -33,27 +32,25 @@ export function signUpAction() {
         });
     }
 }
-export function OkButtonAction() {
-
-    return (dispatch) => {
-        dispatch({
-            type: OK_BUTTON_PRESSED
-        });
-    }
-}
-export function userLogin(user){
+export function userLogin(userName, userAvatar, userAboutMe, userAge){
     return (dispatch) => {
         dispatch({
             type: USER_LOGIN,
-            user
+            userName: userName,
+            userAvatar: userAvatar,
+            userAboutMe: userAboutMe,
+            userAge: userAge
         });
     }
 }
-export function userLogout(user){
+export function userLogout(userName, userAvatar, userAboutMe, userAge){
     return (dispatch) => {
         dispatch({
             type: USER_LOGOUT,
-            user
+            userName: userName,
+            userAvatar: userAvatar,
+            userAboutMe: userAboutMe,
+            userAge: userAge
         });
     }
 }

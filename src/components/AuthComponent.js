@@ -36,8 +36,7 @@ export default class AuthComponent extends Component {
 
         this.props.socketsConnect(); // websockets action
         console.log(this.props);
-        this.props.authSendData(userLogin, userPass, authType); // websockets action
-        //this.props.OkButtonAction();
+        this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
 
 
     }
@@ -144,7 +143,6 @@ AuthComponent.propTypes = {
     buttonSignUpVisible: PropTypes.bool.isRequired,
     showSignUpInput: PropTypes.bool.isRequired,
     okButtonTitle: PropTypes.string.isRequired,
-    OkButtonAction: PropTypes.func.isRequired,
     okButtonVisible: PropTypes.bool.isRequired,
     passwordTitle: PropTypes.string.isRequired,
     showPass: PropTypes.bool.isRequired,

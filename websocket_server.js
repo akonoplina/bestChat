@@ -12,18 +12,20 @@ app.use(function (req, res) {
 
 wss.on('connection', function connection(ws) {
 
+    console.log('new user connected');
+
     ws.on('message', function incoming(message) {
 
         message = JSON.parse(message);
 
-        console.log(message.userLogin);
-        console.log(message.userPass);
-        console.log(message.authType);
+        console.log('received', message);
 
         let userLogin, userPass, authType, userMessage = '';
 
         let userObj = {userName: 'Stacy', userAge: '80', userAvatar: 'fghfghffghf', userAboutMe: 'Cool woman'};
-        if(message.userLogin.length > 0 && message.userPass.length > 0 && message.authType.length > 0){
+
+        if(typeof message.userLogin !== 'undefined' && typeof message.userPass !== 'undefined' &&
+            typeof message.authType !== 'undefined') {
 
             userLogin = message.userLogin;
             userPass = message.userPass;
@@ -32,14 +34,15 @@ wss.on('connection', function connection(ws) {
             ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: authType}));
 
         }
-        else if(message.userMessage.length > 0){
+        else if(typeof message.userMessage !== 'undefined'){
             userMessage = message.userMessage;
-            ws.send({connectionType: 'message', userMessage: userMessage});
+            wss.clients.forEach(function each(client) {
+                if (client !== ws) client.send(JSON.stringify({connectionType: 'message', userMessage: userMessage}));
+            });
 
         }
         else{
-
-            ws.send({error: 'Error occurred. userLogin, userPass and authType are empty!'});
+            ws.send(JSON.stringify({error: 'Error occurred. userLogin, userPass, authType and message are empty!'}));
         }
 
     });
@@ -48,7 +51,7 @@ wss.on('connection', function connection(ws) {
     });
     wss.on('error', function () {
 
-        ws.send({error: 'Something unknown has happened((('});
+        ws.send(JSON.stringify({error: 'Something unknown has happened((('}));
 
     });
 

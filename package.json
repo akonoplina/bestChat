@@ -1,7 +1,7 @@
 {
-  "name": "superChat",
+  "name": "bestChat",
   "version": "1.0.0",
-  "description": "Redux tutorial",
+  "description": "best Chat app",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

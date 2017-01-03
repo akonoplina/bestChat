@@ -15,7 +15,7 @@ class App extends Component {
 
         const { authReducer, socketReducer, userReducer } = this.props;
 
-        const { signUpAction, signInAction, OkButtonAction, changeDataAction, socketsConnect, socketsDisconnect,
+        const { signUpAction, signInAction, changeDataAction, socketsConnect, socketsDisconnect,
             socketsConnecting, socketsDisconnecting, socketsMessageSend, userLogin, userLogout, authSendData}
             = this.props.chatActions;
 
@@ -27,7 +27,7 @@ class App extends Component {
                            showSignUpInput={authReducer.showSignUpInput}
                            buttonSignUpVisible={authReducer.buttonSignUpVisible}
                            signUpAction={signUpAction} signUpButtonTitle={ authReducer.signUpButtonTitle}
-                           okButtonVisible={authReducer.okButtonVisible} OkButtonAction={OkButtonAction}
+                           okButtonVisible={authReducer.okButtonVisible}
                            okButtonTitle={authReducer.okButtonTitle}
                            changeDataAction={changeDataAction} buttonDisabled={authReducer.buttonDisabled}
                            validationStateSignIn={authReducer.validationStateSignIn}
@@ -38,11 +38,11 @@ class App extends Component {
                            authSendData={authSendData} errorMessage={authReducer.errorMessage}/>
 
             <SocketComponent connected={socketReducer.connected} messageHistory={socketReducer.messageHistory}
-                             socketsMessageSend={socketsMessageSend} userName={userReducer.userName} />
+                             socketsMessageSend={socketsMessageSend} userName={authReducer.userName} />
 
-            <UserComponent showUser={authReducer.showUser} userName={userReducer.userName}
-                           userAboutMe={userReducer.userAboutMe} userAvatar={userReducer.userAvatar}
-                           userAge={userReducer.userAge} />
+            <UserComponent showUser={authReducer.showUser} userName={authReducer.userName}
+                           userAboutMe={authReducer.userAboutMe} userAvatar={authReducer.userAvatar}
+                           userAge={authReducer.userAge} />
 
             </div>
     }

@@ -6,7 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { routerMiddleware } from 'react-router-redux';
 
-import socketExampleMiddleware from '../middleware/socketExampleMiddleware';
+import socketMiddleware from '../middleware/socketMiddleware';
 
 
 export default function configureStore(initialState, history) {
@@ -19,7 +19,7 @@ export default function configureStore(initialState, history) {
         rootReducer,
         initialState,
         composeWithDevTools(
-            applyMiddleware(reduxRouterMiddleware,thunk, logger,socketExampleMiddleware())
+            applyMiddleware(reduxRouterMiddleware,thunk, logger,socketMiddleware())
         )
     );
 

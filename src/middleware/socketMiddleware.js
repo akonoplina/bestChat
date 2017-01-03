@@ -12,6 +12,9 @@ export default function webSocketMiddleware() {
         console.log('evt ' + evt.data);
         store.dispatch(chatActions.socketsDisconnect());
     };
+    // const onError = ()=>{
+    //
+    // };
     const waitForConnection = (callback, interval)=> {
         if (webSocket.readyState === 1) {
             callback();
@@ -27,6 +30,23 @@ export default function webSocketMiddleware() {
         msg = JSON.parse(msg);
         const error = msg.errorText;
         const user = msg.user;
+
+        let userName, userAvatar, userAboutMe, userAge = '';
+        if (typeof user !=='undefined'){
+            if(typeof user.userName !== 'undefined'){
+                userName = user.userName;
+            }
+            if(typeof user.userAvatar !== 'undefined'){
+                userAvatar = user.userAvatar;
+            }
+            if(typeof user.userAboutMe !== 'undefined'){
+                userAboutMe = user.userAboutMe;
+            }
+            if(typeof user.userAge !== 'undefined'){
+                userAge = user.userAge;
+            }
+        }
+
         const connectionType = msg.connectionType; // auth or message
         const authType = msg.authType; // signIn or signOut
 
@@ -34,38 +54,38 @@ export default function webSocketMiddleware() {
             case 'auth':
                 if(authType === 'signIn'){
                     if(Object.keys(user).length > 0){
-                        store.dispatch(chatActions.userLogin(user)); // move to the chat page, user exists
+                        store.dispatch(chatActions.userLogin(userName, userAvatar, userAboutMe, userAge)); // move to the chat page, user exists
                     }
                     else{
                         if(error.length > 0){
-                            store.dispatch(chatActions.displayErrorMessage(errorMessage)); // add to actions
+                            store.dispatch(chatActions.displayErrorMessage(errorMessage));
                         }
                         else{
                             store.dispatch(chatActions.displayErrorMessage({errorMessage: 'serverside error appeared'}));
-                            // error appeared on server side
                         }
                     }
                 }
                 else if(authType === 'signUp'){
                     if(user.length > 0){
-                        store.dispatch(chatActions.userLogin(user)); // move to the chat page, user created successfully
+                        store.dispatch(chatActions.userLogin(userName, userAvatar, userAboutMe, userAge)); // move to the chat page, user created successfully
                     }
                     else{
                         if(error.length > 0){
-                            store.dispatch(chatActions.displayErrorMessage(errorMessage)); // add to actions, user wasn't created
+                            store.dispatch(chatActions.displayErrorMessage(errorMessage));
                         }
                         else{
                             store.dispatch(chatActions.displayErrorMessage({errorMessage: 'serverside error appeared'}));
-                            // error appeared on server side
                         }
                     }
                 }
                 else{
-
+                    console.log(msg);
                 }
                 break;
             case 'message':
-                store.dispatch(chatActions.socketsMessageReceiving(msg));
+                let userMessage = msg.userMessage;
+                console.log('someone sended a message!');
+                store.dispatch(chatActions.socketsMessageReceiving(userMessage));
                 break;
             default:
                 break;
@@ -94,10 +114,10 @@ export default function webSocketMiddleware() {
                 }
                 webSocket = null;
                 break;
-            case 'SEND_MESSAGE':
+            case 'SOCKETS_MESSAGE_SEND':
                 console.log('SEND_MESSAGE ACTION');
                 console.log(action);
-                webSocket.send(action.messageSend); //rename it to userMessage for websockets
+                webSocket.send(JSON.stringify({userMessage: action.messageSend})); //rename it to userMessage for websockets
                 store.dispatch(chatActions.socketsMessageSending(action.messageSend));
                 break;
             case 'AUTH_SEND_DATA':
@@ -107,6 +127,17 @@ export default function webSocketMiddleware() {
                     let messageText = {userLogin: action.userLogin, userPass: action.userPass,
                         authType: action.authType};
                     console.log(messageText);
+                    webSocket.send(JSON.stringify(messageText));
+                }, 1000);
+                break;
+            case 'USER_EXIT':
+                waitForConnection(function () {
+                    console.log('USER_EXIT');
+                    console.log(action);
+                    let messageText = {userLogin: action.userLogin, userPass: action.userPass,
+                        authType: action.authType};
+                    console.log(messageText);
+                    store.dispatch(chatActions.userLogout(messageText));
                     webSocket.send(JSON.stringify(messageText));
                 }, 1000);
                 break;
