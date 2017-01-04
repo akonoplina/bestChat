@@ -12,7 +12,7 @@ app.use(function (req, res) {
 
 wss.on('connection', function connection(ws) {
 
-    console.log('new user connected');
+    let clientID = ws._socket._handle.fd;
 
     ws.on('message', function incoming(message) {
 
@@ -21,9 +21,14 @@ wss.on('connection', function connection(ws) {
         console.log('received', message);
 
         let userLogin, userPass, authType, userMessage = '';
+        let userObj = {};
 
-        let userObj = {userName: 'Stacy', userAge: '80', userAvatar: 'fghfghffghf', userAboutMe: 'Cool woman'};
-
+        if(clientID%2 == 1){
+            userObj = {userName: 'Helen', userAge: '16', userAvatar: 'avatarGirl', userAboutMe: 'Awesome girl...'};
+        }
+        else{
+            userObj = {userName: 'Robert', userAge: '20', userAvatar: 'avatarBoy', userAboutMe: 'Tough guy!'};
+        }
         if(typeof message.userLogin !== 'undefined' && typeof message.userPass !== 'undefined' &&
             typeof message.authType !== 'undefined') {
 

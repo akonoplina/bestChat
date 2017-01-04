@@ -13,18 +13,17 @@ import * as chatActions from '../actions/chatActions';
 class App extends Component {
     render() {
 
-        const { authReducer, socketReducer, userReducer } = this.props;
+        const { authReducer, socketReducer} = this.props;
 
-        const { signUpAction, signInAction, changeDataAction, socketsConnect, socketsDisconnect,
-            socketsConnecting, socketsDisconnecting, socketsMessageSend, userLogin, userLogout, authSendData}
-            = this.props.chatActions;
+        const { signUpAction, signInAction, changeDataAction, socketsConnect, socketsDisconnect, socketsMessageSend,
+            authSendData, userExit} = this.props.chatActions;
 
         return <div>
             <AuthComponent signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
                            showSignInInput={authReducer.showSignInInput}
                            signInButtonTitle={ authReducer.signInButtonTitle}
                            showPass={authReducer.showPass} passwordTitle={ authReducer.passwordTitle }
-                           showSignUpInput={authReducer.showSignUpInput}
+                           showSignUpInput={authReducer.showSignUpInput} showAuthWrapper={authReducer.showAuthWrapper}
                            buttonSignUpVisible={authReducer.buttonSignUpVisible}
                            signUpAction={signUpAction} signUpButtonTitle={ authReducer.signUpButtonTitle}
                            okButtonVisible={authReducer.okButtonVisible}
@@ -32,17 +31,16 @@ class App extends Component {
                            changeDataAction={changeDataAction} buttonDisabled={authReducer.buttonDisabled}
                            validationStateSignIn={authReducer.validationStateSignIn}
                            validationStateSignUp={authReducer.validationStateSignUp}
-                           validationStatePass={authReducer.validationStatePass} userLogin={userLogin}
-                           userLogout={userLogout} socketsConnect={socketsConnect} socketsDisconnect={socketsDisconnect}
-                           socketsConnecting={socketsConnecting} socketsDisconnecting={socketsDisconnecting}
-                           authSendData={authSendData} errorMessage={authReducer.errorMessage}/>
+                           validationStatePass={authReducer.validationStatePass} socketsConnect={socketsConnect}
+                           socketsDisconnect={socketsDisconnect} authSendData={authSendData}
+                           errorMessage={authReducer.errorMessage} />
 
             <SocketComponent connected={socketReducer.connected} messageHistory={socketReducer.messageHistory}
                              socketsMessageSend={socketsMessageSend} userName={authReducer.userName} />
 
             <UserComponent showUser={authReducer.showUser} userName={authReducer.userName}
                            userAboutMe={authReducer.userAboutMe} userAvatar={authReducer.userAvatar}
-                           userAge={authReducer.userAge} />
+                           userAge={authReducer.userAge} userExit={userExit} />
 
             </div>
     }
@@ -51,8 +49,7 @@ class App extends Component {
 function mapStateToProps(state) {
     return {
         authReducer: state.authReducer,
-        socketReducer: state.socketReducer,
-        userReducer: state.userReducer
+        socketReducer: state.socketReducer
     }
 }
 

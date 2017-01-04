@@ -3,7 +3,8 @@ import {
     SIGN_UP_BUTTON_PRESSED,
     USER_LOGIN,
     USER_LOGOUT,
-    AUTH_SEND_DATA
+    AUTH_SEND_DATA,
+    USER_EXIT
 } from '../constants/AuthComponent';
 
 import {
@@ -64,8 +65,8 @@ export function displayErrorMessage(errorMessage){
 }
 export function changeDataAction(fieldName, validationPassed = false, validateData = null) {
 
-    let type, status = '';
-    let validationStateSignIn, validationStateSignUp, validationStatePass = null;
+    let type = '', status = '';
+    let validationStateSignIn = null, validationStateSignUp = null, validationStatePass = null;
     let buttonDisabled = true;
 
     if(validationPassed === true){
@@ -163,6 +164,17 @@ export function authSendData(userLogin, userPass, authType) {
             userLogin,
             userPass,
             authType
+        });
+    }
+}
+export function userExit(userName, userAvatar, userAboutMe, userAge){
+    return (dispatch) => {
+        dispatch({
+            type: USER_EXIT,
+            userName,
+            userAvatar,
+            userAboutMe,
+            userAge
         });
     }
 }

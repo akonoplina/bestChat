@@ -25,7 +25,7 @@ export default class AuthComponent extends Component {
         let userLogin, authType = '';
         let userPass = ReactDOM.findDOMNode(this.refs.pass).value;
 
-        if(userSignIn !== 'undefined'){
+        if(userSignIn !== ''){
             userLogin = userSignIn;
             authType = 'signIn';
         }
@@ -35,9 +35,12 @@ export default class AuthComponent extends Component {
         }
 
         this.props.socketsConnect(); // websockets action
-        console.log(this.props);
+
         this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
 
+        ReactDOM.findDOMNode(this.refs.signIn).value = '';
+        ReactDOM.findDOMNode(this.refs.signUp).value = '';
+        ReactDOM.findDOMNode(this.refs.pass).value = '';
 
     }
     validateAction(fieldName,value){
@@ -63,8 +66,11 @@ export default class AuthComponent extends Component {
         if (validationResult === 'success') {
             this.props.changeDataAction(fieldName, true, validationResult);
         }
-        else{
+        else if(validationResult === 'error'){
             this.props.changeDataAction(fieldName, false, validationResult);
+        }
+        else{
+            this.props.changeDataAction(fieldName, true, validationResult);
         }
 
     }
@@ -72,11 +78,13 @@ export default class AuthComponent extends Component {
 
         const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
             showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, validationStateSignIn,
-            validationStateSignUp, validationStatePass, buttonDisabled, errorMessage} = this.props;
+            validationStateSignUp, validationStatePass, buttonDisabled, errorMessage, showAuthWrapper} = this.props;
 
-        return <Form horizontal className="authWrapper">
-                <FormGroup>
-                    <h3>Please enter your login & pass)))</h3>
+        return <Form horizontal className={'authWrapper ' + (!showAuthWrapper ? 'none':'')}>
+                <FormGroup className="instructionMessage">
+                    <Col sm={3}>
+                        <h3>Please enter your login & pass)))</h3>
+                    </Col>
                 </FormGroup>
                 <FormGroup className={'signIn ' + (!buttonSignInVisible ? 'none':'')}>
                     <Col sm={1}>
@@ -148,12 +156,9 @@ AuthComponent.propTypes = {
     showPass: PropTypes.bool.isRequired,
     changeDataAction: PropTypes.func.isRequired,
     buttonDisabled: PropTypes.bool.isRequired,
-    userLogin: PropTypes.func.isRequired,
-    userLogout: PropTypes.func.isRequired,
     socketsConnect: PropTypes.func.isRequired,
     socketsDisconnect: PropTypes.func.isRequired,
-    socketsConnecting: PropTypes.func.isRequired,
-    socketsDisconnecting: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired,
-    errorMessage: PropTypes.string.isRequired
+    errorMessage: PropTypes.string.isRequired,
+    showAuthWrapper: PropTypes.bool.isRequired
 };

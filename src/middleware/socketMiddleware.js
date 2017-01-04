@@ -66,7 +66,7 @@ export default function webSocketMiddleware() {
                     }
                 }
                 else if(authType === 'signUp'){
-                    if(user.length > 0){
+                    if(Object.keys(user).length > 0){
                         store.dispatch(chatActions.userLogin(userName, userAvatar, userAboutMe, userAge)); // move to the chat page, user created successfully
                     }
                     else{
@@ -84,7 +84,6 @@ export default function webSocketMiddleware() {
                 break;
             case 'message':
                 let userMessage = msg.userMessage;
-                console.log('someone sended a message!');
                 store.dispatch(chatActions.socketsMessageReceiving(userMessage));
                 break;
             default:
@@ -101,10 +100,10 @@ export default function webSocketMiddleware() {
                 }
                 console.log('SOCKETS_CONNECTING');
                 webSocket = new WebSocket('ws://127.0.0.1:5000');
-                store.dispatch(chatActions.socketsConnecting());
                 webSocket.onmessage = onMessage(webSocket, store);
                 webSocket.onclose = onClose(store);
                 webSocket.onopen = onOpen(action.token);
+                store.dispatch(chatActions.socketsConnecting());
                 break;
             case 'SOCKETS_DISCONNECT':
                 if (webSocket !== null) {
@@ -116,30 +115,21 @@ export default function webSocketMiddleware() {
                 break;
             case 'SOCKETS_MESSAGE_SEND':
                 console.log('SEND_MESSAGE ACTION');
-                console.log(action);
                 webSocket.send(JSON.stringify({userMessage: action.messageSend})); //rename it to userMessage for websockets
                 store.dispatch(chatActions.socketsMessageSending(action.messageSend));
                 break;
             case 'AUTH_SEND_DATA':
                 waitForConnection(function () {
                     console.log('AUTH_SEND_DATA');
-                    console.log(action);
                     let messageText = {userLogin: action.userLogin, userPass: action.userPass,
                         authType: action.authType};
-                    console.log(messageText);
                     webSocket.send(JSON.stringify(messageText));
                 }, 1000);
                 break;
             case 'USER_EXIT':
-                waitForConnection(function () {
-                    console.log('USER_EXIT');
-                    console.log(action);
-                    let messageText = {userLogin: action.userLogin, userPass: action.userPass,
-                        authType: action.authType};
-                    console.log(messageText);
-                    store.dispatch(chatActions.userLogout(messageText));
-                    webSocket.send(JSON.stringify(messageText));
-                }, 1000);
+                store.dispatch(chatActions.userLogout(action.userName, action.userAvatar,
+                    action.userAboutMe, action.userAge));
+                webSocket.close();
                 break;
             default:
                 return next(action);

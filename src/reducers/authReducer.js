@@ -22,10 +22,11 @@ const initialState = {
 
     errorMessage: '',
 
-    userName: 'Anastacia',
-    userAvatar: 'tyty',
-    userAge: '30',
-    userAboutMe: 'Just another junior UI dev)))'
+    userName: '',
+    userAvatar: '',
+    userAge: '',
+    userAboutMe: '',
+    showAuthWrapper: true
 };
 
 import {
@@ -67,12 +68,12 @@ export default function authReducer(state = initialState, action) {
         case DISPLAY_ERROR_MESSAGE:
             return {...state, errorMessage: action.errorMessage};
         case USER_LOGIN:
-            return {...state, showSignInInput: false, showSignUpInput: false, showPass: false, okButtonVisible: false,
-                showUser: true, userName: action.userName, userAge: action.userAge, userAboutMe: action.userAboutMe,
-                userAvatar: action.userAvatar};
+            return {...state, showAuthWrapper: false, showUser: true, userName: action.userName, userAge: action.userAge,
+                userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
         case USER_LOGOUT:
-            return {...state, userName: action.user};
-            default:
+            return {...state, showAuthWrapper: true, showUser: false, userName: action.userName, userAge: action.userAge,
+                userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
+        default:
             return state;
     }
 }

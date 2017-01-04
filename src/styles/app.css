@@ -59,8 +59,22 @@ h3 {
     max-width: 400px;
     margin: 0 auto 10px;
 }
-.authWrapper .okButton{
-    max-width: 400px;
-    margin: 0 auto 10px;
-    float: right;
+.okButton{
+    padding-left: 372px;
+    color: red;
+}
+.userWrapper{
+    position: absolute;
+    left: 1730px;
+    top: 10px;
+}
+.userName{
+    text-align: center;
+    padding-left: 45px;
+}
+.instructionMessage{
+    padding-left: 65px;
+}
+.signIn, .signUp{
+    padding-left: 65px;
 }
