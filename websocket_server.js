@@ -41,10 +41,12 @@ wss.on('connection', function connection(ws) {
         }
         else if(typeof message.userMessage !== 'undefined'){
             userMessage = message.userMessage;
+            userName = message.userName;
+            userAvatar = message.userAvatar;
             wss.clients.forEach(function each(client) {
-                if (client !== ws) client.send(JSON.stringify({connectionType: 'message', userMessage: userMessage}));
+                if (client !== ws) client.send(JSON.stringify({connectionType: 'message', userMessage: userMessage,
+                    userName: userName, userAvatar: userAvatar}));
             });
-
         }
         else{
             ws.send(JSON.stringify({error: 'Error occurred. userLogin, userPass, authType and message are empty!'}));

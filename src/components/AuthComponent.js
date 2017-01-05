@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Button, Form, FormGroup, Col, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, Form, FormGroup, Col, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 import ReactDOM from 'react-dom';
 
@@ -98,7 +98,8 @@ export default class AuthComponent extends Component {
                     <Col sm={2}>
                     <FormControl className="signInData" type="text" ref="signIn"
                                  onChange={this.onFieldChange.bind(this, 'signIn')} />
-                    <FormControl.Feedback />
+                        <FormControl.Feedback />
+                        <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6.</HelpBlock>
                     </Col>
                 </FormGroup>
                 <FormGroup className={'signUp ' + (!buttonSignUpVisible ? 'none':'')}>
@@ -114,6 +115,7 @@ export default class AuthComponent extends Component {
                        <FormControl className="signUpData" type="text" ref="signUp"
                                     onChange={this.onFieldChange.bind(this, 'signUp')} />
                         <FormControl.Feedback />
+                        <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6</HelpBlock>
                     </Col>
                 </FormGroup>
                 <FormGroup validationState={validationStatePass} className={'pass ' + (!showPass ? 'none' : '')}>
@@ -123,7 +125,8 @@ export default class AuthComponent extends Component {
                     <Col sm={2}>
                         <FormControl type="password" className="passData" ref="pass"
                                      onChange={this.onFieldChange.bind(this, 'pass')}/>
-                    <FormControl.Feedback />
+                        <FormControl.Feedback />
+                        <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
                     </Col>
                 </FormGroup>
                 <FormGroup className={'okButton ' + (!okButtonVisible ? 'none' : '')}>

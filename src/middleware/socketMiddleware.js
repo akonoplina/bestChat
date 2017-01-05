@@ -12,9 +12,6 @@ export default function webSocketMiddleware() {
         console.log('evt ' + evt.data);
         store.dispatch(chatActions.socketsDisconnect());
     };
-    // const onError = ()=>{
-    //
-    // };
     const waitForConnection = (callback, interval)=> {
         if (webSocket.readyState === 1) {
             callback();
@@ -31,7 +28,7 @@ export default function webSocketMiddleware() {
         const error = msg.errorText;
         const user = msg.user;
 
-        let userName, userAvatar, userAboutMe, userAge = '';
+        let userName = '', userAvatar = '', userAboutMe = '', userAge = '', userMessage = '';
         if (typeof user !=='undefined'){
             if(typeof user.userName !== 'undefined'){
                 userName = user.userName;
@@ -83,8 +80,14 @@ export default function webSocketMiddleware() {
                 }
                 break;
             case 'message':
-                let userMessage = msg.userMessage;
-                store.dispatch(chatActions.socketsMessageReceiving(userMessage));
+
+                console.log(msg);
+
+                userMessage = msg.userMessage;
+                userName = msg.userName;
+                userAvatar = msg.userAvatar;
+
+                store.dispatch(chatActions.socketsMessageReceiving(userMessage, userName, userAvatar));
                 break;
             default:
                 break;
@@ -115,8 +118,9 @@ export default function webSocketMiddleware() {
                 break;
             case 'SOCKETS_MESSAGE_SEND':
                 console.log('SEND_MESSAGE ACTION');
-                webSocket.send(JSON.stringify({userMessage: action.messageSend})); //rename it to userMessage for websockets
-                store.dispatch(chatActions.socketsMessageSending(action.messageSend));
+                webSocket.send(JSON.stringify({userMessage: action.messageSend, userName: action.userName,
+                    userAvatar: action.userAvatar}));
+                store.dispatch(chatActions.socketsMessageSending(action.messageSend, action.userName, action.userAvatar));
                 break;
             case 'AUTH_SEND_DATA':
                 waitForConnection(function () {

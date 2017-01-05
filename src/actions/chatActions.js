@@ -132,27 +132,33 @@ export function socketsDisconnect() {
         });
     }
 }
-export function socketsMessageSending(sendMessage) {
+export function socketsMessageSending(sendMessage, userName, userAvatar) {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_MESSAGE_SENDING,
-            messageSend: sendMessage
+            messageSend: sendMessage,
+            userName: userName,
+            userAvatar: userAvatar
         });
     }
 }
-export function socketsMessageSend(sendMessage) {
+export function socketsMessageSend(sendMessage, userName, userAvatar) {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_MESSAGE_SEND,
-            messageSend: sendMessage
+            messageSend: sendMessage,
+            userName: userName,
+            userAvatar: userAvatar
         });
     }
 }
-export function socketsMessageReceiving(receiveMessage) {
+export function socketsMessageReceiving(receiveMessage, userName, userAvatar) {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_MESSAGE_RECEIVING,
-            messageReceive: receiveMessage
+            messageReceive: receiveMessage,
+            userName: userName,
+            userAvatar: userAvatar
         });
     }
 }

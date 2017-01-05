@@ -36,11 +36,12 @@ class App extends Component {
                            errorMessage={authReducer.errorMessage} />
 
             <SocketComponent connected={socketReducer.connected} messageHistory={socketReducer.messageHistory}
-                             socketsMessageSend={socketsMessageSend} userName={authReducer.userName} />
+                             socketsMessageSend={socketsMessageSend} userName={authReducer.userName}
+                             userAvatar={authReducer.userAvatar} />
 
             <UserComponent showUser={authReducer.showUser} userName={authReducer.userName}
                            userAboutMe={authReducer.userAboutMe} userAvatar={authReducer.userAvatar}
-                           userAge={authReducer.userAge} userExit={userExit} />
+                           userAge={authReducer.userAge} userExit={userExit} showMore={authReducer.showMore}/>
 
             </div>
     }

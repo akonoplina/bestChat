@@ -26,7 +26,8 @@ const initialState = {
     userAvatar: '',
     userAge: '',
     userAboutMe: '',
-    showAuthWrapper: true
+    showAuthWrapper: true,
+    showMore: false
 };
 
 import {
@@ -71,8 +72,10 @@ export default function authReducer(state = initialState, action) {
             return {...state, showAuthWrapper: false, showUser: true, userName: action.userName, userAge: action.userAge,
                 userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
         case USER_LOGOUT:
-            return {...state, showAuthWrapper: true, showUser: false, userName: action.userName, userAge: action.userAge,
-                userAboutMe: action.userAboutMe, userAvatar: action.userAvatar};
+            return {...state, showAuthWrapper: true, showUser: false, buttonSignInVisible: true, showSignInInput: false,
+                buttonSignUpVisible: true, showSignUpInput: false, showPass: false, okButtonVisible: false,
+                userName: action.userName, userAge: action.userAge, userAboutMe: action.userAboutMe,
+                userAvatar: action.userAvatar};
         default:
             return state;
     }

@@ -22,7 +22,9 @@ export default function socketReducer(state = initialState, action = {}) {
                 ...state.messageHistory,
                 {
                     direction: '->',
-                    message: action.messageSend
+                    message: action.messageSend,
+                    userName: action.userName,
+                    userAvatar: action.userAvatar
                 }
             ]};
         case SOCKETS_MESSAGE_RECEIVING:
@@ -31,7 +33,9 @@ export default function socketReducer(state = initialState, action = {}) {
                     ...state.messageHistory,
                     {
                         direction: '<-',
-                        message: action.messageReceive
+                        message: action.messageReceive,
+                        userName: action.userName,
+                        userAvatar: action.userAvatar
                     }
                 ]
             };
