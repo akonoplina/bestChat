@@ -8,9 +8,11 @@ export default class SocketComponent extends Component {
 
     handleSendButton(e) {
         e.preventDefault();
-        this.props.socketsMessageSend(ReactDOM.findDOMNode(this.refs.messageText).value, this.props.userName,
-            this.props.userAvatar);
-        ReactDOM.findDOMNode(this.refs.messageText).value = '';
+        if(ReactDOM.findDOMNode(this.refs.messageText).value.length > 0){
+            this.props.socketsMessageSend(ReactDOM.findDOMNode(this.refs.messageText).value, this.props.userName,
+                this.props.userAvatar);
+            ReactDOM.findDOMNode(this.refs.messageText).value = '';
+        }
     }
     render() {
 
@@ -33,8 +35,9 @@ export default class SocketComponent extends Component {
                         {
                             messageHistory.map((messageHistoryElement, index) =>
                                 <li key={index} className="userMessageWrapper">
-                                    <img height={16} width={16} className="messageUserAvatar" src={`../pics/ ${messageHistoryElement.userAvatar}.png`} />
-                                    <span className="messageUserName">{`${messageHistoryElement.userName}  wrote`}</span>
+                                    <img height={16} width={16} className="messageUserAvatar" src={ require("../pics/"
+                                        + messageHistoryElement.userAvatar + ".png")} />
+                                    <span className="messageUserName">{`${messageHistoryElement.userName}  wrote:`}</span>
 
                                     <span className="userMessage">{messageHistoryElement.message}</span>
                                 </li>
@@ -64,4 +67,5 @@ SocketComponent.propTypes = {
     socketsMessageSend: PropTypes.func.isRequired,
     userName: PropTypes.string.isRequired,
     userAvatar: PropTypes.string.isRequired
+
 };
