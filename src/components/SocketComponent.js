@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 
 import ReactDOM from 'react-dom';
 
-import { Button, Form, FormGroup, Col, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, Form, FormGroup, Col, FormControl} from 'react-bootstrap';
 
 export default class SocketComponent extends Component {
 
@@ -33,9 +33,8 @@ export default class SocketComponent extends Component {
                         {
                             messageHistory.map((messageHistoryElement, index) =>
                                 <li key={index} className="userMessageWrapper">
-                                    <img height={16} width={16} className="messageUserAvatar" src={ require("../pics/"
-                                        + messageHistoryElement.userAvatar + ".png")} />
-                                    <span className="messageUserName">{messageHistoryElement.userName + ' wrote:'}</span>
+                                    <img height={16} width={16} className="messageUserAvatar" src={`../pics/ ${messageHistoryElement.userAvatar}.png`} />
+                                    <span className="messageUserName">{`${messageHistoryElement.userName}  wrote`}</span>
 
                                     <span className="userMessage">{messageHistoryElement.message}</span>
                                 </li>
@@ -45,7 +44,7 @@ export default class SocketComponent extends Component {
             </FormGroup>
             <FormGroup>
                 <Col sm={2}>
-                    <FormControl ref="messageText" readOnly = {(connected === true) ? false : true}/>
+                    <FormControl componentClass="textarea" ref="messageText" readOnly = {(connected === true) ? false : true}/>
                 </Col>
             </FormGroup>
             <FormGroup>
@@ -65,5 +64,4 @@ SocketComponent.propTypes = {
     socketsMessageSend: PropTypes.func.isRequired,
     userName: PropTypes.string.isRequired,
     userAvatar: PropTypes.string.isRequired
-
 };

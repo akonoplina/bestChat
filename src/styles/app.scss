@@ -43,43 +43,44 @@ table {
 }
 
 /*end reset*/
-
-h3 {
-    font-size: 22px;
-    margin: 10px 0 0;
-}
 .app {
     margin: 50px;
     font: 14px sans-serif;
-}
-.none{
-    display: none;
-}
-.authWrapper button.btn-block{
-    max-width: 400px;
-    margin: 0 auto 10px;
-}
-.okButton{
-    padding-left: 372px;
-    color: red;
-}
-.userWrapper{
-    position: absolute;
-    left: 1660px;
-    top: 10px;
-}
-.userName, .userAge, .userAboutMe, .logOutButton{
-    padding-left: 10px;
-}
-.instructionMessage{
-    padding-left: 65px;
-}
-.signIn, .signUp{
-    padding-left: 65px;
-}
-.messageUserName{
-    padding-right: 10px;
-}
-.userMessageWrapper{
-    padding-bottom: 10px;
+
+    h3 {
+        font-size: 22px;
+        margin: 10px 0 0;
+    }
+
+    .none {
+        display: none;
+    }
+    .authWrapper button.btn-block {
+        max-width: 400px;
+        margin: 0 auto 10px;
+    }
+    .okButton {
+        padding-left: 372px;
+        color: red;
+    }
+    .userWrapper {
+        position: absolute;
+        left: 1660px;
+        top: 10px;
+    }
+    .userName, .userAge, .userAboutMe, .logOutButton, .showMoreButton, .showLessButton {
+        padding-left: 10px;
+    }
+    .instructionMessage {
+        padding-left: 65px;
+    }
+    .signIn, .signUp {
+        padding-left: 65px;
+    }
+    .messageUserName {
+        padding-right: 10px;
+    }
+    .userMessageWrapper {
+        padding-bottom: 10px;
+    }
 }

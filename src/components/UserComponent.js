@@ -1,26 +1,41 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Button, Form, FormGroup, Col, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, Form, FormGroup, Col} from 'react-bootstrap';
 
 export default class UserComponent extends Component {
     onLogoutButtonPress(e) {
         e.preventDefault();
         this.props.userExit( this.props.userName, this.props.userAvatar, this.props.userAboutMe, this.props.userAge);
     }
-    showMoreAction() {
-        // set showMore to true
-        this.setState({showMore11: true});
-        //this.setState({showMore: false});
+    showMore() {
+        this.props.showMoreAction();
+    }
+    showLess(){
+        this.props.showLessAction();
     }
     render() {
         const { userName, userAvatar, userAge, userAboutMe, showUser, showMore } = this.props;
         return <Form horizontal className={'userWrapper '+ (!showUser ? 'none': '')}>
-            <FormGroup onClick={::this.showMoreAction} className="userAvatar">
+            <FormGroup className="userAvatar">
                 <Col sm={4}>
-                    {(userAvatar.length !== 0) ? <img src ={ require("../pics/" + userAvatar + ".png")} /> : 'no avatar yet'}
+                    {(userAvatar.length !== 0) ? <img src = { require("../pics/" + userAvatar + ".png")} /> : 'no avatar yet'}
                 </Col>
             </FormGroup>
-            <FormGroup className={'userName ' + (!showMore11? 'none':'')}>
+            <FormGroup className={'showMoreButton ' + (showMore? 'none': '')} onClick={::this.showMore}>
+                <Col sm={4}>
+                    <Button bsStyle="primary">
+                        Show more
+                    </Button>
+                </Col>
+            </FormGroup>
+            <FormGroup className={'showLessButton ' + (!showMore? 'none': '')} onClick={::this.showLess}>
+                <Col sm={4}>
+                    <Button bsStyle="primary">
+                        Show less
+                    </Button>
+                </Col>
+            </FormGroup>
+            <FormGroup className={'userName ' + (!showMore? 'none':'')}>
                 <Col sm={4}>
                     Name:
                 </Col>
@@ -28,7 +43,7 @@ export default class UserComponent extends Component {
                     {userName}
                 </Col>
             </FormGroup>
-            <FormGroup className={'userAge ' + (!showMore11? 'none':'')}>
+            <FormGroup className={'userAge ' + (!showMore? 'none':'')}>
                 <Col sm={4}>
                     Age:
                 </Col>
@@ -36,7 +51,7 @@ export default class UserComponent extends Component {
                     {userAge}
                 </Col>
             </FormGroup>
-            <FormGroup className={'userAboutMe ' + (!showMore11? 'none':'')} >
+            <FormGroup className={'userAboutMe ' + (!showMore? 'none':'')} >
                 <Col sm={4}>
                     About me:
                 </Col>
@@ -44,7 +59,7 @@ export default class UserComponent extends Component {
                     {userAboutMe}
                 </Col>
             </FormGroup>
-            <FormGroup className={'logOutButton ' + (!showMore11? 'none':'')}>
+            <FormGroup className={'logOutButton ' + (!showMore? 'none':'')}>
                 <Col sm={1}>
                     <Button bsStyle="primary" onClick={::this.onLogoutButtonPress}>
                         Logout
@@ -53,7 +68,6 @@ export default class UserComponent extends Component {
             </FormGroup>
         </Form>
     }
-
 }
 
 UserComponent.propTypes = {
@@ -63,6 +77,7 @@ UserComponent.propTypes = {
     userAboutMe: PropTypes.string.isRequired,
     showUser: PropTypes.bool.isRequired,
     userExit: PropTypes.func.isRequired,
-    showMore: PropTypes.bool.isRequired
+    showMore: PropTypes.bool.isRequired,
+    showMoreAction: PropTypes.func.isRequired,
+    showLessAction: PropTypes.func.isRequired
 };
-//somewhere should be password

@@ -1,0 +1,2 @@
+export const SHOW_MORE_ACTION = 'SHOW_MORE_ACTION';
+export const SHOW_LESS_ACTION = 'SHOW_LESS_ACTION';

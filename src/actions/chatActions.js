@@ -17,6 +17,11 @@ import {
     SOCKETS_DISCONNECT
 } from '../constants/SocketsComponent';
 
+import {
+    SHOW_MORE_ACTION,
+    SHOW_LESS_ACTION
+}from '../constants/UserComponent';
+
 export function signInAction() {
 
     return (dispatch) => {
@@ -184,4 +189,19 @@ export function userExit(userName, userAvatar, userAboutMe, userAge){
         });
     }
 }
+export function showMoreAction() {
+    return (dispatch)=>{
+        dispatch({
+           type: SHOW_MORE_ACTION
+        });
+    }
+}
+export function showLessAction() {
+    return (dispatch)=>{
+        dispatch({
+            type: SHOW_LESS_ACTION
+        });
+    }
+}
+
 

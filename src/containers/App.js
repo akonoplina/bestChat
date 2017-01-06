@@ -13,10 +13,10 @@ import * as chatActions from '../actions/chatActions';
 class App extends Component {
     render() {
 
-        const { authReducer, socketReducer} = this.props;
+        const { authReducer, socketReducer, userReducer} = this.props;
 
         const { signUpAction, signInAction, changeDataAction, socketsConnect, socketsDisconnect, socketsMessageSend,
-            authSendData, userExit} = this.props.chatActions;
+            authSendData, userExit, showMoreAction, showLessAction} = this.props.chatActions;
 
         return <div>
             <AuthComponent signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
@@ -39,9 +39,9 @@ class App extends Component {
                              socketsMessageSend={socketsMessageSend} userName={authReducer.userName}
                              userAvatar={authReducer.userAvatar} />
 
-            <UserComponent showUser={authReducer.showUser} userName={authReducer.userName}
+            <UserComponent showLessAction={showLessAction} showMoreAction={showMoreAction} showUser={authReducer.showUser} userName={authReducer.userName}
                            userAboutMe={authReducer.userAboutMe} userAvatar={authReducer.userAvatar}
-                           userAge={authReducer.userAge} userExit={userExit} showMore={authReducer.showMore}/>
+                           userAge={authReducer.userAge} userExit={userExit} showMore={userReducer.showMore}/>
 
             </div>
     }
@@ -50,7 +50,8 @@ class App extends Component {
 function mapStateToProps(state) {
     return {
         authReducer: state.authReducer,
-        socketReducer: state.socketReducer
+        socketReducer: state.socketReducer,
+        userReducer: state.userReducer
     }
 }
 
