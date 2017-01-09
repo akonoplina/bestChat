@@ -37,7 +37,7 @@ export function signUpAction() {
     });
   };
 }
-export function userLogin(userName, userAvatar, userAboutMe, userAge) {
+export function userLoginAction(userName, userAvatar, userAboutMe, userAge) {
   return (dispatch) => {
     dispatch({
       type: USER_LOGIN,
@@ -83,15 +83,15 @@ export function changeDataAction(fieldName, validationPassed = false, validateDa
   }
   switch (fieldName) {
     case 'signIn':
-      type = 'SIGN_IN_VALIDATION_' + status;
+      type = `SIGN_IN_VALIDATION_${status}`;
       validationStateSignIn = validateData;
       break;
     case 'signUp':
-      type = 'SIGN_UP_VALIDATION_' + status;
+      type = `SIGN_UP_VALIDATION_${status}`;
       validationStateSignUp = validateData;
       break;
     case 'pass':
-      type = 'PASS_VALIDATION_' + status;
+      type = `PASS_VALIDATION_${status}`;
       validationStatePass = validateData;
       break;
     default:

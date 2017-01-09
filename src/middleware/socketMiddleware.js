@@ -3,16 +3,14 @@ import * as chatActions from '../actions/chatActions';
 export default function webSocketMiddleware() {
   let webSocket = null;
 
-  const onOpen = (token) => (evt) => {
-  };
-  const onClose = (store) => (evt) => {
+  const onClose = (store) => () => {
     store.dispatch(chatActions.socketsDisconnect());
   };
   const waitForConnection = (callback, interval) => {
     if (webSocket.readyState === 1) {
       callback();
     } else {
-      setTimeout(function () {
+      setTimeout(() => {
         waitForConnection(callback, interval);
       }, interval);
     }
@@ -51,25 +49,21 @@ export default function webSocketMiddleware() {
       case 'auth':
         if (authType === 'signIn') {
           if (Object.keys(user).length > 0) {
-            store.dispatch(chatActions.userLogin(userName, userAvatar, userAboutMe, userAge));
+            store.dispatch(chatActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
             // move to the chat page, user exists
+          } else if (error.length > 0) {
+            store.dispatch(chatActions.displayErrorMessage({ errorMessage: error }));
           } else {
-            if (error.length > 0) {
-              store.dispatch(chatActions.displayErrorMessage({ errorMessage: error }));
-            } else {
-              store.dispatch(chatActions.displayErrorMessage({ errorMessage: 'serverside error appeared' }));
-            }
+            store.dispatch(chatActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
           }
         } else if (authType === 'signUp') {
           if (Object.keys(user).length > 0) {
-            store.dispatch(chatActions.userLogin(userName, userAvatar, userAboutMe, userAge));
+            store.dispatch(chatActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
             // move to the chat page, user created successfully
+          } else if (error.length > 0) {
+            store.dispatch(chatActions.displayErrorMessage({ errorMessage: error }));
           } else {
-            if (error.length > 0) {
-              store.dispatch(chatActions.displayErrorMessage({ errorMessage: error }));
-            } else {
-              store.dispatch(chatActions.displayErrorMessage({ errorMessage: 'serverside error appeared' }));
-            }
+            store.dispatch(chatActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
           }
         }
         break;
@@ -94,7 +88,6 @@ export default function webSocketMiddleware() {
         webSocket = new WebSocket('ws://127.0.0.1:5000');
         webSocket.onmessage = onMessage(webSocket, store);
         webSocket.onclose = onClose(store);
-        webSocket.onopen = onOpen(action.token);
         store.dispatch(chatActions.socketsConnecting());
         break;
       case 'SOCKETS_DISCONNECT':
@@ -113,7 +106,7 @@ export default function webSocketMiddleware() {
             action.userAvatar));
         break;
       case 'AUTH_SEND_DATA':
-        waitForConnection(function () {
+        waitForConnection(() => {
           const messageText = {
             userLogin: action.userLogin,
             userPass: action.userPass,
