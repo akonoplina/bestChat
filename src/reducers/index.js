@@ -7,7 +7,7 @@ import socketReducer from './socketReducer';
 import userReducer from './userReducer';
 
 export default combineReducers({
-    authReducer,
-    socketReducer,
-    userReducer
+  authReducer,
+  socketReducer,
+  userReducer,
 });

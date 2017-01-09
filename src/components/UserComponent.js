@@ -21,21 +21,21 @@ export default class UserComponent extends Component {
                     {(userAvatar.length !== 0) ? <img src = { require("../pics/" + userAvatar + ".png")} /> : 'no avatar yet'}
                 </Col>
             </FormGroup>
-            <FormGroup className={'showMoreButton ' + (showMore? 'none': '')} onClick={::this.showMore}>
+            <FormGroup className={'showMoreButton ' + (showMore ? 'none' : '')} onClick={::this.showMore}>
                 <Col sm={4}>
                     <Button bsStyle="primary">
                         Show more
                     </Button>
                 </Col>
             </FormGroup>
-            <FormGroup className={'showLessButton ' + (!showMore? 'none': '')} onClick={::this.showLess}>
+            <FormGroup className={'showLessButton ' + (!showMore ? 'none' : '')} onClick={::this.showLess}>
                 <Col sm={4}>
                     <Button bsStyle="primary">
                         Show less
                     </Button>
                 </Col>
             </FormGroup>
-            <FormGroup className={'userName ' + (!showMore? 'none':'')}>
+            <FormGroup className={'userName ' + (!showMore ? 'none' : '')}>
                 <Col sm={4}>
                     Name:
                 </Col>
@@ -43,7 +43,7 @@ export default class UserComponent extends Component {
                     {userName}
                 </Col>
             </FormGroup>
-            <FormGroup className={'userAge ' + (!showMore? 'none':'')}>
+            <FormGroup className={'userAge ' + (!showMore ? 'none' : '')}>
                 <Col sm={4}>
                     Age:
                 </Col>
@@ -51,7 +51,7 @@ export default class UserComponent extends Component {
                     {userAge}
                 </Col>
             </FormGroup>
-            <FormGroup className={'userAboutMe ' + (!showMore? 'none':'')} >
+            <FormGroup className={'userAboutMe ' + (!showMore ? 'none' : '')} >
                 <Col sm={4}>
                     About me:
                 </Col>
@@ -59,7 +59,7 @@ export default class UserComponent extends Component {
                     {userAboutMe}
                 </Col>
             </FormGroup>
-            <FormGroup className={'logOutButton ' + (!showMore? 'none':'')}>
+            <FormGroup className={'logOutButton ' + (!showMore ? 'none' : '')}>
                 <Col sm={1}>
                     <Button bsStyle="primary" onClick={::this.onLogoutButtonPress}>
                         Logout

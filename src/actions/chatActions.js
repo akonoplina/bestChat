@@ -4,7 +4,8 @@ import {
     USER_LOGIN,
     USER_LOGOUT,
     AUTH_SEND_DATA,
-    USER_EXIT
+    USER_EXIT,
+    DISPLAY_ERROR_MESSAGE,
 } from '../constants/AuthComponent';
 
 import {
@@ -14,194 +15,190 @@ import {
     SOCKETS_MESSAGE_RECEIVING,
     SOCKETS_MESSAGE_SEND,
     SOCKETS_CONNECT,
-    SOCKETS_DISCONNECT
+    SOCKETS_DISCONNECT,
 } from '../constants/SocketsComponent';
 
 import {
     SHOW_MORE_ACTION,
-    SHOW_LESS_ACTION
-}from '../constants/UserComponent';
+    SHOW_LESS_ACTION,
+} from '../constants/UserComponent';
 
 export function signInAction() {
-
-    return (dispatch) => {
-        dispatch({
-            type: SIGN_IN_BUTTON_PRESSED
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SIGN_IN_BUTTON_PRESSED,
+    });
+  };
 }
 export function signUpAction() {
-
-    return (dispatch) => {
-        dispatch({
-            type: SIGN_UP_BUTTON_PRESSED
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SIGN_UP_BUTTON_PRESSED,
+    });
+  };
 }
-export function userLogin(userName, userAvatar, userAboutMe, userAge){
-    return (dispatch) => {
-        dispatch({
-            type: USER_LOGIN,
-            userName: userName,
-            userAvatar: userAvatar,
-            userAboutMe: userAboutMe,
-            userAge: userAge
-        });
-    }
+export function userLogin(userName, userAvatar, userAboutMe, userAge) {
+  return (dispatch) => {
+    dispatch({
+      type: USER_LOGIN,
+      userName,
+      userAvatar,
+      userAboutMe,
+      userAge,
+    });
+  };
 }
-export function userLogout(userName, userAvatar, userAboutMe, userAge){
-    return (dispatch) => {
-        dispatch({
-            type: USER_LOGOUT,
-            userName: userName,
-            userAvatar: userAvatar,
-            userAboutMe: userAboutMe,
-            userAge: userAge
-        });
-    }
+export function userLogout(userName, userAvatar, userAboutMe, userAge) {
+  return (dispatch) => {
+    dispatch({
+      type: USER_LOGOUT,
+      userName,
+      userAvatar,
+      userAboutMe,
+      userAge,
+    });
+  };
 }
-export function displayErrorMessage(errorMessage){
-    return (dispatch) => {
-        dispatch({
-            type: DISPLAY_ERROR_MESSAGE,
-            errorMessage
-        });
-    }
+export function displayErrorMessage(errorMessage) {
+  return (dispatch) => {
+    dispatch({
+      type: DISPLAY_ERROR_MESSAGE,
+      errorMessage,
+    });
+  };
 }
 export function changeDataAction(fieldName, validationPassed = false, validateData = null) {
+  let type = '';
+  let status = '';
+  let validationStateSignIn = null;
+  let validationStateSignUp = null;
+  let validationStatePass = null;
+  let buttonDisabled = true;
 
-    let type = '', status = '';
-    let validationStateSignIn = null, validationStateSignUp = null, validationStatePass = null;
-    let buttonDisabled = true;
+  if (validationPassed === true) {
+    status = 'PASSED';
+    buttonDisabled = false;
+  } else {
+    status = 'FAILED';
+  }
+  switch (fieldName) {
+    case 'signIn':
+      type = 'SIGN_IN_VALIDATION_' + status;
+      validationStateSignIn = validateData;
+      break;
+    case 'signUp':
+      type = 'SIGN_UP_VALIDATION_' + status;
+      validationStateSignUp = validateData;
+      break;
+    case 'pass':
+      type = 'PASS_VALIDATION_' + status;
+      validationStatePass = validateData;
+      break;
+    default:
+      break;
+  }
 
-    if(validationPassed === true){
-        status = 'PASSED';
-        buttonDisabled = false;
-    } else {
-        status = 'FAILED';
-    }
-    switch(fieldName){
-        case 'signIn':
-            type = 'SIGN_IN_VALIDATION_' + status;
-            validationStateSignIn = validateData;
-            break;
-        case 'signUp':
-            type = 'SIGN_UP_VALIDATION_' + status;
-            validationStateSignUp = validateData;
-            break;
-        case 'pass':
-            type = 'PASS_VALIDATION_' + status;
-            validationStatePass = validateData;
-            break;
-        default:
-            break;
-
-    }
-
-    return (dispatch) => {
-        dispatch({
-            type: type,
-            validationStateSignIn: validationStateSignIn,
-            validationStateSignUp: validationStateSignUp,
-            validationStatePass: validationStatePass,
-            buttonDisabled: buttonDisabled
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type,
+      validationStateSignIn,
+      validationStateSignUp,
+      validationStatePass,
+      buttonDisabled,
+    });
+  };
 }
 
 export function socketsConnecting() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_CONNECTING
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_CONNECTING,
+    });
+  };
 }
 export function socketsConnect() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_CONNECT
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_CONNECT,
+    });
+  };
 }
 export function socketsDisconnecting() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_DISCONNECTING
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_DISCONNECTING,
+    });
+  };
 }
 export function socketsDisconnect() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_DISCONNECT
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_DISCONNECT,
+    });
+  };
 }
 export function socketsMessageSending(sendMessage, userName, userAvatar) {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_MESSAGE_SENDING,
-            messageSend: sendMessage,
-            userName: userName,
-            userAvatar: userAvatar
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_MESSAGE_SENDING,
+      messageSend: sendMessage,
+      userName,
+      userAvatar,
+    });
+  };
 }
 export function socketsMessageSend(sendMessage, userName, userAvatar) {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_MESSAGE_SEND,
-            messageSend: sendMessage,
-            userName: userName,
-            userAvatar: userAvatar
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_MESSAGE_SEND,
+      messageSend: sendMessage,
+      userName,
+      userAvatar,
+    });
+  };
 }
 export function socketsMessageReceiving(receiveMessage, userName, userAvatar) {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_MESSAGE_RECEIVING,
-            messageReceive: receiveMessage,
-            userName: userName,
-            userAvatar: userAvatar
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SOCKETS_MESSAGE_RECEIVING,
+      messageReceive: receiveMessage,
+      userName,
+      userAvatar,
+    });
+  };
 }
 export function authSendData(userLogin, userPass, authType) {
-
-    return (dispatch) => {
-        dispatch({
-            type: AUTH_SEND_DATA,
-            userLogin,
-            userPass,
-            authType
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: AUTH_SEND_DATA,
+      userLogin,
+      userPass,
+      authType,
+    });
+  };
 }
-export function userExit(userName, userAvatar, userAboutMe, userAge){
-    return (dispatch) => {
-        dispatch({
-            type: USER_EXIT,
-            userName,
-            userAvatar,
-            userAboutMe,
-            userAge
-        });
-    }
+export function userExit(userName, userAvatar, userAboutMe, userAge) {
+  return (dispatch) => {
+    dispatch({
+      type: USER_EXIT,
+      userName,
+      userAvatar,
+      userAboutMe,
+      userAge,
+    });
+  };
 }
 export function showMoreAction() {
-    return (dispatch)=>{
-        dispatch({
-           type: SHOW_MORE_ACTION
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SHOW_MORE_ACTION,
+    });
+  };
 }
 export function showLessAction() {
-    return (dispatch)=>{
-        dispatch({
-            type: SHOW_LESS_ACTION
-        });
-    }
+  return (dispatch) => {
+    dispatch({
+      type: SHOW_LESS_ACTION,
+    });
+  };
 }
-
-
