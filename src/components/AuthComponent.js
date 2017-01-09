@@ -42,8 +42,17 @@ export default class AuthComponent extends Component {
         ReactDOM.findDOMNode(this.refs.signUp).value = '';
         ReactDOM.findDOMNode(this.refs.pass).value = '';
 
+        let el = {target:{value:null}};
+
+        this.onFieldChange('signIn', el);
+        this.onFieldChange('signUp', el);
+        this.onFieldChange('pass', el);
+
     }
     validateAction(fieldName,value){
+        if(!value){
+            return null;
+        }
         switch (fieldName){
             case 'pass':
                 let ckPassword = /^[A-Za-z0-9!@#$%^&*()_]{6,}$/;

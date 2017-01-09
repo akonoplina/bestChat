@@ -3,10 +3,9 @@ import * as chatActions from '../actions/chatActions';
 export default function webSocketMiddleware() {
   let webSocket = null;
 
-  const onOpen = () => {
-
+  const onOpen = (token) => (evt) => {
   };
-  const onClose = (store) => {
+  const onClose = (store) => (evt) => {
     store.dispatch(chatActions.socketsDisconnect());
   };
   const waitForConnection = (callback, interval) => {
