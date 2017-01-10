@@ -2,6 +2,9 @@ import React, { PropTypes, Component } from 'react';
 
 import { Button, Form, FormGroup, Col, FormControl } from 'react-bootstrap';
 
+import avatarBoy from '../pics/avatarBoy.png';
+import avatarGirl from '../pics/avatarGirl.png';
+
 export default class SocketComponent extends Component {
 
     constructor(props) {
@@ -48,7 +51,7 @@ export default class SocketComponent extends Component {
                                     height={16}
                                     width={16}
                                     className='messageUserAvatar'
-                                    src={`../pics/${messageHistoryElement.userAvatar}.png`}
+                                    src={messageHistoryElement.userAvatar === 'avatarGirl' ? avatarGirl : avatarBoy}
                                 />
                                 <span className='messageUserName'>{`${messageHistoryElement.userName}  wrote:`}</span>
                                 <span className='userMessage'>{messageHistoryElement.message}</span>
