@@ -1,3 +1,58 @@
 {
-  "extends": "airbnb"
+  "extends": "airbnb",
+  "rules": {
+    /******
+    * AIRBNB OVERRIDES
+    *******/
+    //overrides from airbnb config
+    "no-param-reassign": 0,
+    //allow no curly on block statements that are only one line
+    "curly": [2, "multi-line"],
+    //single quotes vs double
+    "quotes": [2, "single"],
+    //4 spaces vs 2 spaces
+    "indent": [2, 4, {
+      "SwitchCase": 1
+    }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/forbid-prop-types": [0],
+    "react/jsx-indent-props": [2, 4],
+    "react/jsx-indent": [2, 4],
+    //allow _variablesLikeThis
+    "no-underscore-dangle": 0,
+    "no-confusing-arrow": 0,
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-no-bind": 0,
+    "comma-dangle": [2, "never"],
+    "one-var": [2, {
+      "uninitialized": "always",
+      "initialized": "never"
+    }],
+    "camelcase": [2, {properties: "always"}],
+    "no-unused-expressions": [2, { allowShortCircuit: true, allowTernary: true }],
+    "one-var-declaration-per-line": 0,
+    "no-return-assign": 0,
+    "array-callback-return": 0,
+    "no-use-before-define": [0, "nofunc"],
+    "arrow-body-style": 0,
+    "jsx-quotes": [2, "prefer-single"],
+    "no-nested-ternary": 0,
+    "react/prefer-stateless-function": 0,
+    "no-shadow": [0, {
+      "hoist": "functions"
+    }],
+    "jsx-a11y/img-has-alt": 0,
+    "default-case": 0,
+    "react/no-multi-comp": 0,
+    "no-throw-literal": 0,
+    "consistent-return": 0,
+    "react/prop-types": 0,
+    "max-len": [0, {"code": 200, "tabWidth": 4, "ignoreUrls": true}],
+    "no-console": 0,
+
+    /******
+    * BROKEN
+    *******/
+    "object-curly-spacing": [0, "never"]
+  }
 }

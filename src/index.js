@@ -10,10 +10,11 @@ const store = configureStore();
 
 
 render(
-  <Provider store={store}>
-    <div className="app">
-      <App />
-    </div>
-  </Provider>,
+    <Provider store={store}>
+        <div className='app'>
+            <App />
+        </div>
+    </Provider>,
+    /* global document*/
     document.getElementById('root'),
 );
