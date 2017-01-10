@@ -24,8 +24,16 @@ export default class AuthComponent extends Component {
             }
         }
     }
+    constructor(props) {
+        super(props);
+        this.state = {
+            signIn: '',
+            signUp: '',
+            pass: ''
+        };
+    }
     onFieldChange(fieldName, e) {
-        const validationResult = this.validateAction(fieldName, e.target.value);
+        const validationResult = this.constructor.validateAction(fieldName, e.target.value);
         if (validationResult === 'success') {
             this.props.changeDataAction(fieldName, true, validationResult);
         } else if (validationResult === 'error') {
@@ -33,6 +41,7 @@ export default class AuthComponent extends Component {
         } else {
             this.props.changeDataAction(fieldName, true, validationResult);
         }
+        this.setState({[fieldName]: e.target.value});
     }
     onSignInButtonPress() {
         this.props.signInAction();
@@ -41,13 +50,12 @@ export default class AuthComponent extends Component {
         this.props.signUpAction();
     }
     onOkButtonPress() {
-        const userSignIn = this.signIn.value;
-
-        const userSignUp = this.signUp.value;
+        const userSignIn = this.state.signIn;
+        const userSignUp = this.state.signUp;
+        const userPass = this.state.pass;
 
         let userLogin = '';
         let authType = '';
-        const userPass = this.pass.value;
 
         if (userSignIn !== '') {
             userLogin = userSignIn;
@@ -61,9 +69,9 @@ export default class AuthComponent extends Component {
 
         this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
 
-        this.signIn.value = '';
-        this.signUp.value = '';
-        this.pass.value = '';
+        this.setState({signIn: ''});
+        this.setState({signUp: ''});
+        this.setState({pass: ''});
 
         const el = {target: {value: null}};
 
@@ -71,6 +79,7 @@ export default class AuthComponent extends Component {
         this.onFieldChange('signUp', el);
         this.onFieldChange('pass', el);
     }
+
     render() {
         const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
             showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, validationStateSignIn,
@@ -95,7 +104,6 @@ export default class AuthComponent extends Component {
                     <FormControl
                         className='signInData'
                         type='text'
-                        ref={(c) => { this.signIn = c; }}
                         onChange={this.onFieldChange.bind(this, 'signIn')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6.</HelpBlock>
@@ -114,7 +122,6 @@ export default class AuthComponent extends Component {
                     <FormControl
                         className='signUpData'
                         type='text'
-                        ref={(c) => { this.signUp = c; }}
                         onChange={this.onFieldChange.bind(this, 'signUp')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6</HelpBlock>
@@ -128,7 +135,6 @@ export default class AuthComponent extends Component {
                     <FormControl
                         type='password'
                         className='passData'
-                        ref={(c) => { this.pass = c; }}
                         onChange={this.onFieldChange.bind(this, 'pass')}
                     />
                     <FormControl.Feedback />

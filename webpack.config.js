@@ -1,8 +1,8 @@
-let path = require('path');
-let webpack = require('webpack');
-let NpmInstallPlugin = require('npm-install-webpack-plugin');
-let autoprefixer = require('autoprefixer');
-let precss = require('precss');
+const path = require('path');
+const webpack = require('webpack');
+const NpmInstallPlugin = require('npm-install-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const precss = require('precss');
 
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
@@ -27,30 +27,30 @@ module.exports = {
                 test: /\.js$/,
                 loaders: ['eslint'],
                 include: [
-                    path.resolve(__dirname, "src"),
-                ],
+                    path.resolve(__dirname, 'src')
+                ]
             }
         ],
         loaders: [
             {
                 loaders: ['react-hot', 'babel-loader'],
                 include: [
-                    path.resolve(__dirname, "src"),
+                    path.resolve(__dirname, 'src')
                 ],
                 test: /\.js$/,
-                plugins: ['transform-runtime'],
+                plugins: ['transform-runtime']
             },
             {
                 test: /\.(css|scss)$/,
-                loader: "style-loader!css-loader!sass-loader?modules"
+                loader: 'style-loader!css-loader!sass-loader?modules'
             },
             {
                 test: /\.png$/,
-                loader: "url-loader?limit=100000"
+                loader: 'url-loader?limit=100000'
             },
             {
                 test: /\.jpg$/,
-                loader: "file-loader"
+                loader: 'file-loader'
             },
             {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
@@ -71,7 +71,7 @@ module.exports = {
 
         ]
     },
-    postcss: function () {
+    postcss: () => {
         return [autoprefixer, precss];
     }
 };

@@ -4,12 +4,21 @@ import { Button, Form, FormGroup, Col, FormControl } from 'react-bootstrap';
 
 export default class SocketComponent extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            messageText: ''
+        };
+    }
     handleSendButton(e) {
         e.preventDefault();
-        if (this.messageText.value.length > 0) {
-            this.props.socketsMessageSend(this.messageText.value, this.props.userName, this.props.userAvatar);
-            this.messageText.value = '';
+        if (this.state.messageText.length > 0) {
+            this.props.socketsMessageSend(this.state.messageText, this.props.userName, this.props.userAvatar);
+            this.setState({messageText: ''});
         }
+    }
+    handleChange(e) {
+        this.setState({messageText: e.target.value});
     }
     render() {
         const { connected, messageHistory, userName } = this.props;
@@ -20,7 +29,7 @@ export default class SocketComponent extends Component {
             onSubmit={this.handleSendButton}>
             <FormGroup>
                 <Col sm={5}>
-                    <h3>`Welcome to the chat, ${userName}!!!`</h3>
+                    <h3>Welcome to the chat, {userName}!!!</h3>
                 </Col>
             </FormGroup>
             <FormGroup>
@@ -52,14 +61,14 @@ export default class SocketComponent extends Component {
                 <Col sm={2}>
                     <FormControl
                         componentClass='textarea'
-                        ref={(c) => { this.messageText = c; }}
                         readOnly={!connected}
+                        onChange={this.handleChange.bind(this)}
                     />
                 </Col>
             </FormGroup>
             <FormGroup>
                 <Col sm={1}>
-                    <Button bsStyle='primary' onClick={this.handleSendButton} disabled={!connected}>
+                    <Button bsStyle='primary' onClick={this.handleSendButton.bind(this)} disabled={!connected}>
                         Send
                     </Button>
                 </Col>
