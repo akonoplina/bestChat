@@ -17,6 +17,7 @@ export default class SocketComponent extends Component {
         e.preventDefault();
         if (this.state.messageText.length > 0) {
             this.props.socketsMessageSend(this.state.messageText, this.props.userName, this.props.userAvatar);
+            document.getElementsByClassName('messageText')[0].value = ''; /* global document*/
             this.setState({messageText: ''});
         }
     }
@@ -66,6 +67,7 @@ export default class SocketComponent extends Component {
                         componentClass='textarea'
                         readOnly={!connected}
                         onChange={this.handleChange.bind(this)}
+                        className='messageText'
                     />
                 </Col>
             </FormGroup>

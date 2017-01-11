@@ -8,27 +8,29 @@ import SocketComponent from '../components/SocketComponent';
 
 import UserComponent from '../components/UserComponent';
 
-import * as chatActions from '../actions/chatActions';
+import * as authActions from '../actions/authActions';
+
+import * as userActions from '../actions/userActions';
+
+import * as socketActions from '../actions/socketActions';
 
 class App extends Component {
     render() {
         const { authReducer, socketReducer, userReducer } = this.props;
 
-        const { signUpAction, signInAction, changeDataAction, socketsConnect,
-            socketsMessageSend, authSendData, userExit, showMoreAction, showLessAction } =
-            this.props.chatActions;
+        const { signUpAction, signInAction, changeDataAction, authSendData, userExit } = this.props.authActions;
+        const { socketsConnect, socketsMessageSend } = this.props.socketActions;
+        const { showMoreAction, showLessAction } = this.props.userActions;
 
         return (<div>
             <AuthComponent
                 signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
                 showSignInInput={authReducer.showSignInInput}
-                signInButtonTitle={authReducer.signInButtonTitle}
-                showPass={authReducer.showPass} passwordTitle={authReducer.passwordTitle}
+                showPass={authReducer.showPass}
                 showSignUpInput={authReducer.showSignUpInput} showAuthWrapper={authReducer.showAuthWrapper}
                 buttonSignUpVisible={authReducer.buttonSignUpVisible}
-                signUpAction={signUpAction} signUpButtonTitle={authReducer.signUpButtonTitle}
+                signUpAction={signUpAction}
                 okButtonVisible={authReducer.okButtonVisible}
-                okButtonTitle={authReducer.okButtonTitle}
                 changeDataAction={changeDataAction} buttonDisabled={authReducer.buttonDisabled}
                 validationStateSignIn={authReducer.validationStateSignIn}
                 validationStateSignUp={authReducer.validationStateSignUp}
@@ -64,7 +66,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        chatActions: bindActionCreators(chatActions, dispatch)
+        authActions: bindActionCreators(authActions, dispatch),
+        socketActions: bindActionCreators(socketActions, dispatch),
+        userActions: bindActionCreators(userActions, dispatch)
     };
 }
 

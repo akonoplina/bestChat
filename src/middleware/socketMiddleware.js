@@ -1,10 +1,11 @@
-import * as chatActions from '../actions/chatActions';
+import * as authActions from '../actions/authActions';
+import * as socketActions from '../actions/socketActions';
 
 export default function webSocketMiddleware() {
     let webSocket = null;
 
     const onClose = store => () => {
-        store.dispatch(chatActions.socketsDisconnect());
+        store.dispatch(socketActions.socketsDisconnect());
     };
     const waitForConnection = (callback, interval) => {
         if (webSocket.readyState === 1) {
@@ -49,21 +50,21 @@ export default function webSocketMiddleware() {
             case 'auth':
                 if (authType === 'signIn') {
                     if (Object.keys(user).length > 0) {
-                        store.dispatch(chatActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
+                        store.dispatch(authActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
                         // move to the chat page, user exists
                     } else if (error.length > 0) {
-                        store.dispatch(chatActions.displayErrorMessage({ errorMessage: error }));
+                        store.dispatch(authActions.displayErrorMessage({ errorMessage: error }));
                     } else {
-                        store.dispatch(chatActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
+                        store.dispatch(authActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
                     }
                 } else if (authType === 'signUp') {
                     if (Object.keys(user).length > 0) {
-                        store.dispatch(chatActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
+                        store.dispatch(authActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
                         // move to the chat page, user created successfully
                     } else if (error.length > 0) {
-                        store.dispatch(chatActions.displayErrorMessage({ errorMessage: error }));
+                        store.dispatch(authActions.displayErrorMessage({ errorMessage: error }));
                     } else {
-                        store.dispatch(chatActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
+                        store.dispatch(authActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
                     }
                 }
                 break;
@@ -71,7 +72,7 @@ export default function webSocketMiddleware() {
                 userMessage = msg.userMessage;
                 userName = msg.userName;
                 userAvatar = msg.userAvatar;
-                store.dispatch(chatActions.socketsMessageReceiving(userMessage, userName, userAvatar));
+                store.dispatch(socketActions.socketsMessageReceiving(userMessage, userName, userAvatar));
                 break;
             default:
                 break;
@@ -81,18 +82,18 @@ export default function webSocketMiddleware() {
         switch (action.type) {
             case 'SOCKETS_CONNECT':
                 if (webSocket !== null) {
-                    store.dispatch(chatActions.socketsDisconnecting());
+                    store.dispatch(socketActions.socketsDisconnecting());
                     webSocket.close();
                 }
                 /* global WebSocket*/
                 webSocket = new WebSocket('ws://127.0.0.1:5000');
                 webSocket.onmessage = onMessage(webSocket, store);
                 webSocket.onclose = onClose(store);
-                store.dispatch(chatActions.socketsConnecting());
+                store.dispatch(socketActions.socketsConnecting());
                 break;
             case 'SOCKETS_DISCONNECT':
                 if (webSocket !== null) {
-                    store.dispatch(chatActions.socketsDisconnecting());
+                    store.dispatch(socketActions.socketsDisconnecting());
                     webSocket.close();
                 }
                 webSocket = null;
@@ -102,7 +103,7 @@ export default function webSocketMiddleware() {
                     userMessage: action.messageSend,
                     userName: action.userName,
                     userAvatar: action.userAvatar }));
-                store.dispatch(chatActions.socketsMessageSending(action.messageSend, action.userName,
+                store.dispatch(socketActions.socketsMessageSending(action.messageSend, action.userName,
                 action.userAvatar));
                 break;
             case 'AUTH_SEND_DATA':
@@ -115,7 +116,7 @@ export default function webSocketMiddleware() {
                 }, 1000);
                 break;
             case 'USER_EXIT':
-                store.dispatch(chatActions.userLogout(action.userName, action.userAvatar,
+                store.dispatch(authActions.userLogout(action.userName, action.userAvatar,
                 action.userAboutMe, action.userAge));
                 webSocket.close();
                 break;

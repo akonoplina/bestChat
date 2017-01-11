@@ -69,6 +69,10 @@ export default class AuthComponent extends Component {
 
         this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
 
+        document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
+        document.getElementsByClassName('signUpData')[0].value = ''; /* global document*/
+        document.getElementsByClassName('passData')[0].value = ''; /* global document*/
+
         this.setState({signIn: ''});
         this.setState({signUp: ''});
         this.setState({pass: ''});
@@ -81,8 +85,8 @@ export default class AuthComponent extends Component {
     }
 
     render() {
-        const { signInButtonTitle, buttonSignInVisible, showSignInInput, signUpButtonTitle, buttonSignUpVisible,
-            showSignUpInput, okButtonTitle, okButtonVisible, passwordTitle, showPass, validationStateSignIn,
+        const {buttonSignInVisible, showSignInInput, buttonSignUpVisible,
+            showSignUpInput, okButtonVisible, showPass, validationStateSignIn,
             validationStateSignUp, validationStatePass, buttonDisabled, errorMessage, showAuthWrapper} = this.props;
 
         return (<Form horizontal className={(!showAuthWrapper ? 'authWrapper none' : 'authWrapper')}>
@@ -93,12 +97,12 @@ export default class AuthComponent extends Component {
             </FormGroup>
             <FormGroup className={(!buttonSignInVisible ? 'signIn none' : 'signIn')}>
                 <Col sm={1}>
-                    <Button block bsStyle='primary' onClick={this.onSignInButtonPress.bind(this)} >{signInButtonTitle}</Button>
+                    <Button block bsStyle='primary' onClick={this.onSignInButtonPress.bind(this)} >Sign in</Button>
                 </Col>
             </FormGroup>
             <FormGroup validationState={validationStateSignIn} className={(!showSignInInput ? 'none' : '')}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    {signInButtonTitle}:
+                    Sign in:
                 </Col>
                 <Col sm={2}>
                     <FormControl
@@ -111,12 +115,12 @@ export default class AuthComponent extends Component {
             </FormGroup>
             <FormGroup className={(!buttonSignUpVisible ? 'signUp none' : 'signUp')}>
                 <Col sm={1}>
-                    <Button block bsStyle='primary' onClick={this.onSignUpButtonPress.bind(this)}>{signUpButtonTitle}</Button>
+                    <Button block bsStyle='primary' onClick={this.onSignUpButtonPress.bind(this)}>Sign up</Button>
                 </Col>
             </FormGroup>
             <FormGroup validationState={validationStateSignUp} className={(!showSignUpInput ? 'none' : '')}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    {signUpButtonTitle}:
+                    Sign up:
                 </Col>
                 <Col sm={2}>
                     <FormControl
@@ -129,7 +133,7 @@ export default class AuthComponent extends Component {
             </FormGroup>
             <FormGroup validationState={validationStatePass} className={(!showPass ? 'pass none' : 'pass')}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    {passwordTitle}:
+                    Password
                 </Col>
                 <Col sm={2}>
                     <FormControl
@@ -148,7 +152,7 @@ export default class AuthComponent extends Component {
                         disabled={buttonDisabled}
                         onClick={this.onOkButtonPress.bind(this)}
                     >
-                        {okButtonTitle}
+                       Ok
                     </Button>
                 </Col>
             </FormGroup>
@@ -162,17 +166,13 @@ export default class AuthComponent extends Component {
 }
 
 AuthComponent.propTypes = {
-    signInButtonTitle: PropTypes.string.isRequired,
     signInAction: PropTypes.func.isRequired,
     buttonSignInVisible: PropTypes.bool.isRequired,
     showSignInInput: PropTypes.bool.isRequired,
-    signUpButtonTitle: PropTypes.string.isRequired,
     signUpAction: PropTypes.func.isRequired,
     buttonSignUpVisible: PropTypes.bool.isRequired,
     showSignUpInput: PropTypes.bool.isRequired,
-    okButtonTitle: PropTypes.string.isRequired,
     okButtonVisible: PropTypes.bool.isRequired,
-    passwordTitle: PropTypes.string.isRequired,
     showPass: PropTypes.bool.isRequired,
     changeDataAction: PropTypes.func.isRequired,
     buttonDisabled: PropTypes.bool.isRequired,

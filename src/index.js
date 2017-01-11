@@ -15,6 +15,5 @@ render(
             <App />
         </div>
     </Provider>,
-    /* global document*/
-    document.getElementById('root'),
+    document.getElementById('root'), /* global document*/
 );

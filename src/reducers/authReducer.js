@@ -14,11 +14,6 @@ import {
 } from '../constants/AuthComponent';
 
 const initialState = {
-    signInButtonTitle: 'Sign in',
-    signUpButtonTitle: 'Sign up',
-    passwordTitle: 'Password',
-    okButtonTitle: 'Ok',
-
     buttonSignInVisible: true,
     showSignInInput: false,
     buttonSignUpVisible: true,
