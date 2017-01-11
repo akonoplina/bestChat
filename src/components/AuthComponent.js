@@ -1,159 +1,36 @@
 import React, { PropTypes, Component } from 'react';
 
-import { Button, Form, FormGroup, Col, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { Button, Form, FormGroup, Col } from 'react-bootstrap';
+
+import SignInFormComponent from '../components/SignInFormComponent';
+import SignUpFormComponent from '../components/SignUpFormComponent';
 
 export default class AuthComponent extends Component {
-    static validateAction(fieldName, value) {
-        if (!value) {
-            return null;
-        }
-        switch (fieldName) {
-            case 'pass': {
-                const ckPassword = /^[A-Za-z0-9!@#$%^&*()_]{6,}$/;
-                if (!ckPassword.test(value)) {
-                    return 'error';
-                }
-                return 'success';
-            }
-            default: {
-                const ckUsername = /^[A-Za-z0-9_]{6,}$/;
-                if (!ckUsername.test(value)) {
-                    return 'error';
-                }
-                return 'success';
-            }
-        }
-    }
-    constructor(props) {
-        super(props);
-        this.state = {
-            signIn: '',
-            signUp: '',
-            pass: ''
-        };
-    }
-    onFieldChange(fieldName, e) {
-        const validationResult = this.constructor.validateAction(fieldName, e.target.value);
-        if (validationResult === 'success') {
-            this.props.changeDataAction(fieldName, true, validationResult);
-        } else if (validationResult === 'error') {
-            this.props.changeDataAction(fieldName, false, validationResult);
-        } else {
-            this.props.changeDataAction(fieldName, true, validationResult);
-        }
-        this.setState({[fieldName]: e.target.value});
+    componentWillMount() {
+        this.state = {signIn: false, signUp: false, showAuthWrapper: true};
     }
     onSignInButtonPress() {
-        this.props.signInAction();
+        this.setState({signIn: true});
     }
     onSignUpButtonPress() {
-        this.props.signUpAction();
+        this.setState({signUp: true});
     }
-    onOkButtonPress() {
-        const userSignIn = this.state.signIn;
-        const userSignUp = this.state.signUp;
-        const userPass = this.state.pass;
-
-        let userLogin = '';
-        let authType = '';
-
-        if (userSignIn !== '') {
-            userLogin = userSignIn;
-            authType = 'signIn';
-        } else {
-            userLogin = userSignUp;
-            authType = 'signUp';
-        }
-
-        this.props.socketsConnect(); // websockets action
-
-        this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
-
-        document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
-        document.getElementsByClassName('signUpData')[0].value = ''; /* global document*/
-        document.getElementsByClassName('passData')[0].value = ''; /* global document*/
-
-        this.setState({signIn: ''});
-        this.setState({signUp: ''});
-        this.setState({pass: ''});
-
-        const el = {target: {value: null}};
-
-        this.onFieldChange('signIn', el);
-        this.onFieldChange('signUp', el);
-        this.onFieldChange('pass', el);
-    }
-
     render() {
-        const {buttonSignInVisible, showSignInInput, buttonSignUpVisible,
-            showSignUpInput, okButtonVisible, showPass, validationStateSignIn,
-            validationStateSignUp, validationStatePass, buttonDisabled, errorMessage, showAuthWrapper} = this.props;
-
-        return (<Form horizontal className={(!showAuthWrapper ? 'authWrapper none' : 'authWrapper')}>
-            <FormGroup className='instructionMessage'>
-                <Col sm={3}>
-                    <h3>Please enter your login & pass)))</h3>
-                </Col>
-            </FormGroup>
-            <FormGroup className={(!buttonSignInVisible ? 'signIn none' : 'signIn')}>
+        const {errorMessage} = this.props;
+        if (this.state.signIn) {
+            return (<SignInFormComponent socketsConnect={this.props.socketsConnect} authSendData={this.props.authSendData} />);
+        } else if (this.state.signUp) {
+            return (<SignUpFormComponent socketsConnect={this.props.socketsConnect} authSendData={this.props.authSendData} />);
+        }
+        return (<Form horizontal className={(!this.state.showAuthWrapper ? 'authWrapper none' : 'authWrapper')}>
+            <FormGroup className='signIn'>
                 <Col sm={1}>
                     <Button block bsStyle='primary' onClick={this.onSignInButtonPress.bind(this)} >Sign in</Button>
                 </Col>
             </FormGroup>
-            <FormGroup validationState={validationStateSignIn} className={(!showSignInInput ? 'none' : '')}>
-                <Col componentClass={ControlLabel} sm={1}>
-                    Sign in:
-                </Col>
-                <Col sm={2}>
-                    <FormControl
-                        className='signInData'
-                        type='text'
-                        onChange={this.onFieldChange.bind(this, 'signIn')} />
-                    <FormControl.Feedback />
-                    <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6.</HelpBlock>
-                </Col>
-            </FormGroup>
-            <FormGroup className={(!buttonSignUpVisible ? 'signUp none' : 'signUp')}>
+            <FormGroup className='signUp'>
                 <Col sm={1}>
                     <Button block bsStyle='primary' onClick={this.onSignUpButtonPress.bind(this)}>Sign up</Button>
-                </Col>
-            </FormGroup>
-            <FormGroup validationState={validationStateSignUp} className={(!showSignUpInput ? 'none' : '')}>
-                <Col componentClass={ControlLabel} sm={1}>
-                    Sign up:
-                </Col>
-                <Col sm={2}>
-                    <FormControl
-                        className='signUpData'
-                        type='text'
-                        onChange={this.onFieldChange.bind(this, 'signUp')} />
-                    <FormControl.Feedback />
-                    <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6</HelpBlock>
-                </Col>
-            </FormGroup>
-            <FormGroup validationState={validationStatePass} className={(!showPass ? 'pass none' : 'pass')}>
-                <Col componentClass={ControlLabel} sm={1}>
-                    Password
-                </Col>
-                <Col sm={2}>
-                    <FormControl
-                        type='password'
-                        className='passData'
-                        onChange={this.onFieldChange.bind(this, 'pass')}
-                    />
-                    <FormControl.Feedback />
-                    <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
-                </Col>
-            </FormGroup>
-            <FormGroup className={(!okButtonVisible ? 'okButton none' : 'okButton')}>
-                <Col sm={1}>
-                    <Button
-                        bsStyle='primary'
-                        disabled={buttonDisabled}
-                        onClick={this.onOkButtonPress.bind(this)}
-                    >
-                       Ok
-                    </Button>
                 </Col>
             </FormGroup>
             <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
@@ -166,18 +43,7 @@ export default class AuthComponent extends Component {
 }
 
 AuthComponent.propTypes = {
-    signInAction: PropTypes.func.isRequired,
-    buttonSignInVisible: PropTypes.bool.isRequired,
-    showSignInInput: PropTypes.bool.isRequired,
-    signUpAction: PropTypes.func.isRequired,
-    buttonSignUpVisible: PropTypes.bool.isRequired,
-    showSignUpInput: PropTypes.bool.isRequired,
-    okButtonVisible: PropTypes.bool.isRequired,
-    showPass: PropTypes.bool.isRequired,
-    changeDataAction: PropTypes.func.isRequired,
-    buttonDisabled: PropTypes.bool.isRequired,
-    socketsConnect: PropTypes.func.isRequired,
-    authSendData: PropTypes.func.isRequired,
     errorMessage: PropTypes.string.isRequired,
-    showAuthWrapper: PropTypes.bool.isRequired
+    socketsConnect: PropTypes.func.isRequired,
+    authSendData: PropTypes.func.isRequired
 };

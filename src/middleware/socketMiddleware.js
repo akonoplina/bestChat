@@ -1,5 +1,6 @@
 import * as authActions from '../actions/authActions';
 import * as socketActions from '../actions/socketActions';
+import * as userActions from '../actions/userActions';
 
 export default function webSocketMiddleware() {
     let webSocket = null;
@@ -50,7 +51,7 @@ export default function webSocketMiddleware() {
             case 'auth':
                 if (authType === 'signIn') {
                     if (Object.keys(user).length > 0) {
-                        store.dispatch(authActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
+                        store.dispatch(userActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
                         // move to the chat page, user exists
                     } else if (error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage({ errorMessage: error }));
@@ -59,7 +60,7 @@ export default function webSocketMiddleware() {
                     }
                 } else if (authType === 'signUp') {
                     if (Object.keys(user).length > 0) {
-                        store.dispatch(authActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
+                        store.dispatch(userActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
                         // move to the chat page, user created successfully
                     } else if (error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage({ errorMessage: error }));
@@ -116,7 +117,7 @@ export default function webSocketMiddleware() {
                 }, 1000);
                 break;
             case 'USER_EXIT':
-                store.dispatch(authActions.userLogout(action.userName, action.userAvatar,
+                store.dispatch(userActions.userLogout(action.userName, action.userAvatar,
                 action.userAboutMe, action.userAge));
                 webSocket.close();
                 break;

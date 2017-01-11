@@ -18,38 +18,24 @@ class App extends Component {
     render() {
         const { authReducer, socketReducer, userReducer } = this.props;
 
-        const { signUpAction, signInAction, changeDataAction, authSendData, userExit } = this.props.authActions;
+        const { authSendData, userExit } = this.props.authActions;
         const { socketsConnect, socketsMessageSend } = this.props.socketActions;
         const { showMoreAction, showLessAction } = this.props.userActions;
 
         return (<div>
-            <AuthComponent
-                signInAction={signInAction} buttonSignInVisible={authReducer.buttonSignInVisible}
-                showSignInInput={authReducer.showSignInInput}
-                showPass={authReducer.showPass}
-                showSignUpInput={authReducer.showSignUpInput} showAuthWrapper={authReducer.showAuthWrapper}
-                buttonSignUpVisible={authReducer.buttonSignUpVisible}
-                signUpAction={signUpAction}
-                okButtonVisible={authReducer.okButtonVisible}
-                changeDataAction={changeDataAction} buttonDisabled={authReducer.buttonDisabled}
-                validationStateSignIn={authReducer.validationStateSignIn}
-                validationStateSignUp={authReducer.validationStateSignUp}
-                validationStatePass={authReducer.validationStatePass} socketsConnect={socketsConnect}
-                authSendData={authSendData}
-                errorMessage={authReducer.errorMessage}
-            />
+            <AuthComponent authSendData={authSendData} errorMessage={authReducer.errorMessage} socketsConnect={socketsConnect} />
 
             <SocketComponent
                 connected={socketReducer.connected} messageHistory={socketReducer.messageHistory}
-                socketsMessageSend={socketsMessageSend} userName={authReducer.userName}
-                userAvatar={authReducer.userAvatar}
+                socketsMessageSend={socketsMessageSend} userName={userReducer.userName}
+                userAvatar={userReducer.userAvatar}
             />
 
             <UserComponent
                 showLessAction={showLessAction} showMoreAction={showMoreAction}
-                showUser={authReducer.showUser} userName={authReducer.userName}
-                userAboutMe={authReducer.userAboutMe}
-                userAvatar={authReducer.userAvatar} userAge={authReducer.userAge}
+                showUser={userReducer.showUser} userName={userReducer.userName}
+                userAboutMe={userReducer.userAboutMe}
+                userAvatar={userReducer.userAvatar} userAge={userReducer.userAge}
                 userExit={userExit} showMore={userReducer.showMore}
             />
         </div>);
