@@ -112,7 +112,11 @@ export default function webSocketMiddleware() {
                     const messageText = {
                         userLogin: action.userLogin,
                         userPass: action.userPass,
-                        authType: action.authType };
+                        authType: action.authType,
+                        userName: action.userName,
+                        userAge: action.userAge,
+                        userAvatar: action.userAvatar,
+                        userAboutMe: action.userAboutMe};
                     webSocket.send(JSON.stringify(messageText));
                 }, 1000);
                 break;

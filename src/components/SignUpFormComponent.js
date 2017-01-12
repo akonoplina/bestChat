@@ -64,7 +64,7 @@ export default class SignUpFormComponent extends Component {
             </FormGroup>
             <FormGroup validationState={this.state.validationStateSignUp}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    Sign up:
+                    Sign up*:
                 </Col>
                 <Col sm={3}>
                     <FormControl className='signUpData' type='text' onChange={this.validateAction.bind(this, 'signUp')} />
@@ -74,7 +74,7 @@ export default class SignUpFormComponent extends Component {
             </FormGroup>
             <FormGroup validationState={this.state.validationStatePass}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    Password
+                    Password*:
                 </Col>
                 <Col sm={3}>
                     <FormControl type='password' className='passDataUp' onChange={this.validateAction.bind(this, 'pass')} />

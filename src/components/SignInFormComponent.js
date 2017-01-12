@@ -15,20 +15,29 @@ export default class SignInFormComponent extends Component {
     onOkButtonPress() {
         const userPass = document.getElementsByClassName('passDataIn')[0].value; /* global document*/
         const userLogin = document.getElementsByClassName('signInData')[0].value; /* global document*/
+        const userNameData = document.getElementsByClassName('userNameData')[0].value; /* global document*/
+        const userAgeData = document.getElementsByClassName('userAgeData')[0].value; /* global document*/
+        const userAvatarData = document.getElementsByClassName('userAvatarData')[0].files[0]; /* global document*/
+        const userAboutMeData = document.getElementsByClassName('userAboutMeData')[0].value; /* global document*/
         const authType = 'signIn';
 
-        this.props.socketsConnect(); // websockets action
+        const reader = new FileReader(); /* global FileReader*/
+        let userAvatarDataText = '';
+        reader.onload = () => {
+            userAvatarDataText = reader.result;
+            this.props.socketsConnect(); // websockets action
 
-        this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
+            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData, userAvatarDataText, userAboutMeData); // websockets action calls loginAction
+            this.setState({showSignIn: false});
 
-        this.setState({showSignIn: false});
+            document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
+            document.getElementsByClassName('passDataIn')[0].value = ''; /* global document*/
 
-        document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
-        document.getElementsByClassName('passDataIn')[0].value = ''; /* global document*/
+            const el = {target: {value: null}};
 
-        const el = {target: {value: null}};
-
-        this.validateAction('all', el);
+            this.validateAction('all', el);
+        };
+        reader.readAsText(userAvatarData);
     }
     validateAction(fieldName, e) {
         if (fieldName === 'all' && !e.target.value) {
@@ -64,7 +73,7 @@ export default class SignInFormComponent extends Component {
             </FormGroup>
             <FormGroup validationState={this.state.validationStateSignIn}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    Sign in:
+                    Sign in*:
                 </Col>
                 <Col sm={3}>
                     <FormControl className='signInData' type='text' onChange={this.validateAction.bind(this, 'signIn')} />
@@ -74,12 +83,44 @@ export default class SignInFormComponent extends Component {
             </FormGroup>
             <FormGroup validationState={this.state.validationStatePass}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    Password
+                    Password*:
                 </Col>
                 <Col sm={3}>
                     <FormControl type='password' className='passDataIn' onChange={this.validateAction.bind(this, 'pass')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    Name:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='text' className='userNameData' />
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    Age:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='text' className='userAgeData' />
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    About me:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='text' className='userAboutMeData' />
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    Avatar:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='file' className='userAvatarData' />
                 </Col>
             </FormGroup>
             <FormGroup className='okButton'>
