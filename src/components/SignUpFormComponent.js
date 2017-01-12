@@ -56,7 +56,7 @@ export default class SignUpFormComponent extends Component {
         }
     }
     render() {
-        return (<Form horizontal className={!(this.state.showSignUp) ? 'none' : ''}>
+        return (<Form horizontal className={!(this.state.showSignUp) ? 'signUpForm none' : 'signUpForm'}>
             <FormGroup className='instructionMessage'>
                 <Col sm={3}>
                     <h3>Please enter your login & pass)))</h3>

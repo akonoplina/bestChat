@@ -71,10 +71,13 @@ table {
         padding-left: 10px;
     }
     .instructionMessage {
-        padding-left: 65px;
+        padding-left: 15px;
     }
-    .signIn, .signUp {
-        padding-left: 65px;
+    .signIn, .signUp, .signInForm, .signUpForm {
+        margin-left: 700px;
+    }
+    .welcomeMessage {
+        margin-left: 665px;
     }
     .messageUserName {
         padding-right: 10px;

@@ -23,18 +23,23 @@ export default class AuthComponent extends Component {
             return (<SignUpFormComponent socketsConnect={this.props.socketsConnect} authSendData={this.props.authSendData} />);
         }
         return (<Form horizontal className={(!this.state.showAuthWrapper ? 'authWrapper none' : 'authWrapper')}>
+            <FormGroup className='welcomeMessage'>
+                <Col sm={4}>
+                    <h3>Please select authorisation type</h3>
+                </Col>
+            </FormGroup>
             <FormGroup className='signIn'>
-                <Col sm={1}>
+                <Col sm={3}>
                     <Button block bsStyle='primary' onClick={this.onSignInButtonPress.bind(this)} >Sign in</Button>
                 </Col>
             </FormGroup>
             <FormGroup className='signUp'>
-                <Col sm={1}>
+                <Col sm={3}>
                     <Button block bsStyle='primary' onClick={this.onSignUpButtonPress.bind(this)}>Sign up</Button>
                 </Col>
             </FormGroup>
             <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
-                <Col sm={1}>
+                <Col sm={3}>
                     {errorMessage}
                 </Col>
             </FormGroup>

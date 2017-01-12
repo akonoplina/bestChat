@@ -56,9 +56,9 @@ export default class SignInFormComponent extends Component {
         }
     }
     render() {
-        return (<Form horizontal className={!(this.state.showSignIn) ? 'none' : ''}>
+        return (<Form horizontal className={!(this.state.showSignIn) ? 'signInForm none' : 'signInForm'}>
             <FormGroup className='instructionMessage'>
-                <Col sm={3}>
+                <Col sm={5}>
                     <h3>Please enter your login & pass)))</h3>
                 </Col>
             </FormGroup>
@@ -66,7 +66,7 @@ export default class SignInFormComponent extends Component {
                 <Col componentClass={ControlLabel} sm={1}>
                     Sign in:
                 </Col>
-                <Col sm={2}>
+                <Col sm={3}>
                     <FormControl className='signInData' type='text' onChange={this.validateAction.bind(this, 'signIn')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6.</HelpBlock>
@@ -76,7 +76,7 @@ export default class SignInFormComponent extends Component {
                 <Col componentClass={ControlLabel} sm={1}>
                     Password
                 </Col>
-                <Col sm={2}>
+                <Col sm={3}>
                     <FormControl type='password' className='passDataIn' onChange={this.validateAction.bind(this, 'pass')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
