@@ -21,6 +21,9 @@ export default function webSocketMiddleware() {
         let msg = evt.data;
         msg = JSON.parse(msg);
         const error = msg.errorText;
+
+        console.log(error);
+
         const user = msg.user;
 
         let userName = '';

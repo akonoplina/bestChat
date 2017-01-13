@@ -21,13 +21,16 @@ export default class SignInFormComponent extends Component {
         const userAboutMeData = document.getElementsByClassName('userAboutMeData')[0].value; /* global document*/
         const authType = 'signIn';
 
+        const imageName = userAvatarData.name;
+
         const reader = new FileReader(); /* global FileReader*/
         let userAvatarDataText = '';
         reader.onload = () => {
             userAvatarDataText = reader.result;
+
             this.props.socketsConnect(); // websockets action
 
-            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData, userAvatarDataText, userAboutMeData); // websockets action calls loginAction
+            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData, `${imageName}:${userAvatarDataText}`, userAboutMeData); // websockets action calls loginAction
             this.setState({showSignIn: false});
 
             document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
@@ -37,7 +40,7 @@ export default class SignInFormComponent extends Component {
 
             this.validateAction('all', el);
         };
-        reader.readAsText(userAvatarData);
+        reader.readAsDataURL(userAvatarData);
     }
     validateAction(fieldName, e) {
         if (fieldName === 'all' && !e.target.value) {

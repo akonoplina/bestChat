@@ -2,7 +2,6 @@ const server = require('http').createServer();
 const WebSocketServer = require('ws').Server;
 const express = require('express');
 const fs = require('fs');
-const querystring = require('querystring');
 
 const wss = new WebSocketServer({server});
 const app = express();
@@ -12,11 +11,9 @@ const MongoClient = require('mongodb').MongoClient;
 
 let userDB, chatDB;
 
-// подсоединяемся к БД
 MongoClient.connect('mongodb://127.0.0.1:27017', (err, db) => {
     if (err) { throw err; }
 
-    // записываем ссылки на таблицы (коллекции) в глобальные переменные
     userDB = db.collection('users');
     chatDB = db.collection('chat');
 });
@@ -32,14 +29,15 @@ wss.on('connection', function connection(ws) {
     ws.on('message', (message) => {
         message = JSON.parse(message);
 
-        console.log('received', message);
-
         let userMessage = '';
         let userAvatar = '';
         let userName = '';
         let userAge = '';
         let userAboutMe = '';
         let userObj = {};
+        let fileName = '';
+        let fileType = '';
+        let base64Data = '';
 
         if (typeof message.userLogin !== 'undefined' && typeof message.userPass !== 'undefined' &&
             typeof message.authType !== 'undefined') {
@@ -54,20 +52,53 @@ wss.on('connection', function connection(ws) {
                         userAge = message.userAge;
                     }
                     if (message.userAvatar) {
-                        userAvatar = message.userAvatar; // file text data
-                        fs.createWriteStream('./pics');
-                        console.log(userAvatar);
+                        userAvatar = message.userAvatar;
+
+                        fileName = userAvatar.substr(0, userAvatar.search(':'));
+                        userAvatar = userAvatar.slice(fileName.length + 1, userAvatar.length);
+                        userAvatar = userAvatar.toString();
+
+                        fileType = fileName.substr(fileName.search(/\./) + 1, fileName.length);
+                        console.log('fileType', fileType);
+
+                        switch (fileType) {
+                            case 'svg': {
+                                base64Data = userAvatar.replace('data:image/svg+xml;base64,', '');
+                                break;
+                            }
+                            case 'png': {
+                                console.log(userAvatar);
+
+                                base64Data = userAvatar.replace('data:image/png;base64,', '');
+                                break;
+                            }
+                            case 'jpg': {
+                                base64Data = userAvatar.replace('data:image/jpg;base64,', '');
+                                break;
+                            }
+                            case 'jpeg': {
+                                base64Data = userAvatar.replace('data:image/jpeg;base64,', '');
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
+
+                        const buffer = Buffer.from(base64Data, 'base64');
+
+                        fs.writeFileSync(`src/pics/${fileName}`, buffer);
                     }
                     if (message.userAboutMe) {
                         userAboutMe = message.userAboutMe;
                     }
-                    const writeRes = userDB.insert({userLogin: message.userLogin, userPass: message.userPass, userName, userAge, userAvatar, userAboutMe });
+                    const writeRes = userDB.insert({userLogin: message.userLogin, userPass: message.userPass, userName, userAge, fileName, userAboutMe });
                     if (writeRes.nInserted === 1) {
                         // success
-                        userObj = {userName, userAge, userAvatar, userAboutMe};
+                        userObj = {userName, userAge, fileName, userAboutMe};
                         ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
                     } else {
-                        ws.send({errorText: 'User wasn\'t  created!!!'}); // send error message
+                        ws.send(JSON.stringify({errorText: 'User wasn\'t  created!!!'})); // send error message
                     }
                     break;
                 }
@@ -76,7 +107,7 @@ wss.on('connection', function connection(ws) {
                     if (Object.keys(userObj).length > 0) {
                         ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
                     } else {
-                        ws.send({errorText: 'User not found!!!'}); // send error message
+                        ws.send(JSON.stringify({errorText: 'User not found!!!'})); // send error message
                     }
                     break;
                 }
