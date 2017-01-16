@@ -9,23 +9,18 @@ const port = 5000;
 
 const MongoClient = require('mongodb').MongoClient;
 
-let userDB, chatDB;
+const chatDB = 'chatDB';
+let usersCollection, messagesCollection;
 
-MongoClient.connect('mongodb://127.0.0.1:27017', (err, db) => {
-    if (err) { throw err; }
-
-    userDB = db.collection('users');
-    chatDB = db.collection('chat');
-});
-
-
-app.use((req, res) => {
-    res.send({ msg: 'hello' });
+MongoClient.connect(`mongodb://127.0.0.1:27017/${chatDB}`, (err, db) => {
+    if (err) {
+        throw err;
+    }
+    usersCollection = db.collection('users');
+    messagesCollection = db.collection('messages');
 });
 
 wss.on('connection', function connection(ws) {
-    // const clientID = ws._socket._handle.fd;
-
     ws.on('message', (message) => {
         message = JSON.parse(message);
 
@@ -59,7 +54,6 @@ wss.on('connection', function connection(ws) {
                         userAvatar = userAvatar.toString();
 
                         fileType = fileName.substr(fileName.search(/\./) + 1, fileName.length);
-                        console.log('fileType', fileType);
 
                         switch (fileType) {
                             case 'svg': {
@@ -67,20 +61,15 @@ wss.on('connection', function connection(ws) {
                                 break;
                             }
                             case 'png': {
-                                console.log(userAvatar);
-
                                 base64Data = userAvatar.replace('data:image/png;base64,', '');
                                 break;
                             }
                             case 'jpg': {
-                                base64Data = userAvatar.replace('data:image/jpg;base64,', '');
-                                break;
-                            }
-                            case 'jpeg': {
                                 base64Data = userAvatar.replace('data:image/jpeg;base64,', '');
                                 break;
                             }
                             default: {
+                                base64Data = userAvatar.replace('data:image/jpeg;base64,', '');
                                 break;
                             }
                         }
@@ -92,45 +81,55 @@ wss.on('connection', function connection(ws) {
                     if (message.userAboutMe) {
                         userAboutMe = message.userAboutMe;
                     }
-                    const writeRes = userDB.insert({userLogin: message.userLogin, userPass: message.userPass, userName, userAge, fileName, userAboutMe });
-                    if (writeRes.nInserted === 1) {
-                        // success
-                        userObj = {userName, userAge, fileName, userAboutMe};
-                        ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
-                    } else {
-                        ws.send(JSON.stringify({errorText: 'User wasn\'t  created!!!'})); // send error message
-                    }
+                    usersCollection.insert({userLogin: message.userLogin,
+                        userPass: message.userPass,
+                        userName,
+                        userAge,
+                        userAvatar: fileName,
+                        userAboutMe }, {w: 1}, (err) => {
+                            if (err) {
+                                ws.send(JSON.stringify({errorText: 'User wasn\'t  created!!!'}));
+                            }
+                            userObj = {userName, userAge, userAvatar: fileName, userAboutMe};
+                            ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
+                        });
                     break;
                 }
                 case 'signUp': {
-                    userObj = userDB.find({userLogin: message.userLogin, userPass: message.userPass});
-                    if (Object.keys(userObj).length > 0) {
-                        ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
-                    } else {
-                        ws.send(JSON.stringify({errorText: 'User not found!!!'})); // send error message
-                    }
+                    usersCollection.find({userLogin: message.userLogin, userPass: message.userPass}).toArray((error, list) => {
+                        if (Object.keys(list[0]).length > 0) {
+                            userObj = {userName: list[0].userName, userAboutMe: list[0].userAboutMe, userAvatar: list[0].userAvatar, userAge: list[0].userAge};
+                            ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
+                        } else {
+                            ws.send(JSON.stringify({errorText: 'User not found!!!'}));
+                        }
+                    });
                     break;
                 }
             }
-            ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
         } else if (typeof message.userMessage !== 'undefined') {
             userMessage = message.userMessage;
             userName = message.userName;
             userAvatar = message.userAvatar;
-            wss.clients.forEach((client) => {
-                if (client !== ws) {
-                    client.send(JSON.stringify({connectionType: 'message', userMessage, userName, userAvatar}));
+            messagesCollection.insert({userName, userAvatar, userMessage}, {w: 1}, (err) => {
+                if (err) {
+                    ws.send(JSON.stringify({connectionType: 'message', errorText: 'message wasn\'t saved'}));
                 }
+                wss.clients.forEach((client) => {
+                    if (client !== ws) {
+                        client.send(JSON.stringify({connectionType: 'message', userMessage, userName, userAvatar}));
+                    }
+                });
             });
         } else {
-            ws.send(JSON.stringify({error: 'Error occurred. userLogin, userPass, authType and message are empty!'}));
+            ws.send(JSON.stringify({errorText: 'Error occurred. userLogin, userPass, authType and message are empty!'}));
         }
     });
     wss.on('close', () => {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
     });
     wss.on('error', () => {
-        ws.send(JSON.stringify({error: 'Something unknown has happened((('}));
+        ws.send(JSON.stringify({errorText: 'Something unknown has happened((('}));
     });
 });
 

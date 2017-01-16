@@ -21,9 +21,6 @@ export default function webSocketMiddleware() {
         let msg = evt.data;
         msg = JSON.parse(msg);
         const error = msg.errorText;
-
-        console.log(error);
-
         const user = msg.user;
 
         let userName = '';
@@ -57,18 +54,18 @@ export default function webSocketMiddleware() {
                         store.dispatch(userActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
                         // move to the chat page, user exists
                     } else if (error.length > 0) {
-                        store.dispatch(authActions.displayErrorMessage({ errorMessage: error }));
+                        store.dispatch(authActions.displayErrorMessage(error));
                     } else {
-                        store.dispatch(authActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
+                        store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
                     }
                 } else if (authType === 'signUp') {
                     if (Object.keys(user).length > 0) {
                         store.dispatch(userActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
                         // move to the chat page, user created successfully
-                    } else if (error.length > 0) {
-                        store.dispatch(authActions.displayErrorMessage({ errorMessage: error }));
+                    } else if (typeof error !== 'undefined' && error.length > 0) {
+                        store.dispatch(authActions.displayErrorMessage(error));
                     } else {
-                        store.dispatch(authActions.displayErrorMessage({ errorMessage: 'server-side error appeared' }));
+                        store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
                     }
                 }
                 break;
@@ -76,7 +73,13 @@ export default function webSocketMiddleware() {
                 userMessage = msg.userMessage;
                 userName = msg.userName;
                 userAvatar = msg.userAvatar;
-                store.dispatch(socketActions.socketsMessageReceiving(userMessage, userName, userAvatar));
+                if (Object.keys(userMessage).length > 0) {
+                    store.dispatch(socketActions.socketsMessageReceiving(userMessage, userName, userAvatar));
+                } else if (typeof error !== 'undefined' && error.length > 0) {
+                    store.dispatch(authActions.displayErrorMessage(error));
+                } else {
+                    store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
+                }
                 break;
             default:
                 break;

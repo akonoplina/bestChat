@@ -2,9 +2,6 @@ import React, { PropTypes, Component } from 'react';
 
 import { Button, Form, FormGroup, Col } from 'react-bootstrap';
 
-import avatarBoy from '../pics/avatarBoy.png';
-import avatarGirl from '../pics/avatarGirl.png';
-
 export default class UserComponent extends Component {
     onLogoutButtonPress(e) {
         e.preventDefault();
@@ -21,7 +18,12 @@ export default class UserComponent extends Component {
         return (<Form horizontal className={(!showUser ? 'userWrapper none' : 'userWrapper')}>
             <FormGroup className='userAvatar'>
                 <Col sm={4}>
-                    {(userAvatar.length !== 0) ? <img role='presentation' src={(userAvatar === 'avatarBoy') ? avatarBoy : avatarGirl} /> : 'no avatar yet'}
+                    {(userAvatar.length !== 0) ? <img
+                        width={128}
+                        height={128}
+                        role='presentation'
+                        src={require(`../pics/${userAvatar}`)} /> : // eslint-disable-line global-require
+                        'no avatar yet'}
                 </Col>
             </FormGroup>
             <FormGroup className={(showMore ? 'showMoreButton none' : 'showMoreButton')} onClick={this.showMore.bind(this)}>
