@@ -3,18 +3,20 @@ import React, { PropTypes, Component } from 'react';
 import { Button, Form, FormGroup, Col } from 'react-bootstrap';
 
 export default class UserComponent extends Component {
+
+    constructor() {
+        super();
+        this.state = {showHide: false};
+    }
     onLogoutButtonPress(e) {
         e.preventDefault();
         this.props.userExit(this.props.userName, this.props.userAvatar, this.props.userAboutMe, this.props.userAge);
     }
-    showMore() {
-        this.props.showMoreAction();
-    }
-    showLess() {
-        this.props.showLessAction();
+    showHide() {
+        this.setState({showHide: !this.state.showHide});
     }
     render() {
-        const { userName, userAvatar, userAge, userAboutMe, showUser, showMore } = this.props;
+        const { userName, userAvatar, userAge, userAboutMe, showUser } = this.props;
         return (<Form horizontal className={(!showUser ? 'userWrapper none' : 'userWrapper')}>
             <FormGroup className='userAvatar'>
                 <Col sm={4}>
@@ -26,21 +28,21 @@ export default class UserComponent extends Component {
                         'no avatar yet'}
                 </Col>
             </FormGroup>
-            <FormGroup className={(showMore ? 'showMoreButton none' : 'showMoreButton')} onClick={this.showMore.bind(this)}>
+            <FormGroup className={(this.state.showHide ? 'showHideButton none' : 'showHideButton')} onClick={this.showHide.bind(this)}>
                 <Col sm={4}>
                     <Button bsStyle='primary'>
                        Show more
                     </Button>
                 </Col>
             </FormGroup>
-            <FormGroup className={(!showMore ? 'showLessButton none' : 'showLessButton')} onClick={this.showLess.bind(this)}>
+            <FormGroup className={(!this.state.showHide ? 'showLessButton none' : 'showLessButton')} onClick={this.showHide.bind(this)}>
                 <Col sm={4}>
                     <Button bsStyle='primary'>
                         Show less
                     </Button>
                 </Col>
             </FormGroup>
-            <FormGroup className={(!showMore ? 'userName none' : 'userName')}>
+            <FormGroup className={(!this.state.showHide ? 'userName none' : 'userName')}>
                 <Col sm={4}>
                   Name:
                 </Col>
@@ -48,7 +50,7 @@ export default class UserComponent extends Component {
                     {userName}
                 </Col>
             </FormGroup>
-            <FormGroup className={(!showMore ? 'userAge none' : 'userAge')}>
+            <FormGroup className={(!this.state.showHide ? 'userAge none' : 'userAge')}>
                 <Col sm={4}>
                     Age:
                 </Col>
@@ -56,7 +58,7 @@ export default class UserComponent extends Component {
                     {userAge}
                 </Col>
             </FormGroup>
-            <FormGroup className={(!showMore ? 'userAboutMe none' : 'userAboutMe')} >
+            <FormGroup className={(!this.state.showHide ? 'userAboutMe none' : 'userAboutMe')} >
                 <Col sm={4}>
                     About me:
                 </Col>
@@ -64,7 +66,7 @@ export default class UserComponent extends Component {
                     {userAboutMe}
                 </Col>
             </FormGroup>
-            <FormGroup className={(!showMore ? 'logOutButton none' : 'logOutButton')}>
+            <FormGroup className={(!this.state.showHide ? 'logOutButton none' : 'logOutButton')}>
                 <Col sm={1}>
                     <Button bsStyle='primary' onClick={this.onLogoutButtonPress.bind(this)}>
                          Logout
@@ -81,8 +83,5 @@ UserComponent.propTypes = {
     userAge: PropTypes.string.isRequired,
     userAboutMe: PropTypes.string.isRequired,
     showUser: PropTypes.bool.isRequired,
-    userExit: PropTypes.func.isRequired,
-    showMore: PropTypes.bool.isRequired,
-    showMoreAction: PropTypes.func.isRequired,
-    showLessAction: PropTypes.func.isRequired
+    userExit: PropTypes.func.isRequired
 };

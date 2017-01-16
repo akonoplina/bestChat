@@ -1,4 +1,2 @@
-export const SHOW_MORE_ACTION = 'SHOW_MORE_ACTION';
-export const SHOW_LESS_ACTION = 'SHOW_LESS_ACTION';
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';

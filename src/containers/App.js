@@ -10,8 +10,6 @@ import UserComponent from '../components/UserComponent';
 
 import * as authActions from '../actions/authActions';
 
-import * as userActions from '../actions/userActions';
-
 import * as socketActions from '../actions/socketActions';
 
 class App extends Component {
@@ -20,7 +18,6 @@ class App extends Component {
 
         const { authSendData, userExit } = this.props.authActions;
         const { socketsConnect, socketsMessageSend } = this.props.socketActions;
-        const { showMoreAction, showLessAction } = this.props.userActions;
 
         return (<div>
             <AuthComponent authSendData={authSendData} errorMessage={authReducer.errorMessage} socketsConnect={socketsConnect} />
@@ -32,11 +29,10 @@ class App extends Component {
             />
 
             <UserComponent
-                showLessAction={showLessAction} showMoreAction={showMoreAction}
                 showUser={userReducer.showUser} userName={userReducer.userName}
                 userAboutMe={userReducer.userAboutMe}
                 userAvatar={userReducer.userAvatar} userAge={userReducer.userAge}
-                userExit={userExit} showMore={userReducer.showMore}
+                userExit={userExit}
             />
         </div>);
     }
@@ -53,8 +49,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         authActions: bindActionCreators(authActions, dispatch),
-        socketActions: bindActionCreators(socketActions, dispatch),
-        userActions: bindActionCreators(userActions, dispatch)
+        socketActions: bindActionCreators(socketActions, dispatch)
     };
 }
 
