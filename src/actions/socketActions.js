@@ -1,6 +1,4 @@
 import {
-    SOCKETS_CONNECTING,
-    SOCKETS_DISCONNECTING,
     SOCKETS_MESSAGE_SENDING,
     SOCKETS_MESSAGE_RECEIVING,
     SOCKETS_MESSAGE_SEND,
@@ -8,24 +6,10 @@ import {
     SOCKETS_DISCONNECT
 } from '../constants/SocketsComponent';
 
-export function socketsConnecting() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_CONNECTING
-        });
-    };
-}
 export function socketsConnect() {
     return (dispatch) => {
         dispatch({
             type: SOCKETS_CONNECT
-        });
-    };
-}
-export function socketsDisconnecting() {
-    return (dispatch) => {
-        dispatch({
-            type: SOCKETS_DISCONNECTING
         });
     };
 }

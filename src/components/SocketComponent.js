@@ -4,10 +4,15 @@ import { Button, Form, FormGroup, Col, FormControl } from 'react-bootstrap';
 
 export default class SocketComponent extends Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
+        /* global localStorage*/
+        const jwtIsSet = !!localStorage.getItem('jwt');
+        const connected = localStorage.getItem('connected');
         this.state = {
-            messageText: ''
+            messageText: '',
+            jwtIsSet,
+            connected
         };
     }
     handleSendButton(e) {
@@ -22,11 +27,11 @@ export default class SocketComponent extends Component {
         this.setState({messageText: e.target.value});
     }
     render() {
-        const { connected, messageHistory, userName } = this.props;
+        const { messageHistory, userName } = this.props;
 
         return (<Form
             horizontal
-            className={((!connected || !userName) ? 'socketWrapper none' : 'socketWrapper')}
+            className={((!this.state.connected || !userName || !this.state.jwtIsSet) ? 'socketWrapper none' : 'socketWrapper')}
             onSubmit={this.handleSendButton}>
             <FormGroup>
                 <Col sm={5}>
@@ -62,7 +67,7 @@ export default class SocketComponent extends Component {
                 <Col sm={2}>
                     <FormControl
                         componentClass='textarea'
-                        readOnly={!connected}
+                        readOnly={!this.state.connected}
                         onChange={this.handleChange.bind(this)}
                         className='messageText'
                     />
@@ -70,7 +75,7 @@ export default class SocketComponent extends Component {
             </FormGroup>
             <FormGroup>
                 <Col sm={1}>
-                    <Button bsStyle='primary' onClick={this.handleSendButton.bind(this)} disabled={!connected}>
+                    <Button bsStyle='primary' onClick={this.handleSendButton.bind(this)} disabled={!this.state.connected}>
                         Send
                     </Button>
                 </Col>
@@ -80,7 +85,6 @@ export default class SocketComponent extends Component {
 }
 
 SocketComponent.propTypes = {
-    connected: PropTypes.bool.isRequired,
     messageHistory: PropTypes.array.isRequired,
     socketsMessageSend: PropTypes.func.isRequired,
     userName: PropTypes.string.isRequired,

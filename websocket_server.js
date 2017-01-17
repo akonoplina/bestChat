@@ -30,6 +30,7 @@ wss.on('connection', function connection(ws) {
         let userAge = '';
         let userAboutMe = '';
         let userObj = {};
+        const jwt = {};
         let fileName = '';
         let fileType = '';
         let base64Data = '';
@@ -91,7 +92,10 @@ wss.on('connection', function connection(ws) {
                                 ws.send(JSON.stringify({errorText: 'User wasn\'t  created!!!'}));
                             }
                             userObj = {userName, userAge, userAvatar: fileName, userAboutMe};
-                            ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
+
+                            // create a JWT with secret
+
+                            ws.send(JSON.stringify({jwt, connectionType: 'auth', authType: message.authType}));
                         });
                     break;
                 }
@@ -99,7 +103,10 @@ wss.on('connection', function connection(ws) {
                     usersCollection.find({userLogin: message.userLogin, userPass: message.userPass}).toArray((error, list) => {
                         if (Object.keys(list[0]).length > 0) {
                             userObj = {userName: list[0].userName, userAboutMe: list[0].userAboutMe, userAvatar: list[0].userAvatar, userAge: list[0].userAge};
-                            ws.send(JSON.stringify({user: userObj, connectionType: 'auth', authType: message.authType}));
+
+                            // create a JWT with secret
+
+                            ws.send(JSON.stringify({jwt, connectionType: 'auth', authType: message.authType}));
                         } else {
                             ws.send(JSON.stringify({errorText: 'User not found!!!'}));
                         }
@@ -126,7 +133,7 @@ wss.on('connection', function connection(ws) {
         }
     });
     wss.on('close', () => {
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+        console.log(`${new Date()} Peer  ${connection.remoteAddress} disconnected.`);
     });
     wss.on('error', () => {
         ws.send(JSON.stringify({errorText: 'Something unknown has happened((('}));

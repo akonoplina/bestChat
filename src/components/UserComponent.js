@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 
 import { Button, Form, FormGroup, Col } from 'react-bootstrap';
 
@@ -6,25 +6,34 @@ export default class UserComponent extends Component {
 
     constructor() {
         super();
-        this.state = {showHide: false};
+        /* global localStorage*/
+        const jwt = localStorage.getItem('jwt'); // decipher it into userObj... maybe even include connected, think about it later
+        const connected = localStorage.getItem('connected');
+        this.state = {
+            showHide: false,
+            connected,
+            jwt,
+            userName: jwt.userName,
+            userAge: jwt.userAge,
+            userAvatar: jwt.userAvatar,
+            userAboutMe: jwt.userAboutMe };
     }
     onLogoutButtonPress(e) {
         e.preventDefault();
-        this.props.userExit(this.props.userName, this.props.userAvatar, this.props.userAboutMe, this.props.userAge);
+        this.props.userExit(this.state.userName, this.state.userAvatar, this.state.userAboutMe, this.state.userAge);
     }
     showHide() {
         this.setState({showHide: !this.state.showHide});
     }
     render() {
-        const { userName, userAvatar, userAge, userAboutMe, showUser } = this.props;
-        return (<Form horizontal className={(!showUser ? 'userWrapper none' : 'userWrapper')}>
+        return (<Form horizontal className={((!this.state.connected && !this.state.jwt) ? 'userWrapper none' : 'userWrapper')}>
             <FormGroup className='userAvatar'>
                 <Col sm={4}>
-                    {(userAvatar.length !== 0) ? <img
+                    {(this.state.userAvatar.length !== 0) ? <img
                         width={128}
                         height={128}
                         role='presentation'
-                        src={require(`../pics/${userAvatar}`)} /> : // eslint-disable-line global-require
+                        src={require(`../pics/${this.state.userAvatar}`)} /> : // eslint-disable-line global-require
                         'no avatar yet'}
                 </Col>
             </FormGroup>
@@ -47,7 +56,7 @@ export default class UserComponent extends Component {
                   Name:
                 </Col>
                 <Col sm={4}>
-                    {userName}
+                    {this.state.userName}
                 </Col>
             </FormGroup>
             <FormGroup className={(!this.state.showHide ? 'userAge none' : 'userAge')}>
@@ -55,7 +64,7 @@ export default class UserComponent extends Component {
                     Age:
                 </Col>
                 <Col sm={4}>
-                    {userAge}
+                    {this.state.userAge}
                 </Col>
             </FormGroup>
             <FormGroup className={(!this.state.showHide ? 'userAboutMe none' : 'userAboutMe')} >
@@ -63,7 +72,7 @@ export default class UserComponent extends Component {
                     About me:
                 </Col>
                 <Col sm={4}>
-                    {userAboutMe}
+                    {this.state.userAboutMe}
                 </Col>
             </FormGroup>
             <FormGroup className={(!this.state.showHide ? 'logOutButton none' : 'logOutButton')}>
@@ -76,12 +85,3 @@ export default class UserComponent extends Component {
         </Form>);
     }
 }
-
-UserComponent.propTypes = {
-    userName: PropTypes.string.isRequired,
-    userAvatar: PropTypes.string.isRequired,
-    userAge: PropTypes.string.isRequired,
-    userAboutMe: PropTypes.string.isRequired,
-    showUser: PropTypes.bool.isRequired,
-    userExit: PropTypes.func.isRequired
-};

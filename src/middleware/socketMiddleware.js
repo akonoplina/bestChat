@@ -1,6 +1,5 @@
 import * as authActions from '../actions/authActions';
 import * as socketActions from '../actions/socketActions';
-import * as userActions from '../actions/userActions';
 
 export default function webSocketMiddleware() {
     let webSocket = null;
@@ -20,48 +19,29 @@ export default function webSocketMiddleware() {
     const onMessage = (ws, store) => (evt) => {
         let msg = evt.data;
         msg = JSON.parse(msg);
+
         const error = msg.errorText;
-        const user = msg.user;
-
-        let userName = '';
-        let userAvatar = '';
-        let userAboutMe = '';
-        let userAge = '';
-        let userMessage = '';
-
-        if (typeof user !== 'undefined') {
-            if (typeof user.userName !== 'undefined') {
-                userName = user.userName;
-            }
-            if (typeof user.userAvatar !== 'undefined') {
-                userAvatar = user.userAvatar;
-            }
-            if (typeof user.userAboutMe !== 'undefined') {
-                userAboutMe = user.userAboutMe;
-            }
-            if (typeof user.userAge !== 'undefined') {
-                userAge = user.userAge;
-            }
-        }
-
         const connectionType = msg.connectionType; // auth or message
         const authType = msg.authType; // signIn or signOut
+
+        const jwt = msg.jwt; // JWT obj needs to be decoded
+        let userName = '';
+        let userAvatar = '';
+        let userMessage = '';
 
         switch (connectionType) {
             case 'auth':
                 if (authType === 'signIn') {
-                    if (Object.keys(user).length > 0) {
-                        store.dispatch(userActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
-                        // move to the chat page, user exists
+                    if (Object.keys(jwt).length > 0) {
+                        localStorage.setItem('jwt', jwt);
                     } else if (error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
                         store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
                     }
                 } else if (authType === 'signUp') {
-                    if (Object.keys(user).length > 0) {
-                        store.dispatch(userActions.userLoginAction(userName, userAvatar, userAboutMe, userAge));
-                        // move to the chat page, user created successfully
+                    if (Object.keys(jwt).length > 0) {
+                        localStorage.setItem('jwt', jwt);
                     } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
@@ -89,18 +69,19 @@ export default function webSocketMiddleware() {
         switch (action.type) {
             case 'SOCKETS_CONNECT':
                 if (webSocket !== null) {
-                    store.dispatch(socketActions.socketsDisconnecting());
+                    /* global localStorage*/
+                    localStorage.setItem('connected', false);
                     webSocket.close();
                 }
                 /* global WebSocket*/
                 webSocket = new WebSocket('ws://127.0.0.1:5000');
                 webSocket.onmessage = onMessage(webSocket, store);
                 webSocket.onclose = onClose(store);
-                store.dispatch(socketActions.socketsConnecting());
+                localStorage.setItem('connected', true);
                 break;
             case 'SOCKETS_DISCONNECT':
                 if (webSocket !== null) {
-                    store.dispatch(socketActions.socketsDisconnecting());
+                    localStorage.setItem('connected', false);
                     webSocket.close();
                 }
                 webSocket = null;
@@ -127,8 +108,7 @@ export default function webSocketMiddleware() {
                 }, 1000);
                 break;
             case 'USER_EXIT':
-                store.dispatch(userActions.userLogout(action.userName, action.userAvatar,
-                action.userAboutMe, action.userAge));
+                localStorage.setItem('jwt', null); // correct to jwt deletion
                 webSocket.close();
                 break;
             default:
