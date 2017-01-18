@@ -7,18 +7,27 @@ export default class SocketComponent extends Component {
     constructor() {
         super();
         /* global localStorage*/
-        const jwtIsSet = !!localStorage.getItem('jwt');
+        this.state = {userName: '', userAvatar: '', messageText: '', connected: false};
+    }
+    componentWillMount() {
+        const userObj = localStorage.getItem('userObj');
+        if (userObj) {
+            if (userObj.userName) {
+                this.setState({userName: userObj.userName});
+            }
+            if (userObj.userAvatar) {
+                this.setState({userAvatar: userObj.userAvatar});
+            }
+        }
         const connected = localStorage.getItem('connected');
-        this.state = {
-            messageText: '',
-            jwtIsSet,
-            connected
-        };
+        if (connected !== null) {
+            this.setState({connected});
+        }
     }
     handleSendButton(e) {
         e.preventDefault();
         if (this.state.messageText.length > 0) {
-            this.props.socketsMessageSend(this.state.messageText, this.props.userName, this.props.userAvatar);
+            this.props.socketsMessageSend(this.state.messageText, this.state.userName, this.state.userAvatar);
             document.getElementsByClassName('messageText')[0].value = ''; /* global document*/
             this.setState({messageText: ''});
         }
@@ -27,15 +36,15 @@ export default class SocketComponent extends Component {
         this.setState({messageText: e.target.value});
     }
     render() {
-        const { messageHistory, userName } = this.props;
+        const { messageHistory} = this.props;
 
         return (<Form
             horizontal
-            className={((!this.state.connected || !userName || !this.state.jwtIsSet) ? 'socketWrapper none' : 'socketWrapper')}
+            className={((!this.state.connected || !this.state.userName) ? 'socketWrapper none' : 'socketWrapper')}
             onSubmit={this.handleSendButton}>
             <FormGroup>
                 <Col sm={5}>
-                    <h3>Welcome to the chat, {userName}!!!</h3>
+                    <h3>Welcome to the chat, {this.state.userName}!!!</h3>
                 </Col>
             </FormGroup>
             <FormGroup>
@@ -86,8 +95,5 @@ export default class SocketComponent extends Component {
 
 SocketComponent.propTypes = {
     messageHistory: PropTypes.array.isRequired,
-    socketsMessageSend: PropTypes.func.isRequired,
-    userName: PropTypes.string.isRequired,
-    userAvatar: PropTypes.string.isRequired
-
+    socketsMessageSend: PropTypes.func.isRequired
 };

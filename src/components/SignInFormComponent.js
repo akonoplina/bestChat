@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Form, FormGroup, Col, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 export default class SignInFormComponent extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             buttonDisabled: true,
             validationStateSignIn: null,
@@ -28,9 +28,8 @@ export default class SignInFormComponent extends Component {
         reader.onload = () => {
             userAvatarDataText = reader.result;
 
-            this.props.socketsConnect(); // websockets action
-
-            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData, `${imageName}:${userAvatarDataText}`, userAboutMeData); // websockets action calls loginAction
+            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData,
+                `${imageName}:${userAvatarDataText}`, userAboutMeData); // sends data to websocket server, sets jwt
             this.setState({showSignIn: false});
 
             document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
@@ -142,6 +141,5 @@ export default class SignInFormComponent extends Component {
 }
 
 SignInFormComponent.propTypes = {
-    socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired
 };

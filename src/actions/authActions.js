@@ -28,14 +28,10 @@ export function authSendData(userLogin, userPass, authType, userName = null, use
         });
     };
 }
-export function userExit(userName, userAvatar, userAboutMe, userAge) {
+export function userExit() {
     return (dispatch) => {
         dispatch({
-            type: USER_EXIT,
-            userName,
-            userAvatar,
-            userAboutMe,
-            userAge
+            type: USER_EXIT
         });
     };
 }

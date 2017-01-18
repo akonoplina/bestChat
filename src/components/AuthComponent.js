@@ -6,49 +6,59 @@ import SignInFormComponent from '../components/SignInFormComponent';
 import SignUpFormComponent from '../components/SignUpFormComponent';
 
 export default class AuthComponent extends Component {
-    componentWillMount() {
-        this.state = {signIn: false, signUp: false, showAuthWrapper: true};
+    constructor() {
+        super();
+        const AUTH_TYPE = '';
+        this.state = {AUTH_TYPE};
     }
+
     onSignInButtonPress() {
-        this.setState({signIn: true});
+        this.setState({AUTH_TYPE: 'signIn'});
     }
+
     onSignUpButtonPress() {
-        this.setState({signUp: true});
+        this.setState({AUTH_TYPE: 'signUp'});
     }
+
     render() {
         const {errorMessage} = this.props;
-        if (this.state.signIn) {
-            return (<SignInFormComponent socketsConnect={this.props.socketsConnect} authSendData={this.props.authSendData} />);
-        } else if (this.state.signUp) {
-            return (<SignUpFormComponent socketsConnect={this.props.socketsConnect} authSendData={this.props.authSendData} />);
+        switch (this.state.AUTH_TYPE) {
+            case 'signIn': {
+                return (<SignInFormComponent authSendData={this.props.authSendData} />);
+            }
+            case 'signUp': {
+                return (<SignUpFormComponent authSendData={this.props.authSendData} />);
+            }
+            default: {
+                return (<Form horizontal className='authWrapper'>
+                    <FormGroup className='welcomeMessage'>
+                        <Col sm={4}>
+                            <h3>Please select authorisation type</h3>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup className='signIn'>
+                        <Col sm={3}>
+                            <Button block bsStyle='primary' onClick={this.onSignInButtonPress.bind(this)}>Sign
+                                in</Button>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup className='signUp'>
+                        <Col sm={3}>
+                            <Button block bsStyle='primary' onClick={this.onSignUpButtonPress.bind(this)}>Sign
+                                up</Button>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
+                        <Col sm={3}>
+                            {errorMessage}
+                        </Col>
+                    </FormGroup>
+                </Form>);
+            }
         }
-        return (<Form horizontal className={(!this.state.showAuthWrapper ? 'authWrapper none' : 'authWrapper')}>
-            <FormGroup className='welcomeMessage'>
-                <Col sm={4}>
-                    <h3>Please select authorisation type</h3>
-                </Col>
-            </FormGroup>
-            <FormGroup className='signIn'>
-                <Col sm={3}>
-                    <Button block bsStyle='primary' onClick={this.onSignInButtonPress.bind(this)} >Sign in</Button>
-                </Col>
-            </FormGroup>
-            <FormGroup className='signUp'>
-                <Col sm={3}>
-                    <Button block bsStyle='primary' onClick={this.onSignUpButtonPress.bind(this)}>Sign up</Button>
-                </Col>
-            </FormGroup>
-            <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
-                <Col sm={3}>
-                    {errorMessage}
-                </Col>
-            </FormGroup>
-        </Form>);
     }
 }
-
 AuthComponent.propTypes = {
     errorMessage: PropTypes.string.isRequired,
-    socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired
 };

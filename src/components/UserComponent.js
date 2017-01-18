@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 
 import { Button, Form, FormGroup, Col } from 'react-bootstrap';
 
@@ -7,26 +7,36 @@ export default class UserComponent extends Component {
     constructor() {
         super();
         /* global localStorage*/
-        const jwt = localStorage.getItem('jwt'); // decipher it into userObj... maybe even include connected, think about it later
+        const userObj = localStorage.getItem('userObj');
         const connected = localStorage.getItem('connected');
+        let userName = '';
+        let userAge = '';
+        let userAvatar = '';
+        let userAboutMe = '';
+        if (userObj) {
+            userName = userObj.userName;
+            userAge = userObj.userAge;
+            userAvatar = userObj.userAvatar;
+            userAboutMe = userObj.userAboutMe;
+        }
         this.state = {
             showHide: false,
             connected,
-            jwt,
-            userName: jwt.userName,
-            userAge: jwt.userAge,
-            userAvatar: jwt.userAvatar,
-            userAboutMe: jwt.userAboutMe };
+            userObj,
+            userName,
+            userAge,
+            userAvatar,
+            userAboutMe};
     }
     onLogoutButtonPress(e) {
         e.preventDefault();
-        this.props.userExit(this.state.userName, this.state.userAvatar, this.state.userAboutMe, this.state.userAge);
+        this.props.userExit();
     }
     showHide() {
         this.setState({showHide: !this.state.showHide});
     }
     render() {
-        return (<Form horizontal className={((!this.state.connected && !this.state.jwt) ? 'userWrapper none' : 'userWrapper')}>
+        return (<Form horizontal className={((!this.state.connected || !this.state.userObj) ? 'userWrapper none' : 'userWrapper')}>
             <FormGroup className='userAvatar'>
                 <Col sm={4}>
                     {(this.state.userAvatar.length !== 0) ? <img
@@ -85,3 +95,7 @@ export default class UserComponent extends Component {
         </Form>);
     }
 }
+
+UserComponent.propTypes = {
+    userExit: PropTypes.func.isRequired
+};

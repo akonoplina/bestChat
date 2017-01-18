@@ -4,9 +4,6 @@ import * as socketActions from '../actions/socketActions';
 export default function webSocketMiddleware() {
     let webSocket = null;
 
-    const onClose = store => () => {
-        store.dispatch(socketActions.socketsDisconnect());
-    };
     const waitForConnection = (callback, interval) => {
         if (webSocket.readyState === 1) {
             callback();
@@ -16,6 +13,9 @@ export default function webSocketMiddleware() {
             }, interval);
         }
     };
+    const onClose = store => () => {
+        store.dispatch(socketActions.socketsDisconnect());
+    };
     const onMessage = (ws, store) => (evt) => {
         let msg = evt.data;
         msg = JSON.parse(msg);
@@ -24,24 +24,33 @@ export default function webSocketMiddleware() {
         const connectionType = msg.connectionType; // auth or message
         const authType = msg.authType; // signIn or signOut
 
-        const jwt = msg.jwt; // JWT obj needs to be decoded
+        const jwt = msg.token; // JWT obj needs to be decoded
+        let userObj = {};
+
+        userObj = KJUR.jws.JWS.verifyJWT(jwt, {utf8: 'shhhhh'}, {
+            alg: ['HS256']});
+        /* global KJUR*/
+        if (userObj) {
+            console.log(jwt); // take the middle part, decipher it
+        }
+
         let userName = '';
         let userAvatar = '';
         let userMessage = '';
 
         switch (connectionType) {
-            case 'auth':
+            case 'auth': {
                 if (authType === 'signIn') {
                     if (Object.keys(jwt).length > 0) {
-                        localStorage.setItem('jwt', jwt);
-                    } else if (error.length > 0) {
+                        localStorage.setItem('userObj', userObj);
+                    } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
                         store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
                     }
                 } else if (authType === 'signUp') {
                     if (Object.keys(jwt).length > 0) {
-                        localStorage.setItem('jwt', jwt);
+                        localStorage.setItem('userObj', userObj);
                     } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
@@ -49,7 +58,8 @@ export default function webSocketMiddleware() {
                     }
                 }
                 break;
-            case 'message':
+            }
+            case 'message': {
                 userMessage = msg.userMessage;
                 userName = msg.userName;
                 userAvatar = msg.userAvatar;
@@ -61,40 +71,38 @@ export default function webSocketMiddleware() {
                     store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
                 }
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
     };
     return store => next => (action) => {
         switch (action.type) {
-            case 'SOCKETS_CONNECT':
-                if (webSocket !== null) {
-                    /* global localStorage*/
-                    localStorage.setItem('connected', false);
-                    webSocket.close();
-                }
-                /* global WebSocket*/
-                webSocket = new WebSocket('ws://127.0.0.1:5000');
-                webSocket.onmessage = onMessage(webSocket, store);
-                webSocket.onclose = onClose(store);
-                localStorage.setItem('connected', true);
-                break;
-            case 'SOCKETS_DISCONNECT':
+            case 'SOCKETS_DISCONNECT': {
                 if (webSocket !== null) {
                     localStorage.setItem('connected', false);
                     webSocket.close();
                 }
                 webSocket = null;
                 break;
-            case 'SOCKETS_MESSAGE_SEND':
+            }
+            case 'SOCKETS_MESSAGE_SEND': {
                 webSocket.send(JSON.stringify({
                     userMessage: action.messageSend,
                     userName: action.userName,
                     userAvatar: action.userAvatar }));
                 store.dispatch(socketActions.socketsMessageSending(action.messageSend, action.userName,
-                action.userAvatar));
+                    action.userAvatar));
                 break;
-            case 'AUTH_SEND_DATA':
+            }
+            case 'AUTH_SEND_DATA': {
+                /* global WebSocket*/
+                /* global localStorage*/
+                webSocket = new WebSocket('ws://127.0.0.1:5000');
+                webSocket.onmessage = onMessage(webSocket, store);
+                webSocket.onclose = onClose(store);
+                localStorage.setItem('connected', true);
                 waitForConnection(() => {
                     const messageText = {
                         userLogin: action.userLogin,
@@ -107,12 +115,16 @@ export default function webSocketMiddleware() {
                     webSocket.send(JSON.stringify(messageText));
                 }, 1000);
                 break;
-            case 'USER_EXIT':
-                localStorage.setItem('jwt', null); // correct to jwt deletion
+            }
+            case 'USER_EXIT': {
+                localStorage.setItem('userObj', null); // delete jwt
+                localStorage.setItem('connected', false); // disconnect
                 webSocket.close();
                 break;
-            default:
+            }
+            default: {
                 return next(action);
+            }
         }
     };
 }

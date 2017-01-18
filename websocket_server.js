@@ -2,6 +2,7 @@ const server = require('http').createServer();
 const WebSocketServer = require('ws').Server;
 const express = require('express');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 
 const wss = new WebSocketServer({server});
 const app = express();
@@ -30,7 +31,6 @@ wss.on('connection', function connection(ws) {
         let userAge = '';
         let userAboutMe = '';
         let userObj = {};
-        const jwt = {};
         let fileName = '';
         let fileType = '';
         let base64Data = '';
@@ -69,6 +69,10 @@ wss.on('connection', function connection(ws) {
                                 base64Data = userAvatar.replace('data:image/jpeg;base64,', '');
                                 break;
                             }
+                            case 'gif': {
+                                base64Data = userAvatar.replace('data:image/gif;base64,', '');
+                                break;
+                            }
                             default: {
                                 base64Data = userAvatar.replace('data:image/jpeg;base64,', '');
                                 break;
@@ -93,9 +97,9 @@ wss.on('connection', function connection(ws) {
                             }
                             userObj = {userName, userAge, userAvatar: fileName, userAboutMe};
 
-                            // create a JWT with secret
+                            const token = jwt.sign({ userObj}, 'shhhhh');
 
-                            ws.send(JSON.stringify({jwt, connectionType: 'auth', authType: message.authType}));
+                            ws.send(JSON.stringify({token, connectionType: 'auth', authType: message.authType}));
                         });
                     break;
                 }
@@ -104,9 +108,9 @@ wss.on('connection', function connection(ws) {
                         if (Object.keys(list[0]).length > 0) {
                             userObj = {userName: list[0].userName, userAboutMe: list[0].userAboutMe, userAvatar: list[0].userAvatar, userAge: list[0].userAge};
 
-                            // create a JWT with secret
+                            const token = jwt.sign({ userObj}, 'shhhhh');
 
-                            ws.send(JSON.stringify({jwt, connectionType: 'auth', authType: message.authType}));
+                            ws.send(JSON.stringify({token, connectionType: 'auth', authType: message.authType}));
                         } else {
                             ws.send(JSON.stringify({errorText: 'User not found!!!'}));
                         }

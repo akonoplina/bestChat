@@ -16,19 +16,15 @@ class App extends Component {
     render() {
         const { authReducer, socketReducer} = this.props;
 
-        const { authSendData} = this.props.authActions;
-        const { socketsConnect, socketsMessageSend } = this.props.socketActions;
+        const { authSendData, userExit} = this.props.authActions;
+        const { socketsMessageSend } = this.props.socketActions;
 
         return (<div>
-            <AuthComponent authSendData={authSendData} errorMessage={authReducer.errorMessage} socketsConnect={socketsConnect} />
+            <AuthComponent authSendData={authSendData} errorMessage={authReducer.errorMessage} />
 
-            <SocketComponent
-                messageHistory={socketReducer.messageHistory}
-                socketsMessageSend={socketsMessageSend} userName={socketReducer.userName}
-                userAvatar={socketReducer.userAvatar}
-            />
+            <SocketComponent messageHistory={socketReducer.messageHistory} socketsMessageSend={socketsMessageSend} />
 
-            <UserComponent />
+            <UserComponent userExit={userExit} />
         </div>);
     }
 }

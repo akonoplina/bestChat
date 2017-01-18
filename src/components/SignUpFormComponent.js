@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Form, FormGroup, Col, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 export default class SignUpFormComponent extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             buttonDisabled: true,
             validationStateSignUp: null,
@@ -17,9 +17,7 @@ export default class SignUpFormComponent extends Component {
         const userLogin = document.getElementsByClassName('signUpData')[0].value; /* global document*/
         const authType = 'signUp';
 
-        this.props.socketsConnect(); // websockets action
-
-        this.props.authSendData(userLogin, userPass, authType); // websockets action calls loginAction
+        this.props.authSendData(userLogin, userPass, authType); // sends data to websocket server, sets jwt
 
         this.setState({showSignUp: false});
 
@@ -98,6 +96,5 @@ export default class SignUpFormComponent extends Component {
 }
 
 SignUpFormComponent.propTypes = {
-    socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired
 };

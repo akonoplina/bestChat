@@ -1,7 +1,7 @@
 import {
     SOCKETS_MESSAGE_RECEIVING,
     SOCKETS_MESSAGE_SENDING
-} from '../constants/SocketsComponent';
+} from '../constants/SocketComponent';
 
 const initialState = {
     messageHistory: [],
