@@ -6,11 +6,11 @@ export default class SocketComponent extends Component {
 
     constructor() {
         super();
-        /* global localStorage*/
-        this.state = {userName: '', userAvatar: '', messageText: '', connected: false};
+
     }
     componentWillMount() {
-        const userObj = localStorage.getItem('userObj');
+        /* global localStorage*/
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
         if (userObj) {
             if (userObj.userName) {
                 this.setState({userName: userObj.userName});
@@ -36,11 +36,11 @@ export default class SocketComponent extends Component {
         this.setState({messageText: e.target.value});
     }
     render() {
-        const { messageHistory} = this.props;
+        const { messageHistory, connected, userObj} = this.props;
 
         return (<Form
             horizontal
-            className={((!this.state.connected || !this.state.userName) ? 'socketWrapper none' : 'socketWrapper')}
+            className={(!this.props.userLoggedIn ? 'socketWrapper none' : 'socketWrapper')}
             onSubmit={this.handleSendButton}>
             <FormGroup>
                 <Col sm={5}>
@@ -95,5 +95,7 @@ export default class SocketComponent extends Component {
 
 SocketComponent.propTypes = {
     messageHistory: PropTypes.array.isRequired,
-    socketsMessageSend: PropTypes.func.isRequired
+    socketsMessageSend: PropTypes.func.isRequired,
+    userObj: PropTypes.object.isRequired,
+    connected: PropTypes.bool.isRequired
 };

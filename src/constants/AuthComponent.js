@@ -1,3 +1,4 @@
 export const DISPLAY_ERROR_MESSAGE = 'DISPLAY_ERROR_MESSAGE';
 export const AUTH_SEND_DATA = 'AUTH_SEND_DATA';
 export const USER_EXIT = 'USER_EXIT';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';

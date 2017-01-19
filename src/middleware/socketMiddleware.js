@@ -24,15 +24,21 @@ export default function webSocketMiddleware() {
         const connectionType = msg.connectionType; // auth or message
         const authType = msg.authType; // signIn or signOut
 
-        const jwt = msg.token; // JWT obj needs to be decoded
-        let userObj = {};
+        const jwt = msg.token;
 
-        userObj = KJUR.jws.JWS.verifyJWT(jwt, {utf8: 'shhhhh'}, {
-            alg: ['HS256']});
-        /* global KJUR*/
-        if (userObj) {
-            console.log(jwt); // take the middle part, decipher it
-        }
+        const symbol = /\./;
+        const start = symbol.exec(jwt).index;
+        let resultStr = jwt.substr(start + 1);
+        const finish = symbol.exec(resultStr).index;
+        resultStr = resultStr.substr(0, finish);
+
+        /* global window*/
+
+        let jwtDeciphered = window.atob(resultStr);
+
+        jwtDeciphered = JSON.parse(jwtDeciphered);
+
+        const userObj = jwtDeciphered.userObj;
 
         let userName = '';
         let userAvatar = '';
@@ -41,16 +47,18 @@ export default function webSocketMiddleware() {
         switch (connectionType) {
             case 'auth': {
                 if (authType === 'signIn') {
-                    if (Object.keys(jwt).length > 0) {
-                        localStorage.setItem('userObj', userObj);
+                    if (Object.keys(userObj).length > 0) {
+                        localStorage.setItem('userObj', JSON.stringify(userObj));
+                        store.dispatch(authActions.userLoggedIn());
                     } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
                         store.dispatch(authActions.displayErrorMessage('server-side error appeared'));
                     }
                 } else if (authType === 'signUp') {
-                    if (Object.keys(jwt).length > 0) {
-                        localStorage.setItem('userObj', userObj);
+                    if (Object.keys(userObj).length > 0) {
+                        localStorage.setItem('userObj', JSON.stringify(userObj));
+                        store.dispatch(authActions.userLoggedIn());
                     } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
@@ -117,8 +125,8 @@ export default function webSocketMiddleware() {
                 break;
             }
             case 'USER_EXIT': {
-                localStorage.setItem('userObj', null); // delete jwt
-                localStorage.setItem('connected', false); // disconnect
+                localStorage.removeItem('userObj'); // delete jwt
+                localStorage.removeItem('connected'); // disconnect
                 webSocket.close();
                 break;
             }

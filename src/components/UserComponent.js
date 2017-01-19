@@ -7,7 +7,7 @@ export default class UserComponent extends Component {
     constructor() {
         super();
         /* global localStorage*/
-        const userObj = localStorage.getItem('userObj');
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
         const connected = localStorage.getItem('connected');
         let userName = '';
         let userAge = '';
@@ -36,7 +36,7 @@ export default class UserComponent extends Component {
         this.setState({showHide: !this.state.showHide});
     }
     render() {
-        return (<Form horizontal className={((!this.state.connected || !this.state.userObj) ? 'userWrapper none' : 'userWrapper')}>
+        return (<Form horizontal className={(!this.props.userLoggedIn ? 'userWrapper none' : 'userWrapper')}>
             <FormGroup className='userAvatar'>
                 <Col sm={4}>
                     {(this.state.userAvatar.length !== 0) ? <img
@@ -97,5 +97,7 @@ export default class UserComponent extends Component {
 }
 
 UserComponent.propTypes = {
-    userExit: PropTypes.func.isRequired
+    userExit: PropTypes.func.isRequired,
+    userObj: PropTypes.object.isRequired,
+    connected: PropTypes.bool.isRequired
 };

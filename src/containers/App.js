@@ -22,9 +22,9 @@ class App extends Component {
         return (<div>
             <AuthComponent authSendData={authSendData} errorMessage={authReducer.errorMessage} />
 
-            <SocketComponent messageHistory={socketReducer.messageHistory} socketsMessageSend={socketsMessageSend} />
+            <SocketComponent userObj={authReducer.userObj} connected={authReducer.connected} messageHistory={socketReducer.messageHistory} socketsMessageSend={socketsMessageSend} />
 
-            <UserComponent userExit={userExit} />
+            <UserComponent userObj={authReducer.userObj} connected={authReducer.connected} userExit={userExit} />
         </div>);
     }
 }
