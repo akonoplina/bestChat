@@ -1,12 +1,10 @@
 import {
-    DISPLAY_ERROR_MESSAGE,
-    USER_LOGGED_IN
+    DISPLAY_ERROR_MESSAGE
 
 } from '../constants/AuthComponent';
 
 const initialState = {
-    errorMessage: '',
-    userLoggedIn: false
+    errorMessage: ''
 };
 
 export default function authReducer(state = initialState, action) {
@@ -14,11 +12,8 @@ export default function authReducer(state = initialState, action) {
         case DISPLAY_ERROR_MESSAGE:
             return {
                 ...state,
-                errorMessage: action.errorMessage };
-        case USER_LOGGED_IN:
-            return {
-                ...state,
-                userLoggedIn: true };
+                errorMessage: action.errorMessage
+            };
         default:
             return state;
     }

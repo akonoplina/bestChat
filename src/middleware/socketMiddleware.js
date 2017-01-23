@@ -49,7 +49,6 @@ export default function webSocketMiddleware() {
                 if (authType === 'signIn') {
                     if (Object.keys(userObj).length > 0) {
                         localStorage.setItem('userObj', JSON.stringify(userObj));
-                        store.dispatch(authActions.userLoggedIn());
                     } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {
@@ -58,7 +57,6 @@ export default function webSocketMiddleware() {
                 } else if (authType === 'signUp') {
                     if (Object.keys(userObj).length > 0) {
                         localStorage.setItem('userObj', JSON.stringify(userObj));
-                        store.dispatch(authActions.userLoggedIn());
                     } else if (typeof error !== 'undefined' && error.length > 0) {
                         store.dispatch(authActions.displayErrorMessage(error));
                     } else {

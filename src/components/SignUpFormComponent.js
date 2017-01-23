@@ -7,30 +7,43 @@ export default class SignUpFormComponent extends Component {
         super();
         this.state = {
             buttonDisabled: true,
-            validationStateSignUp: null,
+            validationStateSignIn: null,
             validationStatePass: null,
-            showSignUp: true
+            showSignIn: true
         };
     }
     onOkButtonPress() {
-        const userPass = document.getElementsByClassName('passDataUp')[0].value; /* global document*/
+        const userPass = document.getElementsByClassName('passDataIn')[0].value; /* global document*/
         const userLogin = document.getElementsByClassName('signUpData')[0].value; /* global document*/
+        const userNameData = document.getElementsByClassName('userNameData')[0].value; /* global document*/
+        const userAgeData = document.getElementsByClassName('userAgeData')[0].value; /* global document*/
+        const userAvatarData = document.getElementsByClassName('userAvatarData')[0].files[0]; /* global document*/
+        const userAboutMeData = document.getElementsByClassName('userAboutMeData')[0].value; /* global document*/
         const authType = 'signUp';
 
-        this.props.authSendData(userLogin, userPass, authType); // sends data to websocket server, sets jwt
+        const imageName = userAvatarData.name;
 
-        this.setState({showSignUp: false});
+        const reader = new FileReader(); /* global FileReader*/
+        let userAvatarDataText = '';
+        reader.onload = () => {
+            userAvatarDataText = reader.result;
 
-        document.getElementsByClassName('signUpData')[0].value = ''; /* global document*/
-        document.getElementsByClassName('passDataUp')[0].value = ''; /* global document*/
+            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData,
+                `${imageName}:${userAvatarDataText}`, userAboutMeData); // sends data to websocket server, sets jwt
+            this.setState({showSignIn: false});
 
-        const el = {target: {value: null}};
+            document.getElementsByClassName('signUpData')[0].value = ''; /* global document*/
+            document.getElementsByClassName('passDataIn')[0].value = ''; /* global document*/
 
-        this.validateAction('all', el);
+            const el = {target: {value: null}};
+
+            this.validateAction('all', el);
+        };
+        reader.readAsDataURL(userAvatarData);
     }
     validateAction(fieldName, e) {
         if (fieldName === 'all' && !e.target.value) {
-            this.setState({validationStatePass: null, validationStateSignUp: null});
+            this.setState({validationStatePass: null, validationStateSignIn: null});
         }
         switch (fieldName) {
             case 'pass': {
@@ -45,24 +58,24 @@ export default class SignUpFormComponent extends Component {
             case 'signUp': {
                 const ckUsername = /^[A-Za-z0-9_]{6,}$/;
                 if (!ckUsername.test(e.target.value)) {
-                    this.setState({validationStateSignUp: 'error'});
+                    this.setState({validationStateSignIn: 'error'});
                 } else {
-                    this.setState({validationStateSignUp: 'success'});
+                    this.setState({validationStateSignIn: 'success'});
                 }
                 break;
             }
         }
     }
     render() {
-        return (<Form horizontal className={!(this.state.showSignUp) ? 'signUpForm none' : 'signUpForm'}>
+        return (<Form horizontal className={!(this.state.showSignIn) ? 'signUpForm none' : 'signUpForm'}>
             <FormGroup className='instructionMessage'>
                 <Col sm={5}>
                     <h3>Please enter your login & pass)))</h3>
                 </Col>
             </FormGroup>
-            <FormGroup validationState={this.state.validationStateSignUp}>
+            <FormGroup validationState={this.state.validationStateSignIn}>
                 <Col componentClass={ControlLabel} sm={1}>
-                    Sign up*:
+                    Login*:
                 </Col>
                 <Col sm={3}>
                     <FormControl className='signUpData' type='text' onChange={this.validateAction.bind(this, 'signUp')} />
@@ -75,16 +88,48 @@ export default class SignUpFormComponent extends Component {
                     Password*:
                 </Col>
                 <Col sm={3}>
-                    <FormControl type='password' className='passDataUp' onChange={this.validateAction.bind(this, 'pass')} />
+                    <FormControl type='password' className='passDataIn' onChange={this.validateAction.bind(this, 'pass')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    Name:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='text' className='userNameData' />
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    Age:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='text' className='userAgeData' />
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    About me:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='text' className='userAboutMeData' />
+                </Col>
+            </FormGroup>
+            <FormGroup>
+                <Col componentClass={ControlLabel} sm={1}>
+                    Avatar:
+                </Col>
+                <Col sm={3}>
+                    <FormControl type='file' className='userAvatarData' />
                 </Col>
             </FormGroup>
             <FormGroup className='okButton'>
                 <Col sm={1}>
                     <Button
                         bsStyle='primary'
-                        disabled={!(this.state.validationStatePass === 'success' && this.state.validationStateSignUp
+                        disabled={!(this.state.validationStatePass === 'success' && this.state.validationStateSignIn
                         === 'success')}
                         onClick={this.onOkButtonPress.bind(this)} >
                         Ok

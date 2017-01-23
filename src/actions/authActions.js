@@ -1,8 +1,7 @@
 import {
     AUTH_SEND_DATA,
     USER_EXIT,
-    DISPLAY_ERROR_MESSAGE,
-    USER_LOGGED_IN
+    DISPLAY_ERROR_MESSAGE
 } from '../constants/AuthComponent';
 
 
@@ -26,13 +25,6 @@ export function authSendData(userLogin, userPass, authType, userName = null, use
             userAge,
             userAvatar,
             userAboutMe
-        });
-    };
-}
-export function userLoggedIn() {
-    return (dispatch) => {
-        dispatch({
-            type: USER_LOGGED_IN
         });
     };
 }

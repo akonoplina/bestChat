@@ -36,7 +36,7 @@ export default class UserComponent extends Component {
         this.setState({showHide: !this.state.showHide});
     }
     render() {
-        return (<Form horizontal className={(!this.props.userLoggedIn ? 'userWrapper none' : 'userWrapper')}>
+        return (<Form horizontal className='userWrapper'>
             <FormGroup className='userAvatar'>
                 <Col sm={4}>
                     {(this.state.userAvatar.length !== 0) ? <img
@@ -97,7 +97,5 @@ export default class UserComponent extends Component {
 }
 
 UserComponent.propTypes = {
-    userExit: PropTypes.func.isRequired,
-    userObj: PropTypes.object.isRequired,
-    connected: PropTypes.bool.isRequired
+    userExit: PropTypes.func.isRequired
 };

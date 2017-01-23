@@ -4,26 +4,6 @@ import { Button, Form, FormGroup, Col, FormControl } from 'react-bootstrap';
 
 export default class SocketComponent extends Component {
 
-    constructor() {
-        super();
-
-    }
-    componentWillMount() {
-        /* global localStorage*/
-        const userObj = JSON.parse(localStorage.getItem('userObj'));
-        if (userObj) {
-            if (userObj.userName) {
-                this.setState({userName: userObj.userName});
-            }
-            if (userObj.userAvatar) {
-                this.setState({userAvatar: userObj.userAvatar});
-            }
-        }
-        const connected = localStorage.getItem('connected');
-        if (connected !== null) {
-            this.setState({connected});
-        }
-    }
     handleSendButton(e) {
         e.preventDefault();
         if (this.state.messageText.length > 0) {
@@ -36,11 +16,11 @@ export default class SocketComponent extends Component {
         this.setState({messageText: e.target.value});
     }
     render() {
-        const { messageHistory, connected, userObj} = this.props;
+        const { messageHistory} = this.props;
 
         return (<Form
             horizontal
-            className={(!this.props.userLoggedIn ? 'socketWrapper none' : 'socketWrapper')}
+            className='socketWrapper'
             onSubmit={this.handleSendButton}>
             <FormGroup>
                 <Col sm={5}>
@@ -95,7 +75,5 @@ export default class SocketComponent extends Component {
 
 SocketComponent.propTypes = {
     messageHistory: PropTypes.array.isRequired,
-    socketsMessageSend: PropTypes.func.isRequired,
-    userObj: PropTypes.object.isRequired,
-    connected: PropTypes.bool.isRequired
+    socketsMessageSend: PropTypes.func.isRequired
 };

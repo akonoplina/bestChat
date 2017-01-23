@@ -57,6 +57,10 @@ table {
     .authWrapper button.btn-block {
         max-width: 400px;
         margin: 0 auto 10px;
+        a{
+            color: white;
+            text-decoration: none;
+        }
     }
     .okButton {
         padding-left: 288px;
