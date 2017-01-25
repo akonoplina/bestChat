@@ -2,18 +2,25 @@ import React, { Component, PropTypes } from 'react';
 
 import { Button, Form, FormGroup, Col, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 
-export default class SignUpFormComponent extends Component {
+import { connect } from 'react-redux';
+
+import { bindActionCreators } from 'redux';
+
+import { authSendData } from '../../actions/authActions';
+
+class SignUpFormComponent extends Component {
     constructor() {
         super();
         this.state = {
             buttonDisabled: true,
-            validationStateSignIn: null,
-            validationStatePass: null,
-            showSignIn: true
+            validationStateSignUp: null,
+            validationStatePass: null
         };
     }
     onOkButtonPress() {
-        const userPass = document.getElementsByClassName('passDataIn')[0].value; /* global document*/
+        const {authSendData} = this.props;
+
+        const userPass = document.getElementsByClassName('passDataUp')[0].value; /* global document*/
         const userLogin = document.getElementsByClassName('signUpData')[0].value; /* global document*/
         const userNameData = document.getElementsByClassName('userNameData')[0].value; /* global document*/
         const userAgeData = document.getElementsByClassName('userAgeData')[0].value; /* global document*/
@@ -28,12 +35,11 @@ export default class SignUpFormComponent extends Component {
         reader.onload = () => {
             userAvatarDataText = reader.result;
 
-            this.props.authSendData(userLogin, userPass, authType, userNameData, userAgeData,
+            authSendData(userLogin, userPass, authType, userNameData, userAgeData,
                 `${imageName}:${userAvatarDataText}`, userAboutMeData); // sends data to websocket server, sets jwt
-            this.setState({showSignIn: false});
 
             document.getElementsByClassName('signUpData')[0].value = ''; /* global document*/
-            document.getElementsByClassName('passDataIn')[0].value = ''; /* global document*/
+            document.getElementsByClassName('passDataUp')[0].value = ''; /* global document*/
 
             const el = {target: {value: null}};
 
@@ -43,7 +49,7 @@ export default class SignUpFormComponent extends Component {
     }
     validateAction(fieldName, e) {
         if (fieldName === 'all' && !e.target.value) {
-            this.setState({validationStatePass: null, validationStateSignIn: null});
+            this.setState({validationStatePass: null, validationStateSignUp: null});
         }
         switch (fieldName) {
             case 'pass': {
@@ -58,22 +64,22 @@ export default class SignUpFormComponent extends Component {
             case 'signUp': {
                 const ckUsername = /^[A-Za-z0-9_]{6,}$/;
                 if (!ckUsername.test(e.target.value)) {
-                    this.setState({validationStateSignIn: 'error'});
+                    this.setState({validationStateSignUp: 'error'});
                 } else {
-                    this.setState({validationStateSignIn: 'success'});
+                    this.setState({validationStateSignUp: 'success'});
                 }
                 break;
             }
         }
     }
     render() {
-        return (<Form horizontal className={!(this.state.showSignIn) ? 'signUpForm none' : 'signUpForm'}>
+        return (<Form horizontal className='signUpForm'>
             <FormGroup className='instructionMessage'>
                 <Col sm={5}>
                     <h3>Please enter your login & pass)))</h3>
                 </Col>
             </FormGroup>
-            <FormGroup validationState={this.state.validationStateSignIn}>
+            <FormGroup validationState={this.state.validationStateSignUp}>
                 <Col componentClass={ControlLabel} sm={1}>
                     Login*:
                 </Col>
@@ -88,7 +94,7 @@ export default class SignUpFormComponent extends Component {
                     Password*:
                 </Col>
                 <Col sm={3}>
-                    <FormControl type='password' className='passDataIn' onChange={this.validateAction.bind(this, 'pass')} />
+                    <FormControl type='password' className='passDataUp' onChange={this.validateAction.bind(this, 'pass')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
                 </Col>
@@ -129,7 +135,7 @@ export default class SignUpFormComponent extends Component {
                 <Col sm={1}>
                     <Button
                         bsStyle='primary'
-                        disabled={!(this.state.validationStatePass === 'success' && this.state.validationStateSignIn
+                        disabled={!(this.state.validationStatePass === 'success' && this.state.validationStateSignUp
                         === 'success')}
                         onClick={this.onOkButtonPress.bind(this)} >
                         Ok
@@ -143,3 +149,15 @@ export default class SignUpFormComponent extends Component {
 SignUpFormComponent.propTypes = {
     authSendData: PropTypes.func.isRequired
 };
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({authSendData}, dispatch);
+}
+
+function mapStateToProps(state) {
+    return {
+        messageHistory: state.socketReducer.messageHistory
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpFormComponent);

@@ -13,8 +13,7 @@ export function displayErrorMessage(errorMessage) {
         });
     };
 }
-export function authSendData(userLogin, userPass, authType, userName = null, userAge = null, userAvatar = null,
-                             userAboutMe = null) {
+export function authSendData(userLogin, userPass, authType, userName = null, userAge = null, userAvatar = null, userAboutMe = null) {
     return (dispatch) => {
         dispatch({
             type: AUTH_SEND_DATA,

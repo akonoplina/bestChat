@@ -4,9 +4,11 @@ import { Button, Form, FormGroup, Col } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 
-export default class AuthComponent extends Component {
+import { connect } from 'react-redux';
+
+class AuthComponent extends Component {
     render() {
-        const {errorMessage} = this.props;
+        const {errorMessage} = this.props.errorMessage;
         return (<Form horizontal className='authWrapper'>
             <FormGroup className='welcomeMessage'>
                 <Col sm={4}>
@@ -38,3 +40,11 @@ export default class AuthComponent extends Component {
 AuthComponent.propTypes = {
     errorMessage: PropTypes.string.isRequired
 };
+
+function mapStateToProps(state) {
+    return {
+        errorMessage: state.authReducer.errorMessage
+    };
+}
+
+export default connect(mapStateToProps)(AuthComponent);

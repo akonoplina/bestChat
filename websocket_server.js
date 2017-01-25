@@ -38,7 +38,7 @@ wss.on('connection', function connection(ws) {
         if (typeof message.userLogin !== 'undefined' && typeof message.userPass !== 'undefined' &&
             typeof message.authType !== 'undefined') {
             switch (message.authType) {
-                case 'signIn': {
+                case 'signUp': {
                     if (message.userName) {
                         userName = message.userName;
                     } else {
@@ -103,7 +103,7 @@ wss.on('connection', function connection(ws) {
                         });
                     break;
                 }
-                case 'signUp': {
+                case 'signIn': {
                     usersCollection.find({userLogin: message.userLogin, userPass: message.userPass}).toArray((error, list) => {
                         if (Object.keys(list[0]).length > 0) {
                             userObj = {userName: list[0].userName, userAboutMe: list[0].userAboutMe, userAvatar: list[0].userAvatar, userAge: list[0].userAge};
