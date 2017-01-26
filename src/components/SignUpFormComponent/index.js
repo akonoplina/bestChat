@@ -6,9 +6,22 @@ import { connect } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
 
+import { browserHistory } from 'react-router';
+
 import { authSendData } from '../../actions/authActions';
 
+import { socketsConnect } from '../../actions/socketActions';
+
 class SignUpFormComponent extends Component {
+    static componentWillMount() {
+        /* global localStorage*/
+
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
+        const connected = localStorage.getItem('connected');
+        if (userObj && connected) {
+            browserHistory.push('/chat');
+        }
+    }
     constructor() {
         super();
         this.state = {
@@ -18,14 +31,20 @@ class SignUpFormComponent extends Component {
         };
     }
     onOkButtonPress() {
-        const {authSendData} = this.props;
+        const socketsConnect = this.props.socketsConnect;
+        const authSendData = this.props.authSendData;
 
-        const userPass = document.getElementsByClassName('passDataUp')[0].value; /* global document*/
-        const userLogin = document.getElementsByClassName('signUpData')[0].value; /* global document*/
-        const userNameData = document.getElementsByClassName('userNameData')[0].value; /* global document*/
-        const userAgeData = document.getElementsByClassName('userAgeData')[0].value; /* global document*/
-        const userAvatarData = document.getElementsByClassName('userAvatarData')[0].files[0]; /* global document*/
-        const userAboutMeData = document.getElementsByClassName('userAboutMeData')[0].value; /* global document*/
+        console.log(socketsConnect);
+        console.log(authSendData);
+        console.log(this.props);
+        /* global document*/
+
+        const userPass = document.getElementsByClassName('passDataUp')[0].value;
+        const userLogin = document.getElementsByClassName('signUpData')[0].value;
+        const userNameData = document.getElementsByClassName('userNameData')[0].value;
+        const userAgeData = document.getElementsByClassName('userAgeData')[0].value;
+        const userAvatarData = document.getElementsByClassName('userAvatarData')[0].files[0];
+        const userAboutMeData = document.getElementsByClassName('userAboutMeData')[0].value;
         const authType = 'signUp';
 
         const imageName = userAvatarData.name;
@@ -35,13 +54,18 @@ class SignUpFormComponent extends Component {
         reader.onload = () => {
             userAvatarDataText = reader.result;
 
+            socketsConnect();
             authSendData(userLogin, userPass, authType, userNameData, userAgeData,
                 `${imageName}:${userAvatarDataText}`, userAboutMeData); // sends data to websocket server, sets jwt
 
-            document.getElementsByClassName('signUpData')[0].value = ''; /* global document*/
-            document.getElementsByClassName('passDataUp')[0].value = ''; /* global document*/
+            document.getElementsByClassName('signUpData')[0].value = '';
+            document.getElementsByClassName('passDataUp')[0].value = '';
+            document.getElementsByClassName('userNameData')[0].value = '';
+            document.getElementsByClassName('userAgeData')[0].value = '';
+            document.getElementsByClassName('userAboutMeData')[0].value = '';
+            document.getElementsByClassName('userAvatarData')[0].value = '';
 
-            const el = {target: {value: null}};
+            const el = { target: { value: null } };
 
             this.validateAction('all', el);
         };
@@ -147,17 +171,15 @@ class SignUpFormComponent extends Component {
 }
 
 SignUpFormComponent.propTypes = {
+    socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired
 };
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({authSendData}, dispatch);
-}
-
-function mapStateToProps(state) {
     return {
-        messageHistory: state.socketReducer.messageHistory
+        socketsConnect: bindActionCreators(socketsConnect, dispatch),
+        authSendData: bindActionCreators(authSendData, dispatch)
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpFormComponent);
+export default connect(mapDispatchToProps)(SignUpFormComponent);

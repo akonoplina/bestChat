@@ -85,9 +85,22 @@ export default function webSocketMiddleware() {
     };
     return store => next => (action) => {
         switch (action.type) {
+            case 'SOCKETS_CONNECT': {
+                if (webSocket !== null) {
+                    /* global localStorage*/
+                    localStorage.setItem('connected', false);
+                    webSocket.close();
+                }
+                /* global WebSocket*/
+                webSocket = new WebSocket('ws://127.0.0.1:5000');
+                webSocket.onmessage = onMessage(webSocket, store);
+                webSocket.onclose = onClose(store);
+                localStorage.setItem('connected', true);
+                break;
+            }
             case 'SOCKETS_DISCONNECT': {
                 if (webSocket !== null) {
-                    localStorage.setItem('connected', false);
+                    localStorage.removeItem('connected');
                     webSocket.close();
                 }
                 webSocket = null;
@@ -104,11 +117,6 @@ export default function webSocketMiddleware() {
             }
             case 'AUTH_SEND_DATA': {
                 /* global WebSocket*/
-                /* global localStorage*/
-                webSocket = new WebSocket('ws://127.0.0.1:5000');
-                webSocket.onmessage = onMessage(webSocket, store);
-                webSocket.onclose = onClose(store);
-                localStorage.setItem('connected', true);
                 waitForConnection(() => {
                     const messageText = {
                         userLogin: action.userLogin,
@@ -123,8 +131,8 @@ export default function webSocketMiddleware() {
                 break;
             }
             case 'USER_EXIT': {
-                localStorage.removeItem('userObj'); // delete jwt
-                localStorage.removeItem('connected'); // disconnect
+                localStorage.removeItem('userObj');
+                localStorage.removeItem('connected');
                 webSocket.close();
                 break;
             }

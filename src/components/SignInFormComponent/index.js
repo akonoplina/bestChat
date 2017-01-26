@@ -6,9 +6,22 @@ import { connect } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
 
+import { browserHistory } from 'react-router';
+
 import { authSendData } from '../../actions/authActions';
 
+import { socketsConnect } from '../../actions/socketActions';
+
 class SignInFormComponent extends Component {
+    static componentWillMount() {
+        /* global localStorage*/
+
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
+        const connected = localStorage.getItem('connected');
+        if (userObj && connected) {
+            browserHistory.push('/chat');
+        }
+    }
     constructor() {
         super();
         this.state = {
@@ -18,14 +31,18 @@ class SignInFormComponent extends Component {
         };
     }
     onOkButtonPress() {
-        const userPass = document.getElementsByClassName('passDataIn')[0].value; /* global document*/
-        const userLogin = document.getElementsByClassName('signInData')[0].value; /* global document*/
+        const {socketsConnect, authSendData} = this.props;
+        /* global document*/
+
+        const userPass = document.getElementsByClassName('passDataIn')[0].value;
+        const userLogin = document.getElementsByClassName('signInData')[0].value;
         const authType = 'signIn';
 
-        this.props.authSendData(userLogin, userPass, authType); // sends data to websocket server, sets jwt
+        socketsConnect();
+        authSendData(userLogin, userPass, authType); // sends data to websocket server, sets jwt
 
-        document.getElementsByClassName('signInData')[0].value = ''; /* global document*/
-        document.getElementsByClassName('passDataIn')[0].value = ''; /* global document*/
+        document.getElementsByClassName('signInData')[0].value = '';
+        document.getElementsByClassName('passDataIn')[0].value = '';
 
         const el = {target: {value: null}};
 
@@ -99,13 +116,15 @@ class SignInFormComponent extends Component {
 }
 
 SignInFormComponent.propTypes = {
+    socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired
 };
 
-
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({authSendData}, dispatch);
+    return {
+        socketsConnect: bindActionCreators({socketsConnect}, dispatch),
+        authSendData: bindActionCreators({authSendData}, dispatch)
+    };
 }
 
 export default connect(mapDispatchToProps)(SignInFormComponent);

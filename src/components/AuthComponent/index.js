@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 class AuthComponent extends Component {
     render() {
-        const {errorMessage} = this.props.errorMessage;
+        const { errorMessage } = this.props.errorMessage;
         return (<Form horizontal className='authWrapper'>
             <FormGroup className='welcomeMessage'>
                 <Col sm={4}>
@@ -31,7 +31,7 @@ class AuthComponent extends Component {
             </FormGroup>
             <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
                 <Col sm={3}>
-                    {errorMessage}
+                    { errorMessage }
                 </Col>
             </FormGroup>
         </Form>);

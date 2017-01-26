@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
 
-import {socketsMessageSend} from '../../actions/socketActions';
+import { socketsMessageSend } from '../../actions/socketActions';
 
-import {userExit} from '../../actions/authActions';
+import { userExit } from '../../actions/authActions';
 
 class SocketComponent extends Component {
     constructor() {
@@ -37,26 +37,28 @@ class SocketComponent extends Component {
     }
     onLogoutButtonPress(e) {
         e.preventDefault();
-        this.props.userExit();
+        const userExit = this.props.userExit;
+        userExit();
     }
     showHide() {
-        this.setState({showHide: !this.state.showHide});
+        this.setState({ showHide: !this.state.showHide });
     }
-    handleSendButton(e) {
-        e.preventDefault();
-        if (this.state.messageText.length > 0) {
-            this.props.socketsMessageSend(this.state.messageText, this.state.userName, this.state.userAvatar);
+    handleSendButton() {
+        console.log(this.props);
+        const userExit = this.props.userExit;
+        const socketsMessageSend = this.props.socketsMessageSend;
+        console.log(userExit);
+        console.log(socketsMessageSend);
+        const messageText = document.getElementsByClassName('messageText')[0].value;
+        if (messageText.length > 0) {
+            socketsMessageSend(messageText, this.state.userName, this.state.userAvatar);
             document.getElementsByClassName('messageText')[0].value = ''; /* global document*/
-            this.setState({messageText: ''});
         }
-    }
-    handleChange(e) {
-        this.setState({messageText: e.target.value});
     }
     render() {
         const { messageHistory} = this.props.messageHistory;
 
-        return (<div className='commonChatBlock'>
+        return (<div className={(this.state.connected && this.state.userObj ? 'commonChatBlock' : 'commonChatBlock none')}>
             <Form
                 horizontal
                 className='socketWrapper'
@@ -74,7 +76,7 @@ class SocketComponent extends Component {
                 <FormGroup>
                     <Col sm={4}>
                         <ul>
-                            {
+                            {(messageHistory) ?
                             messageHistory.map((messageHistoryElement, index) =>
                                 <li key={index} className='userMessageWrapper'>
                                     <img
@@ -86,7 +88,7 @@ class SocketComponent extends Component {
                                     />
                                     <span className='messageUserName'>{`${messageHistoryElement.userName}  wrote:`}</span>
                                     <span className='userMessage'>{messageHistoryElement.message}</span>
-                                </li>)
+                                </li>) : ''
                             }
                         </ul>
                     </Col>
@@ -96,7 +98,6 @@ class SocketComponent extends Component {
                         <FormControl
                             componentClass='textarea'
                             readOnly={!this.state.connected}
-                            onChange={this.handleChange.bind(this)}
                             className='messageText'
                         />
                     </Col>
@@ -109,7 +110,7 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
             </Form>
-            <Form horizontal className='userWrapper'>
+            <Form horizontal className={(this.state.userObj ? 'userWrapper' : 'userWrapper none')}>
                 <FormGroup className='userAvatar'>
                     <Col sm={4}>
                         {(this.state.userAvatar.length !== 0) ? <img
