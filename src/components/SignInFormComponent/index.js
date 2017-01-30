@@ -13,15 +13,6 @@ import { authSendData } from '../../actions/authActions';
 import { socketsConnect } from '../../actions/socketActions';
 
 class SignInFormComponent extends Component {
-    static componentWillMount() {
-        /* global localStorage*/
-
-        const userObj = JSON.parse(localStorage.getItem('userObj'));
-        const connected = localStorage.getItem('connected');
-        if (userObj && connected) {
-            browserHistory.push('/chat');
-        }
-    }
     constructor() {
         super();
         this.state = {
@@ -30,8 +21,21 @@ class SignInFormComponent extends Component {
             validationStatePass: null
         };
     }
+    componentWillMount() {
+        /* global localStorage*/
+
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
+        const connected = localStorage.getItem('connected');
+        if (userObj && connected) {
+            browserHistory.push('/chat');
+        }
+    }
     onOkButtonPress() {
-        const {socketsConnect, authSendData} = this.props;
+        const socketsConnect = this.props.socketsConnect;
+        const authSendData = this.props.authSendData;
+        const userLoggedIn = this.props.userLoggedIn;
+        const errorMessage = this.props.errorMessage;
+
         /* global document*/
 
         const userPass = document.getElementsByClassName('passDataIn')[0].value;
@@ -39,6 +43,7 @@ class SignInFormComponent extends Component {
         const authType = 'signIn';
 
         socketsConnect();
+
         authSendData(userLogin, userPass, authType); // sends data to websocket server, sets jwt
 
         document.getElementsByClassName('signInData')[0].value = '';
@@ -47,6 +52,9 @@ class SignInFormComponent extends Component {
         const el = {target: {value: null}};
 
         this.validateAction('all', el);
+        if (!errorMessage && userLoggedIn) {
+            browserHistory.push('/chat');
+        }
     }
     validateAction(fieldName, e) {
         if (fieldName === 'all' && !e.target.value) {
@@ -74,6 +82,7 @@ class SignInFormComponent extends Component {
         }
     }
     render() {
+        const errorMessage = this.props.errorMessage;
         return (<Form horizontal className='signInForm'>
             <FormGroup className='instructionMessage'>
                 <Col sm={5}>
@@ -111,20 +120,34 @@ class SignInFormComponent extends Component {
                     </Button>
                 </Col>
             </FormGroup>
+            <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
+                <Col sm={3}>
+                    { errorMessage }
+                </Col>
+            </FormGroup>
         </Form>);
     }
 }
 
 SignInFormComponent.propTypes = {
     socketsConnect: PropTypes.func.isRequired,
-    authSendData: PropTypes.func.isRequired
+    authSendData: PropTypes.func.isRequired,
+    errorMessage: PropTypes.string.isRequired,
+    userLoggedIn: PropTypes.bool.isRequired
 };
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
     return {
-        socketsConnect: bindActionCreators({socketsConnect}, dispatch),
-        authSendData: bindActionCreators({authSendData}, dispatch)
+        errorMessage: state.authReducer.errorMessage,
+        userLoggedIn: state.authReducer.userLoggedIn
     };
 }
 
-export default connect(mapDispatchToProps)(SignInFormComponent);
+function mapDispatchToProps(dispatch) {
+    return {
+        socketsConnect: bindActionCreators(socketsConnect, dispatch),
+        authSendData: bindActionCreators(authSendData, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInFormComponent);

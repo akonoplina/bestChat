@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 
 import { bindActionCreators } from 'redux';
 
+import { browserHistory } from 'react-router';
+
 import { socketsMessageSend } from '../../actions/socketActions';
 
 import { userExit } from '../../actions/authActions';
@@ -35,20 +37,24 @@ class SocketComponent extends Component {
             userAvatar,
             userAboutMe};
     }
+    componentWillMount() {
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
+        const connected = localStorage.getItem('connected');
+        if (!userObj && !connected) {
+            browserHistory.push('/auth');
+        }
+    }
     onLogoutButtonPress(e) {
         e.preventDefault();
         const userExit = this.props.userExit;
         userExit();
+        browserHistory.push('/auth');
     }
     showHide() {
         this.setState({ showHide: !this.state.showHide });
     }
     handleSendButton() {
-        console.log(this.props);
-        const userExit = this.props.userExit;
         const socketsMessageSend = this.props.socketsMessageSend;
-        console.log(userExit);
-        console.log(socketsMessageSend);
         const messageText = document.getElementsByClassName('messageText')[0].value;
         if (messageText.length > 0) {
             socketsMessageSend(messageText, this.state.userName, this.state.userAvatar);
@@ -56,7 +62,7 @@ class SocketComponent extends Component {
         }
     }
     render() {
-        const { messageHistory} = this.props.messageHistory;
+        const messageHistory = this.props.messageHistory;
 
         return (<div className={(this.state.connected && this.state.userObj ? 'commonChatBlock' : 'commonChatBlock none')}>
             <Form

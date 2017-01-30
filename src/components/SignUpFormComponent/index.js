@@ -13,15 +13,6 @@ import { authSendData } from '../../actions/authActions';
 import { socketsConnect } from '../../actions/socketActions';
 
 class SignUpFormComponent extends Component {
-    static componentWillMount() {
-        /* global localStorage*/
-
-        const userObj = JSON.parse(localStorage.getItem('userObj'));
-        const connected = localStorage.getItem('connected');
-        if (userObj && connected) {
-            browserHistory.push('/chat');
-        }
-    }
     constructor() {
         super();
         this.state = {
@@ -30,13 +21,21 @@ class SignUpFormComponent extends Component {
             validationStatePass: null
         };
     }
+    componentWillMount() {
+        /* global localStorage*/
+
+        const userObj = JSON.parse(localStorage.getItem('userObj'));
+        const connected = localStorage.getItem('connected');
+        if (userObj && connected) {
+            browserHistory.push('/chat');
+        }
+    }
     onOkButtonPress() {
         const socketsConnect = this.props.socketsConnect;
         const authSendData = this.props.authSendData;
+        const userLoggedIn = this.props.userLoggedIn;
+        const errorMessage = this.props.errorMessage;
 
-        console.log(socketsConnect);
-        console.log(authSendData);
-        console.log(this.props);
         /* global document*/
 
         const userPass = document.getElementsByClassName('passDataUp')[0].value;
@@ -68,6 +67,9 @@ class SignUpFormComponent extends Component {
             const el = { target: { value: null } };
 
             this.validateAction('all', el);
+            if (!errorMessage && userLoggedIn) {
+                browserHistory.push('/chat');
+            }
         };
         reader.readAsDataURL(userAvatarData);
     }
@@ -97,6 +99,7 @@ class SignUpFormComponent extends Component {
         }
     }
     render() {
+        const errorMessage = this.props.errorMessage;
         return (<Form horizontal className='signUpForm'>
             <FormGroup className='instructionMessage'>
                 <Col sm={5}>
@@ -166,14 +169,28 @@ class SignUpFormComponent extends Component {
                     </Button>
                 </Col>
             </FormGroup>
+            <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
+                <Col sm={3}>
+                    { errorMessage }
+                </Col>
+            </FormGroup>
         </Form>);
     }
 }
 
 SignUpFormComponent.propTypes = {
     socketsConnect: PropTypes.func.isRequired,
-    authSendData: PropTypes.func.isRequired
+    authSendData: PropTypes.func.isRequired,
+    errorMessage: PropTypes.string.isRequired,
+    userLoggedIn: PropTypes.bool.isRequired
 };
+
+function mapStateToProps(state) {
+    return {
+        errorMessage: state.authReducer.errorMessage,
+        userLoggedIn: state.authReducer.userLoggedIn
+    };
+}
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -182,4 +199,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapDispatchToProps)(SignUpFormComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpFormComponent);

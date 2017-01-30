@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 
 import { Button, Form, FormGroup, Col } from 'react-bootstrap';
 
@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 
 class AuthComponent extends Component {
     render() {
-        const { errorMessage } = this.props.errorMessage;
         return (<Form horizontal className='authWrapper'>
             <FormGroup className='welcomeMessage'>
                 <Col sm={4}>
@@ -29,22 +28,8 @@ class AuthComponent extends Component {
                     </Button>
                 </Col>
             </FormGroup>
-            <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
-                <Col sm={3}>
-                    { errorMessage }
-                </Col>
-            </FormGroup>
         </Form>);
     }
 }
-AuthComponent.propTypes = {
-    errorMessage: PropTypes.string.isRequired
-};
 
-function mapStateToProps(state) {
-    return {
-        errorMessage: state.authReducer.errorMessage
-    };
-}
-
-export default connect(mapStateToProps)(AuthComponent);
+export default connect()(AuthComponent);

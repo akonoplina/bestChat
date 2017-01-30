@@ -1,7 +1,8 @@
 import {
     AUTH_SEND_DATA,
     USER_EXIT,
-    DISPLAY_ERROR_MESSAGE
+    DISPLAY_ERROR_MESSAGE,
+    USER_LOGGED_IN
 } from '../constants/AuthComponent';
 
 
@@ -24,6 +25,15 @@ export function authSendData(userLogin, userPass, authType, userName = null, use
             userAge,
             userAvatar,
             userAboutMe
+        });
+    };
+}
+export function userLoggedIn(userObj) {
+    return (dispatch) => {
+        /* global localStorage*/
+        localStorage.setItem('userObj', JSON.stringify(userObj));
+        dispatch({
+            type: USER_LOGGED_IN
         });
     };
 }
