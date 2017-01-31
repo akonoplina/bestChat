@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { browserHistory } from 'react-router';
 
-import { authSendData } from '../../actions/authActions';
+import { authSendData, clearErrorMessage } from '../../actions/authActions';
 
 import { socketsConnect } from '../../actions/socketActions';
 
@@ -30,11 +30,13 @@ class SignUpFormComponent extends Component {
             browserHistory.push('/chat');
         }
     }
+    componentWillUnmount() {
+        const clearErrorMessage = this.props.clearErrorMessage;
+        clearErrorMessage();
+    }
     onOkButtonPress() {
         const socketsConnect = this.props.socketsConnect;
         const authSendData = this.props.authSendData;
-        const userLoggedIn = this.props.userLoggedIn;
-        const errorMessage = this.props.errorMessage;
 
         /* global document*/
 
@@ -56,20 +58,6 @@ class SignUpFormComponent extends Component {
             socketsConnect();
             authSendData(userLogin, userPass, authType, userNameData, userAgeData,
                 `${imageName}:${userAvatarDataText}`, userAboutMeData); // sends data to websocket server, sets jwt
-
-            document.getElementsByClassName('signUpData')[0].value = '';
-            document.getElementsByClassName('passDataUp')[0].value = '';
-            document.getElementsByClassName('userNameData')[0].value = '';
-            document.getElementsByClassName('userAgeData')[0].value = '';
-            document.getElementsByClassName('userAboutMeData')[0].value = '';
-            document.getElementsByClassName('userAvatarData')[0].value = '';
-
-            const el = { target: { value: null } };
-
-            this.validateAction('all', el);
-            if (!errorMessage && userLoggedIn) {
-                browserHistory.push('/chat');
-            }
         };
         reader.readAsDataURL(userAvatarData);
     }
@@ -181,21 +169,20 @@ class SignUpFormComponent extends Component {
 SignUpFormComponent.propTypes = {
     socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired,
-    errorMessage: PropTypes.string.isRequired,
-    userLoggedIn: PropTypes.bool.isRequired
+    errorMessage: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
     return {
-        errorMessage: state.authReducer.errorMessage,
-        userLoggedIn: state.authReducer.userLoggedIn
+        errorMessage: state.authReducer.errorMessage
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         socketsConnect: bindActionCreators(socketsConnect, dispatch),
-        authSendData: bindActionCreators(authSendData, dispatch)
+        authSendData: bindActionCreators(authSendData, dispatch),
+        clearErrorMessage: bindActionCreators(clearErrorMessage, dispatch)
     };
 }
 

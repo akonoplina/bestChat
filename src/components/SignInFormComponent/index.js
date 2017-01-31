@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { browserHistory } from 'react-router';
 
-import { authSendData } from '../../actions/authActions';
+import { authSendData, clearErrorMessage } from '../../actions/authActions';
 
 import { socketsConnect } from '../../actions/socketActions';
 
@@ -30,11 +30,13 @@ class SignInFormComponent extends Component {
             browserHistory.push('/chat');
         }
     }
+    componentWillUnmount() {
+        const clearErrorMessage = this.props.clearErrorMessage;
+        clearErrorMessage();
+    }
     onOkButtonPress() {
         const socketsConnect = this.props.socketsConnect;
         const authSendData = this.props.authSendData;
-        const userLoggedIn = this.props.userLoggedIn;
-        const errorMessage = this.props.errorMessage;
 
         /* global document*/
 
@@ -45,16 +47,6 @@ class SignInFormComponent extends Component {
         socketsConnect();
 
         authSendData(userLogin, userPass, authType); // sends data to websocket server, sets jwt
-
-        document.getElementsByClassName('signInData')[0].value = '';
-        document.getElementsByClassName('passDataIn')[0].value = '';
-
-        const el = {target: {value: null}};
-
-        this.validateAction('all', el);
-        if (!errorMessage && userLoggedIn) {
-            browserHistory.push('/chat');
-        }
     }
     validateAction(fieldName, e) {
         if (fieldName === 'all' && !e.target.value) {
@@ -132,21 +124,20 @@ class SignInFormComponent extends Component {
 SignInFormComponent.propTypes = {
     socketsConnect: PropTypes.func.isRequired,
     authSendData: PropTypes.func.isRequired,
-    errorMessage: PropTypes.string.isRequired,
-    userLoggedIn: PropTypes.bool.isRequired
+    errorMessage: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
     return {
-        errorMessage: state.authReducer.errorMessage,
-        userLoggedIn: state.authReducer.userLoggedIn
+        errorMessage: state.authReducer.errorMessage
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         socketsConnect: bindActionCreators(socketsConnect, dispatch),
-        authSendData: bindActionCreators(authSendData, dispatch)
+        authSendData: bindActionCreators(authSendData, dispatch),
+        clearErrorMessage: bindActionCreators(clearErrorMessage, dispatch)
     };
 }
 

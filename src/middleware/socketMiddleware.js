@@ -89,11 +89,18 @@ export default function webSocketMiddleware() {
             case 'SOCKETS_CONNECT': {
                 /* global localStorage*/
                 /* global WebSocket*/
-
+                console.log('1');
+                if (webSocket !== null) {
+                    localStorage.removeItem('connected');
+                    console.log('2');
+                    webSocket.close();
+                    console.log('3');
+                }
                 webSocket = new WebSocket('ws://127.0.0.1:5000');
                 webSocket.onmessage = onMessage(webSocket, store);
                 webSocket.onclose = onClose(store);
                 localStorage.setItem('connected', true);
+                console.log('4');
                 break;
             }
             case 'SOCKETS_DISCONNECT': {
@@ -105,10 +112,12 @@ export default function webSocketMiddleware() {
                 break;
             }
             case 'SOCKETS_MESSAGE_SEND': {
-                webSocket.send(JSON.stringify({
-                    userMessage: action.messageSend,
-                    userName: action.userName,
-                    userAvatar: action.userAvatar }));
+                waitForConnection(() => {
+                    webSocket.send(JSON.stringify({
+                        userMessage: action.messageSend,
+                        userName: action.userName,
+                        userAvatar: action.userAvatar }));
+                }, 1000);
                 store.dispatch(socketActions.socketsMessageSending(action.messageSend, action.userName,
                     action.userAvatar));
                 break;

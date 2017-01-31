@@ -1,8 +1,10 @@
+import { browserHistory } from 'react-router';
 import {
     AUTH_SEND_DATA,
     USER_EXIT,
     DISPLAY_ERROR_MESSAGE,
-    USER_LOGGED_IN
+    USER_LOGGED_IN,
+    CLEAR_ERROR_MESSAGE
 } from '../constants/AuthComponent';
 
 
@@ -11,6 +13,14 @@ export function displayErrorMessage(errorMessage) {
         dispatch({
             type: DISPLAY_ERROR_MESSAGE,
             errorMessage
+        });
+    };
+}
+export function clearErrorMessage() {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR_ERROR_MESSAGE,
+            errorMessage: ''
         });
     };
 }
@@ -35,6 +45,7 @@ export function userLoggedIn(userObj) {
         dispatch({
             type: USER_LOGGED_IN
         });
+        browserHistory.push('/chat');
     };
 }
 export function userExit() {

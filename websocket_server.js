@@ -143,7 +143,7 @@ wss.on('connection', function connection(ws) {
         console.log(`${new Date()} Peer  ${connection.remoteAddress} disconnected.`);
     });
     wss.on('error', () => {
-        ws.send(JSON.stringify({errorText: 'Something unknown has happened(((', }));
+        ws.send(JSON.stringify({errorText: 'Something unknown has happened((('}));
     });
 });
 

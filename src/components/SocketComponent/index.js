@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { browserHistory } from 'react-router';
 
-import { socketsMessageSend } from '../../actions/socketActions';
+import { socketsConnect, socketsMessageSend, socketsDisconnect } from '../../actions/socketActions';
 
 import { userExit } from '../../actions/authActions';
 
@@ -16,6 +16,7 @@ class SocketComponent extends Component {
     constructor() {
         super();
         /* global localStorage*/
+        /* global window*/
         const userObj = JSON.parse(localStorage.getItem('userObj'));
         const connected = localStorage.getItem('connected');
         let userName = '';
@@ -38,8 +39,11 @@ class SocketComponent extends Component {
             userAboutMe};
     }
     componentWillMount() {
-        const userObj = JSON.parse(localStorage.getItem('userObj'));
         const connected = localStorage.getItem('connected');
+        const userObj = localStorage.getItem('userObj');
+        const socketsDisconnect = this.props.socketsDisconnect;
+        const socketsConnect = this.props.socketsConnect;
+        window.onbeforeunload = () => { socketsDisconnect(); socketsConnect(); };
         if (!userObj && !connected) {
             browserHistory.push('/auth');
         }
@@ -179,7 +183,9 @@ class SocketComponent extends Component {
 
 SocketComponent.propTypes = {
     messageHistory: PropTypes.array.isRequired,
+    socketsConnect: PropTypes.func.isRequired,
     socketsMessageSend: PropTypes.func.isRequired,
+    socketsDisconnect: PropTypes.func.isRequired,
     userExit: PropTypes.func.isRequired
 };
 
@@ -191,7 +197,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        socketsConnect: bindActionCreators(socketsConnect, dispatch),
         socketsMessageSend: bindActionCreators(socketsMessageSend, dispatch),
+        socketsDisconnect: bindActionCreators(socketsDisconnect, dispatch),
         userExit: bindActionCreators(userExit, dispatch)
     };
 }
