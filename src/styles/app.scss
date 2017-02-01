@@ -54,20 +54,25 @@ table {
     .none {
         display: none;
     }
-    .authWrapper button.btn-block {
-        max-width: 400px;
-        margin: 0 auto 10px;
+    .authWrapper {
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 340px;
+        max-height: 200px;
         a{
             color: white;
             text-decoration: none;
+            display: block;
         }
     }
     .okButton {
         padding-left: 288px;
     }
     .userWrapper {
-        position: absolute;
-        left: 1660px;
+        position: fixed;
+        right: 5%;
         top: 10px;
     }
     .userName, .userAge, .userAboutMe, .logOutButton, .showMoreButton, .showLessButton {
@@ -77,16 +82,48 @@ table {
         padding-left: 10px;
         padding-bottom: 20px;
     }
-    .signIn, .signUp, .signInForm, .signUpForm {
-        margin-left: 700px;
+    .signInForm, .signUpForm {
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 340px;
+        max-height: 200px;
+        label{
+            margin-right: 10px;
+        }
     }
-    .welcomeMessage {
-        margin-left: 665px;
+    .signInData, .passDataIn, .signUpData, .passDataUp, .userAboutMeData, .userNameData, .userAgeData, .userAvatarData {
+        display: inline-block;
+    }
+    .signInData, .signUpData {
+        width: 272px;
+    }
+    .passDataIn, .passDataUp {
+        width: 245px;
+    }
+    .userAgeData {
+        width: 287px;
+    }
+    .userAboutMeData {
+        width: 252px;
+    }
+    .userNameData {
+        width: 274px;
+    }
+    .signInBlock, .passBlock, .signUpBlock, .nameBlock, .ageBlock, .aboutMeBlock, .avatarBlock {
+        display: inline;
+        .glyphicon{
+            margin-right: 35px;
+        }
     }
     .messageUserName {
         padding-right: 10px;
     }
     .userMessageWrapper {
         padding-bottom: 10px;
+    }
+    .messageText{
+        width: 300px;
     }
 }

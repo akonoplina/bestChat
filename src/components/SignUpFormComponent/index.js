@@ -90,64 +90,64 @@ class SignUpFormComponent extends Component {
         const errorMessage = this.props.errorMessage;
         return (<Form horizontal className='signUpForm'>
             <FormGroup className='instructionMessage'>
-                <Col sm={5}>
+                <Col>
                     <h3>Please enter your login & pass)))</h3>
                 </Col>
             </FormGroup>
             <FormGroup validationState={this.state.validationStateSignUp}>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Login*:
                 </Col>
-                <Col sm={3}>
+                <Col className='signUpBlock'>
                     <FormControl className='signUpData' type='text' onChange={this.validateAction.bind(this, 'signUp')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6.</HelpBlock>
                 </Col>
             </FormGroup>
             <FormGroup validationState={this.state.validationStatePass}>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Password*:
                 </Col>
-                <Col sm={3}>
+                <Col className='passBlock'>
                     <FormControl type='password' className='passDataUp' onChange={this.validateAction.bind(this, 'pass')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
                 </Col>
             </FormGroup>
             <FormGroup>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Name:
                 </Col>
-                <Col sm={3}>
+                <Col className='nameBlock'>
                     <FormControl type='text' className='userNameData' />
                 </Col>
             </FormGroup>
             <FormGroup>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Age:
                 </Col>
-                <Col sm={3}>
+                <Col className='ageBlock'>
                     <FormControl type='text' className='userAgeData' />
                 </Col>
             </FormGroup>
             <FormGroup>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     About me:
                 </Col>
-                <Col sm={3}>
+                <Col className='aboutMeBlock'>
                     <FormControl type='text' className='userAboutMeData' />
                 </Col>
             </FormGroup>
             <FormGroup>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Avatar:
                 </Col>
-                <Col sm={3}>
+                <Col className='avatarBlock'>
                     <FormControl type='file' className='userAvatarData' />
                 </Col>
             </FormGroup>
             <FormGroup className='okButton'>
-                <Col sm={1}>
+                <Col>
                     <Button
                         bsStyle='primary'
                         disabled={!(this.state.validationStatePass === 'success' && this.state.validationStateSignUp
@@ -158,7 +158,7 @@ class SignUpFormComponent extends Component {
                 </Col>
             </FormGroup>
             <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
-                <Col sm={3}>
+                <Col>
                     { errorMessage }
                 </Col>
             </FormGroup>

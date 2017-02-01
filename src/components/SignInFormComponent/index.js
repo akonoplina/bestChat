@@ -77,32 +77,32 @@ class SignInFormComponent extends Component {
         const errorMessage = this.props.errorMessage;
         return (<Form horizontal className='signInForm'>
             <FormGroup className='instructionMessage'>
-                <Col sm={5}>
+                <Col>
                     <h3>Please enter your login & pass)))</h3>
                 </Col>
             </FormGroup>
             <FormGroup validationState={this.state.validationStateSignIn}>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Login*:
                 </Col>
-                <Col sm={3}>
+                <Col className='signInBlock'>
                     <FormControl className='signInData' type='text' onChange={this.validateAction.bind(this, 'signIn')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9 and _ signs. The length should be at least 6.</HelpBlock>
                 </Col>
             </FormGroup>
             <FormGroup validationState={this.state.validationStatePass}>
-                <Col componentClass={ControlLabel} sm={1}>
+                <Col componentClass={ControlLabel}>
                     Password*:
                 </Col>
-                <Col sm={3}>
+                <Col className='passBlock'>
                     <FormControl type='password' className='passDataIn' onChange={this.validateAction.bind(this, 'pass')} />
                     <FormControl.Feedback />
                     <HelpBlock>You can only use a-Z, 0-9, _, !, @, #, $, %, ^, &, *, () signs. The length should be at least 6</HelpBlock>
                 </Col>
             </FormGroup>
             <FormGroup className='okButton'>
-                <Col sm={1}>
+                <Col>
                     <Button
                         bsStyle='primary'
                         disabled={!(this.state.validationStatePass === 'success' && this.state.validationStateSignIn
@@ -113,7 +113,7 @@ class SignInFormComponent extends Component {
                 </Col>
             </FormGroup>
             <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
-                <Col sm={3}>
+                <Col>
                     { errorMessage }
                 </Col>
             </FormGroup>

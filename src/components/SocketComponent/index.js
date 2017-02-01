@@ -74,17 +74,17 @@ class SocketComponent extends Component {
                 className='socketWrapper'
                 onSubmit={this.handleSendButton}>
                 <FormGroup>
-                    <Col sm={5}>
+                    <Col>
                         <h3>Welcome to the chat, {this.state.userName}!!!</h3>
                     </Col>
                 </FormGroup>
                 <FormGroup>
-                    <Col sm={2}>
+                    <Col>
                         <h3>Message log</h3>
                     </Col>
                 </FormGroup>
                 <FormGroup>
-                    <Col sm={4}>
+                    <Col>
                         <ul>
                             {(messageHistory) ?
                             messageHistory.map((messageHistoryElement, index) =>
@@ -104,7 +104,7 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup>
-                    <Col sm={2}>
+                    <Col>
                         <FormControl
                             componentClass='textarea'
                             readOnly={!this.state.connected}
@@ -113,7 +113,7 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup>
-                    <Col sm={1}>
+                    <Col>
                         <Button bsStyle='primary' onClick={this.handleSendButton.bind(this)} disabled={!this.state.connected}>
                             Send
                         </Button>
@@ -122,7 +122,7 @@ class SocketComponent extends Component {
             </Form>
             <Form horizontal className={(this.state.userObj ? 'userWrapper' : 'userWrapper none')}>
                 <FormGroup className='userAvatar'>
-                    <Col sm={4}>
+                    <Col>
                         {(this.state.userAvatar.length !== 0) ? <img
                             width={128}
                             height={128}
@@ -132,45 +132,45 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup className={(this.state.showHide ? 'showHideButton none' : 'showHideButton')} onClick={this.showHide.bind(this)}>
-                    <Col sm={4}>
+                    <Col>
                         <Button bsStyle='primary'>
                             Show more
                         </Button>
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'showLessButton none' : 'showLessButton')} onClick={this.showHide.bind(this)}>
-                    <Col sm={4}>
+                    <Col>
                         <Button bsStyle='primary'>
                             Show less
                         </Button>
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'userName none' : 'userName')}>
-                    <Col sm={4}>
+                    <Col>
                         Name:
                     </Col>
-                    <Col sm={4}>
+                    <Col>
                         {this.state.userName}
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'userAge none' : 'userAge')}>
-                    <Col sm={4}>
+                    <Col>
                         Age:
                     </Col>
-                    <Col sm={4}>
+                    <Col>
                         {this.state.userAge}
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'userAboutMe none' : 'userAboutMe')} >
-                    <Col sm={4}>
+                    <Col>
                         About me:
                     </Col>
-                    <Col sm={4}>
+                    <Col>
                         {this.state.userAboutMe}
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'logOutButton none' : 'logOutButton')}>
-                    <Col sm={1}>
+                    <Col>
                         <Button bsStyle='primary' onClick={this.onLogoutButtonPress.bind(this)}>
                             Logout
                         </Button>
