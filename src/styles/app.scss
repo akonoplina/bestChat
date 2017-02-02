@@ -68,18 +68,15 @@ table {
         }
     }
     .okButton {
-        padding-left: 288px;
+        margin-top: 10px;
     }
     .userWrapper {
+        width: 128px;
         position: fixed;
         right: 5%;
         top: 10px;
     }
-    .userName, .userAge, .userAboutMe, .logOutButton, .showMoreButton, .showLessButton {
-        padding-left: 10px;
-    }
     .instructionMessage {
-        padding-left: 10px;
         padding-bottom: 20px;
     }
     .signInForm, .signUpForm {
@@ -87,8 +84,8 @@ table {
         top: 30%;
         left: 50%;
         transform: translate(-50%, -50%);
-        max-width: 340px;
-        max-height: 200px;
+        max-width: 380px;
+        max-height: 300px;
         label{
             margin-right: 10px;
         }
@@ -97,24 +94,38 @@ table {
         display: inline-block;
     }
     .signInData, .signUpData {
-        width: 272px;
+        width: 254px;
     }
     .passDataIn, .passDataUp {
-        width: 245px;
+        width: 227px;
     }
     .userAgeData {
-        width: 287px;
+        width: 269px;
     }
     .userAboutMeData {
-        width: 252px;
+        width: 234px;
     }
     .userNameData {
-        width: 274px;
+        width: 257px;
+    }
+    .userAvatarData {
+        width: 254px;
     }
     .signInBlock, .passBlock, .signUpBlock, .nameBlock, .ageBlock, .aboutMeBlock, .avatarBlock {
         display: inline;
-        .glyphicon{
-            margin-right: 35px;
+        .help-block {
+            width: 307px;
+        }
+    }
+    .form-horizontal .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .form-group.has-feedback  {
+        margin-left: 0;
+        margin-right: 0;
+        .form-control-feedback {
+            right: 0;
         }
     }
     .messageUserName {
@@ -125,5 +136,30 @@ table {
     }
     .messageText{
         width: 300px;
+    }
+    .nameLabel, .ageLabel, .aboutMeLabel {
+        float: left;
+        font-weight: bold;
+        margin-right: 5px;
+        color: #286090;
+    }
+    .showLessButton, .showHideButton, .logOutButton {
+        margin-left: 0;
+        margin-right: 0;
+        button {
+            width: 128px;
+        }
+    }
+    .errorMessageBlock {
+        width: 307px;
+        text-align: center;
+        border-width: 2px;
+        border-style: solid;
+        border-color: red;
+        height: 34px;
+        div {
+            height: 34px;
+            transform: translateY(20%);
+        }
     }
 }

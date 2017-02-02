@@ -91,7 +91,12 @@ class SignUpFormComponent extends Component {
         return (<Form horizontal className='signUpForm'>
             <FormGroup className='instructionMessage'>
                 <Col>
-                    <h3>Please enter your login & pass)))</h3>
+                    <h3>Please enter your login & pass</h3>
+                </Col>
+            </FormGroup>
+            <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
+                <Col>
+                    { errorMessage }
                 </Col>
             </FormGroup>
             <FormGroup validationState={this.state.validationStateSignUp}>
@@ -155,11 +160,6 @@ class SignUpFormComponent extends Component {
                         onClick={this.onOkButtonPress.bind(this)} >
                         Ok
                     </Button>
-                </Col>
-            </FormGroup>
-            <FormGroup className={(!errorMessage ? 'errorMessageBlock none' : 'errorMessageBlock')}>
-                <Col>
-                    { errorMessage }
                 </Col>
             </FormGroup>
         </Form>);

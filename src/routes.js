@@ -4,15 +4,7 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './containers/App';
 
-import Auth from './components/AuthComponent';
-
-import Socket from './components/SocketComponent';
-
-import SignIn from './components/SignInFormComponent';
-
-import SignUp from './components/SignUpFormComponent';
-
-import NotFound from './components/NotFoundComponent';
+import {Auth, SignIn, SignUp, Socket, NotFound} from './components';
 
 export default (
     <div>

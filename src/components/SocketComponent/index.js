@@ -146,7 +146,7 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'userName none' : 'userName')}>
-                    <Col>
+                    <Col className='nameLabel'>
                         Name:
                     </Col>
                     <Col>
@@ -154,7 +154,7 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'userAge none' : 'userAge')}>
-                    <Col>
+                    <Col className='ageLabel'>
                         Age:
                     </Col>
                     <Col>
@@ -162,7 +162,7 @@ class SocketComponent extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup className={(!this.state.showHide ? 'userAboutMe none' : 'userAboutMe')} >
-                    <Col>
+                    <Col className='aboutMeLabel'>
                         About me:
                     </Col>
                     <Col>
